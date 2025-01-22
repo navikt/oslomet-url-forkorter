@@ -12,7 +12,7 @@ COPY backend/pom.xml .
 COPY --from=frontend-build-stage /frontend/dist ./src/main/resources/public
 RUN mvn verify -DskipTests
 
-FROM ncr.sky.nhn.no/dockerhub/library/amazoncorretto:21-alpine
+FROM amazoncorretto:21-alpine
 WORKDIR /app
 
 COPY --from=backend-build-stage /build/target/application.jar .
