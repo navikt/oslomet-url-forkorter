@@ -18,6 +18,6 @@ WORKDIR /app
 COPY --from=backend-build-stage /build/target/application.jar .
 
 USER 1000
-EXPOSE 8888
+EXPOSE 8080
 
 ENTRYPOINT ["java","-jar","/app/application.jar"]
