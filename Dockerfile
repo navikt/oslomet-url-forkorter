@@ -1,9 +1,23 @@
-FROM busybox:latest
-ENV PORT=8080
+FROM node:22-alpine AS frontend-build-stage
+WORKDIR /frontend
+COPY ./frontend .
+RUN npm ci
+RUN npm run build
 
-ADD ./frontend/index.html /www/index.html
+FROM maven:3.9.5-eclipse-temurin-21-alpine AS backend-build-stage
+WORKDIR /build
 
-HEALTHCHECK CMD nc -z localhost $PORT
+COPY backend/src ./src
+COPY backend/pom.xml .
+COPY --from=frontend-build-stage /frontend/dist ./src/main/resources/public
+RUN mvn verify -DskipTests
 
-# Create a basic webserver and run it until the container is stopped
-CMD echo "httpd started" && trap "exit 0;" TERM INT; httpd -v -p $PORT -h /www -f & wait
+FROM ncr.sky.nhn.no/dockerhub/library/amazoncorretto:21-alpine
+WORKDIR /app
+
+COPY --from=backend-build-stage /build/target/application.jar .
+
+USER 1000
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","/app/application.jar"]

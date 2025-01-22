@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy": "rm -rf ../backend/src/main/resources/public/ && mkdir -p ../backend/src/main/resources/public/ && cp -r dist/* ../backend/src/main/resources/public/"
   },
   "dependencies": {
     "react": "^18.3.1",
