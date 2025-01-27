@@ -14,14 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and push image and SBOM to OCI registry
-        uses: nais/docker-build-push@v0
+        uses: nais/docker-build-push@ve69b82501b1f6e02ed65607ee4cd714ca43dc010
         id: docker-build-push
         with:
           team: bachelor-url-forkorter # Replace
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # Provided as Organization Secret
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # Provided as Organization Variable
       - name: Deploy to Nais
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@6fdb8f73f1d1e4ec8bf24bd371929cdedb118dbf
         env:
           CLUSTER: sandbox # Replace
           RESOURCE: .nais/app.yaml # This points to the file we created in the previous step
