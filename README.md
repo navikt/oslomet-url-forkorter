@@ -5,7 +5,13 @@ Applikasjon for backend og frontend for tjenesten.
 
 Se flere detaljer i [dokumentasjon](/dokumentasjon).
 
-## Utvikling
+## Lokal utvikling
+
+Forutsetninger:
+- Node
+- Maven
+- Java > 21
+
 For å bygge backend:
 ```shell
 cd backend
@@ -23,6 +29,8 @@ npm run copy
 ### Starte opp lokalt
 Kjør `main`-metoden i `UrlForkorterApi`. Denne bruker `resources/local.properties` som konfigurasjon.
 
+Backend starter på [http://localhost:8080](http://localhost:8080)
+
 Hvis du skal gjøre endringer i frontend med hot deploy:
 
 ```shell
@@ -30,7 +38,7 @@ cd frontend
 npm run dev
 ```
 
-Åpne `http://localhost:5173`
+Dev starter på [http://localhost:5173](http://localhost:5173)
 
 ## NAIS / Github actions
 Nais oppsettet ligger i mappen `.nais`, og GitHub Actions ligger i `.github/workflows` les [dokumentasjon](https://docs.test-nais.cloud.nais.io/) for mer informasjon om oppsett.
