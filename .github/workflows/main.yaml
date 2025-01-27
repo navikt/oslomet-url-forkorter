@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and push image and SBOM to OCI registry
-        uses: nais/docker-build-push@ve69b82501b1f6e02ed65607ee4cd714ca43dc010
+        uses: nais/docker-build-push@e69b82501b1f6e02ed65607ee4cd714ca43dc010
         id: docker-build-push
         with:
           team: bachelor-url-forkorter # Replace
