@@ -45,7 +45,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - run: wget https://github.com/nais/deploy/releases/download/v2/deploy-linux
+      - run: |
+          wget https://github.com/nais/deploy/releases/download/v2/deploy-linux
+          chmod +x ./deploy-linux
+          ./deploy-linux -h
       - run: |
           payload=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=hookd")
           jwt=$(echo "$payload" | jq -r '.value')
