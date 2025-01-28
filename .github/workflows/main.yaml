@@ -53,8 +53,8 @@ jobs:
           export GITHUB_TOKEN="$jwt"
           ./deploy-linux
         env:
-          TZ="Europe/Oslo"
-          ACTIONS="true"
+          TZ: "Europe/Oslo"
+          ACTIONS: "true"
           CLUSTER: sandbox
           RESOURCE: .nais/app.yaml
           VAR: image=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
