@@ -45,9 +45,16 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Deploy to Nais
-        uses: nais/deploy/actions/deploy@8a33f80a2b36ccfb8e177023425afbd59764d33e
+      - run: wget https://github.com/nais/deploy/releases/download/v2/deploy-linux
+      - run: |
+          payload=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=hookd")
+          jwt=$(echo "$payload" | jq -r '.value')
+
+          export GITHUB_TOKEN="$jwt"
+          ./deploy-linux
         env:
+          TZ="Europe/Oslo"
+          ACTIONS="true"
           CLUSTER: sandbox
           RESOURCE: .nais/app.yaml
           VAR: image=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
