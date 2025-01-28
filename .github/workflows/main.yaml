@@ -45,7 +45,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - run: echo "${{ steps.meta.outputs.json }}" | jq .
       - name: Deploy to Nais
         uses: nais/deploy/actions/deploy@6fdb8f73f1d1e4ec8bf24bd371929cdedb118dbf
         env:
