@@ -1,24 +1,15 @@
-import styled from "styled-components";
+import {SearchContainer, StyledButton, StyledInput} from "./search.style.ts";
 
 interface Props {
     placeholder?: string;
+    onClick?: () => void;
 }
 
-export default function Search({placeholder}: Props) {
-
+export default function Search({placeholder, onClick}: Props) {
     return (
-        <StyledInput type="search" placeholder={placeholder}></StyledInput>
+        <SearchContainer>
+            <StyledInput type="search" placeholder={placeholder}/>
+            <StyledButton text="Søk" onClick={onClick}/>
+        </SearchContainer>
     )
 }
-
-const StyledInput = styled.input`
-    height: 3em;
-    width: 25vw;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid grey;
-    
-    &:active {
-        border: 1px solid var(--theme-color);
-    }
-`

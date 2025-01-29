@@ -1,31 +1,15 @@
-import styled from "styled-components";
+import {StyledButton} from "./button.style.ts";
 
 interface Props {
     text: string;
     onClick?: () => void;
+    className?: string;
 }
 
-export default function Button({text, onClick}: Props) {
-
+export default function Button({text, onClick, className}: Props) {
     return (
-        <StyledButton onClick={onClick}>
+        <StyledButton onClick={onClick} className={className}>
             {text}
         </StyledButton>
     )
 }
-
-const StyledButton = styled.button`
-    height: 2em;
-    width: 6em;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    background: var(--theme-color);
-    color: #eee;
-
-    &:hover {
-        background: var(--theme-color-hover);
-        color: #eee;
-        cursor: pointer;
-    }
-`
