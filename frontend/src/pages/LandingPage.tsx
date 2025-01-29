@@ -1,14 +1,13 @@
-import Search from "../components/Search/Search";
+import Search from "../components/Search/Search.tsx";
 import Button from "../components/Button/Button";
 import styled from "styled-components";
 
 export default function LandingPage() {
 
-
     return (
         <Main>
             <Search placeholder="Kontroller din lenke.."/>
-            <Button>Logg inn</Button>
+            <Button text="Logg inn" onClick={() => {console.log("Click")}}/>
         </Main>
     )
 }

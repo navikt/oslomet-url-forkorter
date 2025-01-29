@@ -7,14 +7,18 @@ interface Props {
 export default function Search({placeholder}: Props) {
 
     return (
-        <Input type="search" placeholder={placeholder}></Input>
+        <StyledInput type="search" placeholder={placeholder}></StyledInput>
     )
 }
 
-const Input = styled.input`
+const StyledInput = styled.input`
     height: 3em;
     width: 25vw;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid grey;
+    
+    &:active {
+        border: 1px solid var(--theme-color);
+    }
 `

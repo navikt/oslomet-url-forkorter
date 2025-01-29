@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import {ReactNode} from "react";
 
 interface Props {
-    children: ReactNode;
+    text: string;
+    onClick?: () => void;
 }
 
-export default function Button({children}: Props) {
+export default function Button({text, onClick}: Props) {
 
     return (
-        <StyledButton onClick={() => console.log("click")}>
-            {children}
+        <StyledButton onClick={onClick}>
+            {text}
         </StyledButton>
     )
 }
@@ -20,11 +20,11 @@ const StyledButton = styled.button`
     padding: 5px;
     border-radius: 5px;
     border: none;
-    background: #535bf2;
+    background: var(--theme-color);
     color: #eee;
 
     &:hover {
-        background: #464ee3;
+        background: var(--theme-color-hover);
         color: #eee;
         cursor: pointer;
     }
