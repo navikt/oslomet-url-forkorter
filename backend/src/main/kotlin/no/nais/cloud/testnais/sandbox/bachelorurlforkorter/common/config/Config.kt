@@ -48,9 +48,12 @@ data class DbConfig(
 
     private fun maskJdbcUrl(jdbcUrl: String): String {
         return jdbcUrl
-            .replace(Regex("(?<=://)[^:/]+:[^@]+@"), "****:****@")
-            .replace(Regex("(?<=password=)[^&]+"), "****")
-            .replace(Regex("(?<=user=)[^&]+"), "****")
+            .replace(Regex("(?<=://)[^:/]+:[^@]+@"), "*****:*****@")
+            .replace(Regex("(?<=password=)[^&]+"), "*****")
+            .replace(Regex("(?<=user=)[^&]+"), "*****")
+            .replace(Regex("(?<=sslcert=)[^&]+"), "*****")
+            .replace(Regex("(?<=sslkey=)[^&]+"), "*****")
+            .replace(Regex("(?<=sslrootcert=)[^&]+"), "*****")
     }
 }
 
