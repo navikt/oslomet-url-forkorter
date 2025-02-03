@@ -49,7 +49,10 @@ enum class Env {
 fun createApplicationConfig(): Config {
   val props = Properties()
 
-  System.getenv().entries.forEach { props.setProperty(it.key, it.value) }
+  System.getenv().entries.forEach {
+    props.setProperty(it.key, it.value)
+    logger.info("${it.key} = ${it.value}")
+  }
 
   if (getEnv(props) == null) {
     addLocalProperties(props)
