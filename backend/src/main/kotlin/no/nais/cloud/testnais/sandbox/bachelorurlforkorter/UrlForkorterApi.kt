@@ -19,11 +19,11 @@ private val logger = KotlinLogging.logger {}
 
 fun main() {
     val config = createApplicationConfig()
+    DatabaseInitializer.init(config)
     startAppServer(config);
 }
 
 fun startAppServer(config: Config) {
-    DatabaseInitializer.init(config)
     val app = Javalin.create { javalinConfig ->
         javalinConfig.router.apiBuilder {
             path("api") {

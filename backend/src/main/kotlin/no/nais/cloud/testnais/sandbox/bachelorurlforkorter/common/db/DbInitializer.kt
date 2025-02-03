@@ -36,6 +36,6 @@ object DatabaseInitializer {
             throw RuntimeException("Kunne ikke initialisere database connection", e)
         }
 
-        logger.info("Database suksessfullt initialisert!")
+        logger.info("Database connection initialisert!")
     }
 }
