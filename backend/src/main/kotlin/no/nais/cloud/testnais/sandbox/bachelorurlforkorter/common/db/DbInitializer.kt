@@ -22,17 +22,20 @@ object ShortUrls : Table("short_urls") {
 
 object DatabaseInitializer {
     fun init(config: Config) {
-        val db = if (config.environment == Env.Local) {
-            logger.info("Kjører lokalt med H2 in-memory database")
-            Database.connect(config.dbConfig.jdbcUrl, driver = "org.h2.Driver")
-        } else {
-            Database.connect(config.dbConfig.getDbConnection())
+        try {
+            val db = if (config.environment == Env.Local) {
+                logger.info("Kjører lokalt med H2 in-memory database")
+                Database.connect(config.dbConfig.jdbcUrl, driver = "org.h2.Driver")
+            } else {
+                Database.connect(config.dbConfig.getDbConnection())
+            }
+            transaction(db) {
+                SchemaUtils.create(ShortUrls)
+            }
+        } catch (e: Exception) {
+            throw RuntimeException("Kunne ikke initialisere database connection", e)
         }
 
-        transaction(db) {
-            SchemaUtils.create(ShortUrls)
-        }
-
-        logger.info("Database suksessfullt initialisert: ${config.dbConfig.jdbcUrl}")
+        logger.info("Database suksessfullt initialisert!")
     }
 }

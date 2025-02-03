@@ -20,5 +20,4 @@ object UrlForkorterController {
         val langurl = ShortUrlDataAccessObject.getLongUrl(korturl)
         ctx.result(langurl.toString())
     }
-
 }
