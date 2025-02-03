@@ -31,7 +31,7 @@ fun startAppServer(config: Config) {
         get("sjekk/:korturl", UrlForkorterController::sjekk, Rolle.Alle)
 
         post("test", UrlForkorterController::test, Rolle.NavInnloggetBruker)
-        post("forkort", UrlForkorterController::forkort, Rolle.NavInnloggetBruker)
+        post("forkort/:langurl", UrlForkorterController::forkort, Rolle.NavInnloggetBruker)
       }
     }
     javalinConfig.staticFiles.add("/public", Location.CLASSPATH)

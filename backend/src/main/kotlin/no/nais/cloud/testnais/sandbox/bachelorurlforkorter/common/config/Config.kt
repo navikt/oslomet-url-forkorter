@@ -14,8 +14,8 @@ private val logger = KotlinLogging.logger {}
 data class Config(
   val environment: Env,
   val appPort: Int,
-  val healthProbePort: Int?,
-  val exposeWeblogs: Boolean,
+/*  val healthProbePort: Int?,
+  val exposeWeblogs: Boolean, */
   val authConfig: AuthConfig,
   val dbConfig: DbConfig
 )
@@ -60,9 +60,9 @@ fun createApplicationConfig(): Config {
   return Config(
     environment = getEnv(props)
       ?: throw RuntimeException("Property \"environment\" is not set. Valid values are: local, dev, test and prod."),
-    appPort = props.getProperty("spec.port").toInt(),
-    healthProbePort = props.getProperty("health.probe.port")?.toInt(),
-    exposeWeblogs = props.getProperty("weblogs.expose").toBoolean(),
+    appPort = props.getProperty("spec.port").toIntOrNull()?: 8080,
+/*    healthProbePort = props.getProperty("health.probe.port")?.toInt(),
+    exposeWeblogs = props.getProperty("weblogs.expose").toBoolean(), */
     authConfig = AuthConfig(
       basicAuthUsername = props.getProperty("basicauth.username"),
       basicAuthPassword = Password(props.getProperty("basicauth.password"))
