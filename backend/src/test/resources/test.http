@@ -1,0 +1,8 @@
+### Forkort URL
+POST localhost:8080/api/forkort/asd
+Content-Type: application/json
+Accept: application/json
+
+### Sjekk URL
+GET localhost:8080/api/sjekk/123
+Accept: application/json

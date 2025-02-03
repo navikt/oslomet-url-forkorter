@@ -26,12 +26,12 @@ fun startAppServer(config: Config) {
   DatabaseInitializer.init(config)
   val app = Javalin.create { javalinConfig ->
     javalinConfig.router.apiBuilder {
-      path("/api/") {
+      path("api") {
         get("test", UrlForkorterController::test, Rolle.Alle)
-        get("sjekk/:korturl", UrlForkorterController::sjekk, Rolle.Alle)
+        get("sjekk/{korturl}", UrlForkorterController::sjekk, Rolle.Alle)
 
         post("test", UrlForkorterController::test, Rolle.NavInnloggetBruker)
-        post("forkort/:langurl", UrlForkorterController::forkort, Rolle.NavInnloggetBruker)
+        post("forkort/{langurl}", UrlForkorterController::forkort, Rolle.Alle)
       }
     }
     javalinConfig.staticFiles.add("/public", Location.CLASSPATH)

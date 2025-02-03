@@ -14,8 +14,6 @@ private val logger = KotlinLogging.logger {}
 data class Config(
     val environment: Env,
     val appPort: Int,
-    /*  val healthProbePort: Int?,
-      val exposeWeblogs: Boolean, */
     val authConfig: AuthConfig,
     val dbConfig: DbConfig
 )
@@ -25,17 +23,30 @@ data class AuthConfig(val basicAuthUsername: String, val basicAuthPassword: Pass
 data class DbConfig(
     val jdbcUrl: String
 ) {
-    private val hikariConfig = HikariConfig().apply {
-        jdbcUrl = this@DbConfig.jdbcUrl
-        driverClassName = "org.postgresql.Driver"
-        maximumPoolSize = 5
-        isAutoCommit = false
-        transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+    private val dataSource: HikariDataSource? = if (!jdbcUrl.contains("h2")) {
+        val hikariConfig = HikariConfig().apply {
+            jdbcUrl = this@DbConfig.jdbcUrl
+            driverClassName = "org.postgresql.Driver"
+            maximumPoolSize = 5
+            isAutoCommit = false
+            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+        }
+        HikariDataSource(hikariConfig)
+    } else {
+        null
     }
 
-    private val dataSource: HikariDataSource = HikariDataSource(hikariConfig)
+    fun getDbConnection(): DataSource {
+        return dataSource ?: throw RuntimeException("HikariCP brukes ikke for H2, kall Database.connect() i stedet.")
+    }
 
-    fun getDbConnection(): DataSource = dataSource
+    override fun toString(): String {
+        return "DbConfig(jdbcUrl=${maskJdbcUrl(jdbcUrl)})"
+    }
+
+    private fun maskJdbcUrl(jdbcUrl: String): String {
+        return jdbcUrl.replace(Regex("(?<=://).*?:.*?@"), "****:****@")
+    }
 }
 
 data class Password(val value: String) {
@@ -64,8 +75,6 @@ fun createApplicationConfig(): Config {
             ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox og prod."),
         appPort = props.getProperty("PORT")?.toInt()
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
-        /*    healthProbePort = props.getProperty("health.probe.port")?.toInt(),
-            exposeWeblogs = props.getProperty("weblogs.expose").toBoolean(), */
         authConfig = AuthConfig(
             basicAuthUsername = props.getProperty("basicauth.username") ?: "",
             basicAuthPassword = Password(props.getProperty("basicauth.password") ?: "")
@@ -79,7 +88,7 @@ fun createApplicationConfig(): Config {
 
 private fun logConfig(config: Config) {
     if (config.environment in listOf(Local, Sandbox, Prod)) {
-        logger.info("Created config : $config")
+        logger.info("Opprettet config : $config")
     }
 }
 

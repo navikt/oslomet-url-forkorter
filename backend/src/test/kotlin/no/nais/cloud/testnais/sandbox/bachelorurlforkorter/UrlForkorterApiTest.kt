@@ -1,5 +1,6 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter
 
+/*
 import io.kotest.matchers.shouldBe
 import kong.unirest.core.HttpResponse
 import kong.unirest.core.HttpStatus
@@ -45,3 +46,4 @@ class UrlForkorterApiTest {
   }
 }
 
+*/

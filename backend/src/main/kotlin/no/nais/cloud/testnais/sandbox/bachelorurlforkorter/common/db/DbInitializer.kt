@@ -2,6 +2,7 @@ package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db
 
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Config
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -21,12 +22,17 @@ object ShortUrls : Table("short_urls") {
 
 object DatabaseInitializer {
     fun init(config: Config) {
-        Database.connect(config.dbConfig.getDbConnection())
+        val db = if (config.environment == Env.Local) {
+            logger.info("🛠️ Kjører lokalt med H2 in-memory database")
+            Database.connect(config.dbConfig.jdbcUrl, driver = "org.h2.Driver")
+        } else {
+            Database.connect(config.dbConfig.getDbConnection())
+        }
 
-        transaction {
+        transaction(db) {
             SchemaUtils.create(ShortUrls)
         }
 
-        logger.info("✅ Database initialized successfully at: ${config.dbConfig.jdbcUrl}")
+        logger.info("✅ Database suksessfullt initialisert: ${config.dbConfig.jdbcUrl}")
     }
 }
