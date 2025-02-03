@@ -4,8 +4,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Local
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Dev
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Test
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Sandbox
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Prod
 import java.util.Properties
 import javax.sql.DataSource
@@ -44,7 +43,7 @@ data class Password(val value: String) {
 }
 
 enum class Env {
-  Local, Dev, Test, Prod
+  Local, Sandbox, Prod
 }
 
 fun createApplicationConfig(): Config {
@@ -56,7 +55,7 @@ fun createApplicationConfig(): Config {
     addLocalProperties(props)
   }
 
-  logger.info("Kjører i ${props.getProperty("NAIS_CLUSTER_NAME")}")
+  logger.info("Kjører i miljø: ${props.getProperty("NAIS_CLUSTER_NAME")}")
 
   return Config(
     environment = getEnv(props)
@@ -75,7 +74,7 @@ fun createApplicationConfig(): Config {
 }
 
 private fun logConfig(config: Config) {
-  if (config.environment in listOf( Local, Dev, Test, Prod)) {
+  if (config.environment in listOf( Local, Sandbox, Prod)) {
     logger.info("Created config : $config")
   }
 }
@@ -84,7 +83,7 @@ private fun addLocalProperties(props: Properties): Properties {
   val fileName = "local.properties"
 
   {}.javaClass.getResourceAsStream("/$fileName")?.use {
-    logger.info("Reading properties from $fileName")
+    logger.info("Leser properties fra $fileName")
     props.load(it)
   } ?: logger.warn { "Missing $fileName file" }
 
@@ -94,8 +93,7 @@ private fun addLocalProperties(props: Properties): Properties {
 private fun getEnv(props: Properties): Env? =
   when (props.getProperty("NAIS_CLUSTER_NAME")) {
     "local" -> Local
-    "dev" -> Dev
-    "test" -> Test
+    "sandbox" -> Sandbox
     "prod" -> Prod
     else -> null
   }
