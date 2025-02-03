@@ -21,6 +21,8 @@
         <javalin.version>6.1.0</javalin.version>
         <jackson.version>2.16.1</jackson.version>
         <slf4j-api.version>2.0.11</slf4j-api.version>
+        <postgresql.version>42.5.0</postgresql.version>
+        <hikaricp.version>5.0.1</hikaricp.version>
         <logback.version>1.5.0</logback.version>
         <kotlin-logging.version>3.0.5</kotlin-logging.version>
 
@@ -54,6 +56,41 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+        <!-- HikariCP for Connection Pooling -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikaricp.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed-core</artifactId>
+            <version>0.41.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed-dao</artifactId>
+            <version>0.41.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed-jdbc</artifactId>
+            <version>0.41.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed-java-time</artifactId>
+            <version>0.44.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
