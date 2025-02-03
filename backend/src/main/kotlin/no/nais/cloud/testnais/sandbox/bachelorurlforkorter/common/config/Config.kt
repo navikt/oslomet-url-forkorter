@@ -47,7 +47,10 @@ data class DbConfig(
     }
 
     private fun maskJdbcUrl(jdbcUrl: String): String {
-        return jdbcUrl.replace(Regex("(?<=://)[^:/]+:[^@]+@"), "****:****@")
+        return jdbcUrl
+            .replace(Regex("(?<=://)[^:/]+:[^@]+@"), "****:****@")
+            .replace(Regex("(?<=password=)[^&]+"), "****")
+            .replace(Regex("(?<=user=)[^&]+"), "****")
     }
 }
 
