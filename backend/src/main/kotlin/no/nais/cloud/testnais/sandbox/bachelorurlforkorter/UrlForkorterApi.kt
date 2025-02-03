@@ -12,12 +12,14 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInitializer
 import org.slf4j.MDC
 
 private val logger = KotlinLogging.logger {}
 
 fun main() {
   val config = createApplicationConfig()
+  DatabaseInitializer.init()
   startAppServer(config);
 }
 
@@ -25,9 +27,11 @@ fun startAppServer(config: Config) {
   val app = Javalin.create { javalinConfig ->
     javalinConfig.router.apiBuilder {
       path("/api/") {
-
         get("test", UrlForkorterController::test, Rolle.Alle)
+        get("sjekk/:korturl", UrlForkorterController::sjekk, Rolle.Alle)
+
         post("test", UrlForkorterController::test, Rolle.NavInnloggetBruker)
+        post("forkort", UrlForkorterController::forkort, Rolle.NavInnloggetBruker)
       }
     }
     javalinConfig.staticFiles.add("/public", Location.CLASSPATH)

@@ -8,4 +8,12 @@ object UrlForkorterController {
         ctx.result("Hello world!")
     }
 
+    fun forkort(ctx: Context) {
+
+    }
+
+    fun sjekk(ctx: Context) {
+
+    }
+
 }
