@@ -1,11 +1,14 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Local
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Dev
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Test
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Prod
 import java.util.Properties
+import javax.sql.DataSource
 
 private val logger = KotlinLogging.logger {}
 
@@ -15,9 +18,26 @@ data class Config(
   val healthProbePort: Int?,
   val exposeWeblogs: Boolean,
   val authConfig: AuthConfig,
+  val dbConfig: DbConfig
 )
 
 data class AuthConfig(val basicAuthUsername: String, val basicAuthPassword: Password)
+
+data class DbConfig(
+  val jdbcUrl: String,
+) {
+  private val hikariConfig = HikariConfig().apply {
+    jdbcUrl = this@DbConfig.jdbcUrl
+    driverClassName = "org.postgresql.Driver"
+    maximumPoolSize = 5
+    isAutoCommit = false
+    transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+  }
+
+  private val dataSource: HikariDataSource = HikariDataSource(hikariConfig)
+
+  fun getDbConnection(): DataSource = dataSource
+}
 
 data class Password(val value: String) {
   override fun toString() = "*****"
@@ -40,11 +60,14 @@ fun createApplicationConfig(): Config {
     environment = getEnv(props)
       ?: throw RuntimeException("Property \"environment\" is not set. Valid values are: local, dev, test and prod."),
     appPort = props.getProperty("app.port").toInt(),
-    healthProbePort = props.getProperty("health.prope.port")?.toInt(),
+    healthProbePort = props.getProperty("health.probe.port")?.toInt(),
     exposeWeblogs = props.getProperty("weblogs.expose").toBoolean(),
     authConfig = AuthConfig(
       basicAuthUsername = props.getProperty("basicauth.username"),
       basicAuthPassword = Password(props.getProperty("basicauth.password"))
+    ),
+    dbConfig = DbConfig(
+      jdbcUrl = props.getProperty("NAIS_DATABASE_MYAPP_MYDB_JDBC_URL"),
     )
   ).also(::logConfig)
 }
@@ -67,7 +90,7 @@ private fun addLocalProperties(props: Properties): Properties {
 }
 
 private fun getEnv(props: Properties): Env? =
-  when (props.getProperty("environment")) {
+  when (props.getProperty("NAIS_CLUSTER_NAME")) {
     "local" -> Local
     "dev" -> Dev
     "test" -> Test

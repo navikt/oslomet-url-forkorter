@@ -1,10 +1,13 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db
 
+import mu.KotlinLogging
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Config
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.javatime.datetime
 
+private val logger = KotlinLogging.logger {}
 
 object ShortUrls : Table("short_urls") {
     val id = integer("id").autoIncrement()
@@ -17,13 +20,13 @@ object ShortUrls : Table("short_urls") {
 }
 
 object DatabaseInitializer {
-    fun init() {
-        Database.connect(DbConfig.getConnection())
+    fun init(config: Config) {
+        Database.connect(config.dbConfig.getDbConnection())
 
         transaction {
             SchemaUtils.create(ShortUrls)
         }
 
-        println("✅ Database initialized successfully.")
+        logger.info("✅ Database initialized successfully at: ${config.dbConfig.jdbcUrl}")
     }
 }
