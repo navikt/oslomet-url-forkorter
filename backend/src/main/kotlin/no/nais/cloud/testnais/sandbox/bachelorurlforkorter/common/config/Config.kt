@@ -23,7 +23,7 @@ data class Config(
 data class AuthConfig(val basicAuthUsername: String, val basicAuthPassword: Password)
 
 data class DbConfig(
-  val jdbcUrl: String,
+  val jdbcUrl: String
 ) {
   private val hikariConfig = HikariConfig().apply {
     jdbcUrl = this@DbConfig.jdbcUrl
@@ -59,16 +59,16 @@ fun createApplicationConfig(): Config {
 
   return Config(
     environment = getEnv(props)
-      ?: throw RuntimeException("Property \"environment\" is not set. Valid values are: local, dev, test and prod."),
+      ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox og prod."),
     appPort = props.getProperty("spec.port").toIntOrNull()?: 8080,
 /*    healthProbePort = props.getProperty("health.probe.port")?.toInt(),
     exposeWeblogs = props.getProperty("weblogs.expose").toBoolean(), */
     authConfig = AuthConfig(
-      basicAuthUsername = props.getProperty("basicauth.username"),
-      basicAuthPassword = Password(props.getProperty("basicauth.password"))
+      basicAuthUsername = props.getProperty("basicauth.username")?: "",
+      basicAuthPassword = Password(props.getProperty("basicauth.password")?: "")
     ),
     dbConfig = DbConfig(
-      jdbcUrl = props.getProperty("NAIS_DATABASE_MYAPP_MYDB_JDBC_URL"),
+      jdbcUrl = props.getProperty("NAIS_DATABASE_oslomet-url-forkorter_postgres-url-forkorter_JDBC_URL")?: "",
     )
   ).also(::logConfig)
 }
