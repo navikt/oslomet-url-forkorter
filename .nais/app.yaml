@@ -21,4 +21,4 @@ spec:
       - type: POSTGRES_16
         tier: db-f1-micro
         databases:
-          - name: postgresurlforkorter
+          - name: postgres-url-forkorter

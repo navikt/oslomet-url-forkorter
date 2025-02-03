@@ -12,7 +12,13 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: SBOM
+        uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: oslomet-url-forkorter
       - id: "auth"
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v2"
