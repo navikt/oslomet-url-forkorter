@@ -30,6 +30,8 @@ data class DbConfig(
             maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+            addDataSourceProperty("user", "****")
+            addDataSourceProperty("password", "****")
         }
         HikariDataSource(hikariConfig)
     } else {
@@ -39,19 +41,18 @@ data class DbConfig(
     fun getDbConnection(): DataSource {
         return dataSource ?: throw RuntimeException("HikariCP brukes ikke for H2, kall Database.connect() i stedet.")
     }
+
+    override fun toString(): String {
+        return "DbConfig(jdbcUrl=${maskJdbcUrl(jdbcUrl)})"
+    }
+
+    private fun maskJdbcUrl(jdbcUrl: String): String {
+        return jdbcUrl.replace(Regex("(?<=://)[^:/]+:[^@]+@"), "****:****@")
+    }
 }
 
 data class Password(val value: String) {
     override fun toString() = "*****"
-}
-
-data class JdbcUrl(val jdbcUrl: String) {
-    override fun toString(): String {
-        return "DbConfig(jdbcUrl=${jdbcUrl(jdbcUrl)})"
-    }
-    private fun jdbcUrl(jdbcUrl: String): String {
-        return jdbcUrl.replace(Regex("(?<=://)[^:/]+:[^@]+@"), "****:****@")
-    }
 }
 
 enum class Env {
@@ -81,8 +82,9 @@ fun createApplicationConfig(): Config {
             basicAuthPassword = Password(props.getProperty("basicauth.password") ?: "")
         ),
         dbConfig = DbConfig(
-            jdbcUrl = JdbcUrl(props.getProperty("NAIS_DATABASE_OSLOMET_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
-                ?: "").toString()
+            jdbcUrl = props.getProperty("NAIS_DATABASE_OSLOMET_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
+                ?: throw RuntimeException("Property \"NAIS_DATABASE_X_Y_JDBC_URL\" er ikke satt.")
+
         )
     ).also(::logConfig)
 }
