@@ -32,6 +32,7 @@ fun startAppServer(config: Config) {
                 post("forkort", UrlForkorterController::forkort, Rolle.Alle)
                 get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.Alle)
             }
+            get("/") { ctx -> ctx.redirect("/index.html") }
             get("{korturl}", UrlForkorterController::redirect, Rolle.Alle)
         }
         // TODO: Kun for lokal utvikling med hot reload
