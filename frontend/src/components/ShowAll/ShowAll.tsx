@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
 import {
+    IconContainer,
     StyledLink,
     StyledTable,
     TableCell,
@@ -47,6 +48,12 @@ export default function ShowAllUrls() {
             });
     }
 
+    function handleCopyClick(url: string) {
+        navigator.clipboard.writeText(url).then(() => {
+
+        });
+    }
+
     return (
         <TableContainer>
             {loading && <p>Loading...</p>}
@@ -70,9 +77,16 @@ export default function ShowAllUrls() {
                         <TableRow key={url.id}>
                             <TableCell>{url.id}</TableCell>
                             <TableCell>
-                                <StyledLink href={import.meta.env.VITE_BASE_URL + url.shortUrl} target="_blank" rel="noopener noreferrer">
-                                    {url.shortUrl}
-                                </StyledLink>
+                                <IconContainer>
+                                    <Icon icon="copy" onClick={() => {
+                                        handleCopyClick(import.meta.env.VITE_BASE_URL + url.shortUrl)
+                                    }}/>
+                                    <StyledLink href={import.meta.env.VITE_BASE_URL + url.shortUrl} target="_blank"
+                                                rel="noopener noreferrer">
+                                        {url.shortUrl}
+                                    </StyledLink>
+
+                                </IconContainer>
                             </TableCell>
                             <TableCell>
                                 <StyledLink href={url.longUrl} target="_blank" rel="noopener noreferrer">
@@ -82,7 +96,9 @@ export default function ShowAllUrls() {
                             <TableCell>{new Date(url.createdAt).toLocaleString()}</TableCell>
                             <TableCell>{url.createdBy || "Unknown"}</TableCell>
                             <TableCell>{url.clicks}</TableCell>
-                            <TableCell><Icon icon="close" onClick={() => {handleDeleteClick(url.id)}}></Icon></TableCell>
+                            <TableCell><Icon icon="close" onClick={() => {
+                                handleDeleteClick(url.id)
+                            }}></Icon></TableCell>
                         </TableRow>
                     ))}
                     </tbody>

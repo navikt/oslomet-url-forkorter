@@ -30,6 +30,7 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
     padding: 6px;
+    position: relative;
     border: 1px solid #ddd;
     text-align: left;
     font-size: 14px;
@@ -51,3 +52,10 @@ export const StyledLink = styled.a`
         text-decoration: underline;
     }
 `;
+
+export const IconContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    width: 100%;
+`
