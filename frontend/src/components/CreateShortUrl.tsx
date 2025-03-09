@@ -23,7 +23,7 @@ export default function CreateShortUrl() {
 
     return (
         <>
-            <Input placeholder="Skriv inn din lenke.."
+            <Input placeholder="Lim inn lenken du ønsker å forkorte.."
                    onClick={handleCreateClick}
                    onChange={setInputValue}>
             </Input>

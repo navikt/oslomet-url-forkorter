@@ -52,15 +52,11 @@ fun startAppServer(config: Config) {
     }
 
     app.before { ctx ->
-        setEventId(ctx)
-        logApiRequest(ctx)
         validateContentType(ctx)
         validateAcceptHeader(ctx)
     }
 
     app.after { ctx ->
-        logApiResponse(ctx)
-
         if (ctx.contentType() == "application/json") {
             ctx.contentType("application/json; charset=utf-8")
         }
@@ -82,28 +78,6 @@ fun startAppServer(config: Config) {
 
     app.start(config.appPort)
 }
-
-private fun setEventId(ctx: Context) = MDC.put("event.id", ctx.header("X-EVENT-ID")?.let(::sanitizeCRLF))
-
-private fun logApiRequest(ctx: Context) {
-    if (isK8sLivenessProbe(ctx)) {
-        return
-    }
-
-    ctx.req().setAttribute("request.start.time", System.currentTimeMillis())
-    logger.info("Request method=${ctx.req().method}, uri=${ctx.req().requestURI}")
-}
-
-private fun logApiResponse(ctx: Context) {
-    if (isK8sLivenessProbe(ctx)) {
-        return
-    }
-
-    val requestTime = System.currentTimeMillis() - ctx.req().getAttribute("request.start.time") as Long
-    logger.info("Request uri=${ctx.req().requestURI}, Duration=${requestTime}, Response=${ctx.res().status}")
-}
-
-private fun isK8sLivenessProbe(ctx: Context): Boolean = ctx.req().requestURL.contains("alivez")
 
 private fun validateContentType(ctx: Context) {
     if (ctx.method().name === "POST" && ctx.header("Content-Type")?.contains("application/json") != true) {
