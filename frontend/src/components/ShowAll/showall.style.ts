@@ -5,7 +5,7 @@ export const TableContainer = styled.div`
     margin: 20px auto;
     padding: 15px;
     border-radius: 10px;
-    background-color: #fcfcfc;
+    background-color: #fdfdfd;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
@@ -32,11 +32,13 @@ export const TableCell = styled.td`
     padding: 6px;
     border: 1px solid #ddd;
     text-align: left;
+    font-size: 14px;
 `;
 
 export const TableHeaderCell = styled.th`
-    padding: 7.5px;
+    padding: 7px;
     text-align: left;
+    font-size: 14px;
     border: 1px solid #ddd;
 `;
 

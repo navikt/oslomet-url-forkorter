@@ -25,6 +25,7 @@ fun main() {
 
 fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
+        javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
                 post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
@@ -33,7 +34,6 @@ fun startAppServer(config: Config) {
             }
             get("{korturl}", UrlForkorterController::redirect, Rolle.Alle)
         }
-        javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         // TODO: Kun for lokal utvikling med hot reload
         javalinConfig.bundledPlugins.enableCors {cors ->
             cors.addRule {it.allowHost("http://localhost:5173")}
