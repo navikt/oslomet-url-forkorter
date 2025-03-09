@@ -1,1 +1,39 @@
 Rapport beskrivelser underveis: 
+
+feat: Legg til forord for bacheloroppgaven
+- Inkluderer introduksjon til prosjektet og takk til veiledere og samarbeidspartnere.
+
+feat: Legg til beskrivelse av gruppemedlemmer
+- Beskriver hver gruppemedlems bakgrunn og rolle i prosjektet.
+
+feat: Inkluderer beskrivelse av oppdragsgiver (NAV)
+- Forklarer NAVs behov for en intern URL-forkortelsestjeneste.
+- Beskriver hvordan løsningen vil forbedre informasjonsflyt og sikkerhet.
+
+feat: Legg til veiledere fra OsloMet og NAV
+- Inkluderer beskrivelse av veileder fra OsloMet (Andrea Arcuri).
+- Inkluderer beskrivelse av veileder fra NAV (Kyrre Havik).
+
+feat: Beskriver hvorfor gruppen valgte denne oppgaven
+- Forklarer beslutningsprosessen bak valg av prosjektet.
+- Understreker relevans for offentlig sektor og teknologiske utfordringer.
+
+feat: Legg til prosjektmål og beskrivelse
+- Definerer hovedmålene for prosjektet og hvordan det skal bidra til NAVs interne infrastruktur.
+
+feat: Definerer problemstilling og delspørsmål
+- Inkluderer overordnet problemstilling for utviklingen av URL-forkortelsestjenesten.
+- Liste over sentrale underspørsmål for sikkerhet, skalerbarhet og integrasjon.
+
+feat: Beskrivelse av målgruppen
+- Definerer primærbrukerne av løsningen, med fokus på NAVs interne ansatte.
+
+feat: Legg til teknologi- og verktøyliste
+- Beskriver valg av backend-teknologier (Kotlin, Ktor, PostgreSQL).
+- Beskriver frontend-teknologier (React, Redux, Tailwind CSS).
+- Inkluderer informasjon om sikkerhet og tilgangsstyring.
+- Nevner infrastruktur og distribusjon via NAVs NAIS-plattform.
+
+feat: Inkluderer "Veien videre" for prosjektet
+- Beskriver neste steg, inkludert testing, brukeropplæring og videreutvikling.
+
