@@ -9,17 +9,9 @@ export default function CreateShortUrl() {
     const [inputValue, setInputValue] = useState("");
     const [result, setResult] = useState<string | null>(null);
 
-    async function postShortUrlSearch(longUrl: string) {
-        try {
-            return await apiRequest<{ forkortetUrl: string }>(`forkort?langurl=${longUrl}`, "POST");
-        } catch (error) {
-            console.error("API error:", error);
-        }
-    }
-
     function handleCreateClick() {
         if (!isValidUrl(inputValue)) return;
-        postShortUrlSearch(inputValue).then((res) => {
+        apiRequest<{ forkortetUrl: string }>(`forkort?langurl=${inputValue}`, "POST").then((res) => {
             if (res) setResult(res.forkortetUrl);
         }).catch(error => {
             setResult(null);
@@ -36,7 +28,7 @@ export default function CreateShortUrl() {
                    onChange={setInputValue}>
             </Input>
             {result &&
-            <a href={url} target="_blank">{url}</a>
+                <a href={url} target="_blank">{url}</a>
             }
         </>
     )

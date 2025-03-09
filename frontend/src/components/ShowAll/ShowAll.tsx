@@ -9,6 +9,7 @@ import {
     TableHeaderCell,
     TableRow
 } from "./showall.style.ts";
+import Icon from "../shared/Icon/Icon.tsx";
 
 interface UrlData {
     id: number;
@@ -38,6 +39,14 @@ export default function ShowAllUrls() {
         fetchUrls().then(() => setLoading(false));
     }, []);
 
+    function handleDeleteClick(id: number) {
+        apiRequest<{ forkortetUrl: string }>(`slett?id=${id}`, "POST")
+            .then(() => setUrls((prevUrls) => prevUrls.filter((url) => url.id !== id)))
+            .catch((error: Error) => {
+                console.error("API error:", error);
+            });
+    }
+
     return (
         <TableContainer>
             {loading && <p>Loading...</p>}
@@ -53,6 +62,7 @@ export default function ShowAllUrls() {
                             <TableHeaderCell>Opprettet</TableHeaderCell>
                             <TableHeaderCell>Av bruker</TableHeaderCell>
                             <TableHeaderCell>Antall besøk</TableHeaderCell>
+                            <TableHeaderCell>Slett</TableHeaderCell>
                         </TableRow>
                     </TableHeader>
                     <tbody>
@@ -72,6 +82,7 @@ export default function ShowAllUrls() {
                             <TableCell>{new Date(url.createdAt).toLocaleString()}</TableCell>
                             <TableCell>{url.createdBy || "Unknown"}</TableCell>
                             <TableCell>{url.clicks}</TableCell>
+                            <TableCell><Icon icon="close" onClick={() => {handleDeleteClick(url.id)}}></Icon></TableCell>
                         </TableRow>
                     ))}
                     </tbody>

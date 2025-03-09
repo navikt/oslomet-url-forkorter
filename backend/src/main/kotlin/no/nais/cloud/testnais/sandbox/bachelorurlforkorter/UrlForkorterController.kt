@@ -9,10 +9,6 @@ private val logger = KotlinLogging.logger {}
 
 object UrlForkorterController {
 
-    fun test(ctx: Context) {
-        ctx.result("Hello world!")
-    }
-
     fun redirect(ctx: Context) {
         val korturl = ctx.pathParam("korturl")
         if (!korturl.matches(Regex("^[a-z0-9]{6}$"))) {
@@ -75,6 +71,17 @@ object UrlForkorterController {
             ctx.status(200).json(urls)
         } catch (e: Exception) {
             logger.error("Feil ved henting av alle URLer", e)
+            ctx.status(500)
+        }
+    }
+
+    fun slett(ctx: Context) {
+        val id = ctx.queryParam("id")
+        try {
+            ShortUrlDataAccessObject.deleteShortUrlById(Integer.parseInt(id))
+            ctx.status(204)
+        } catch (e: Exception) {
+            logger.error("Feil ved sletting av URL", e)
             ctx.status(500)
         }
     }

@@ -2,6 +2,7 @@ package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 object ShortUrlDataAccessObject {
     fun storeShortUrl(shortUrl: String, longUrl: String, createdBy: String?) {
@@ -52,4 +53,11 @@ object ShortUrlDataAccessObject {
             }
         }
     }
+
+    fun deleteShortUrlById(id: Int): Boolean {
+        return transaction {
+            ShortUrls.deleteWhere { ShortUrls.id eq id } > 0
+        }
+    }
+
 }

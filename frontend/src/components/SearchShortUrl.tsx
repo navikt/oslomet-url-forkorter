@@ -7,21 +7,13 @@ export default function SearchShortUrl() {
     const [inputValue, setInputValue] = useState("");
     const [searchResult, setSearchResult] = useState<string | null>(null);
 
-    async function postShortUrlSearch(shortUrl: string) {
-        try {
-            return await apiRequest<{langurl: string }>(`sjekk?korturl=${shortUrl}`, "POST");
-        } catch (error) {
-            console.error("API error:", error);
-        }
-    }
-
     function handleSearchClick() {
         const shortUrl = extractShortUrl(inputValue)
         if (shortUrl === null || shortUrl.length !== 6) {
             console.log("test")
             return;
         }
-        postShortUrlSearch(shortUrl).then((res) => {
+        apiRequest<{langurl: string }>(`sjekk?korturl=${shortUrl}`, "POST").then((res) => {
             if (res) setSearchResult(res.langurl);
             else setSearchResult(null);
         }).catch(error => {
