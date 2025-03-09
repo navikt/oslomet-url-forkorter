@@ -32,12 +32,21 @@ fun startAppServer(config: Config) {
                 post("forkort", UrlForkorterController::forkort, Rolle.Alle)
                 get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.Alle)
             }
-            get("/") { ctx -> ctx.redirect("/index.html") }
-            get("{korturl}", UrlForkorterController::redirect, Rolle.Alle)
+            get("{korturl}") { ctx ->
+                if (ctx.pathParam("korturl") == "index.html") {
+                    val asset =
+                        UrlForkorterController::class.java.getResourceAsStream("/public/index.html")
+                    if (asset != null) {
+                        ctx.contentType("text/html").result(asset)
+                    }
+                } else {
+                    UrlForkorterController.redirect(ctx)
+                }
+            }
         }
         // TODO: Kun for lokal utvikling med hot reload
-        javalinConfig.bundledPlugins.enableCors {cors ->
-            cors.addRule {it.allowHost("http://localhost:5173")}
+        javalinConfig.bundledPlugins.enableCors { cors ->
+            cors.addRule { it.allowHost("http://localhost:5173") }
         }
     }
 
