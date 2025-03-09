@@ -28,13 +28,9 @@ fun startAppServer(config: Config) {
         javalinConfig.router.apiBuilder {
             path("api") {
                 post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
-                get("test", UrlForkorterController::test, Rolle.Alle)
-
-                post("test", UrlForkorterController::test, Rolle.InternNavInnlogget)
                 post("forkort", UrlForkorterController::forkort, Rolle.Alle)
+                get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.Alle)
             }
-        }
-        javalinConfig.router.apiBuilder {
             get("{korturl}", UrlForkorterController::redirect, Rolle.Alle)
         }
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)

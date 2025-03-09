@@ -15,12 +15,18 @@ object UrlForkorterController {
 
     fun redirect(ctx: Context) {
         val korturl = ctx.pathParam("korturl")
+        if (!korturl.matches(Regex("^[a-z0-9]{6}$"))) {
+            ctx.status(204)
+            return
+        }
+        logger.info("🔍 Received redirect request for short URL: $korturl")
         try {
-            val langurl = ShortUrlDataAccessObject.getLongUrl(korturl)
+            val langurl = ShortUrlDataAccessObject.getLongUrl(korturl.toString())
             if (langurl.isNullOrBlank()) {
-                ctx.status(404).json(mapOf("message" to "Finner ingen URL"))
+                ctx.status(404).json(mapOf("message" to "Finner ingen URL i databasen"))
                 return
             }
+            ShortUrlDataAccessObject.incrementClicks(korturl)
             ctx.status(307).redirect(langurl)
         } catch (e: Exception) {
             logger.error("Feil ved redirect: {}", korturl, e)
@@ -59,6 +65,16 @@ object UrlForkorterController {
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
         } catch (e: Exception) {
             logger.error("Feil ved forkorting av url: {}", originalUrl, e)
+            ctx.status(500)
+        }
+    }
+
+    fun hentAlleMedMetadata(ctx: Context) {
+        try {
+            val urls = ShortUrlDataAccessObject.getAllUrlsWithMetadata()
+            ctx.status(200).json(urls)
+        } catch (e: Exception) {
+            logger.error("Feil ved henting av alle URLer", e)
             ctx.status(500)
         }
     }

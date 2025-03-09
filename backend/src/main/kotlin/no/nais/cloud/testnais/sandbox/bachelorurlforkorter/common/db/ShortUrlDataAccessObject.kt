@@ -20,6 +20,21 @@ object ShortUrlDataAccessObject {
         }
     }
 
+    fun getAllUrlsWithMetadata(): List<Map<String, Any?>> {
+        return transaction {
+            ShortUrls.selectAll().map {
+                mapOf(
+                    "id" to it[ShortUrls.id],
+                    "shortUrl" to it[ShortUrls.shortUrl],
+                    "longUrl" to it[ShortUrls.longUrl],
+                    "createdAt" to it[ShortUrls.createdAt].toString(),
+                    "createdBy" to it[ShortUrls.createdBy],
+                    "clicks" to it[ShortUrls.clicks]
+                )
+            }
+        }
+    }
+
     fun getLongUrl(shortUrl: String): String? {
         return transaction {
             ShortUrls.select { ShortUrls.shortUrl eq shortUrl }

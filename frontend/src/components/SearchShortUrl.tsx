@@ -18,6 +18,7 @@ export default function SearchShortUrl() {
     function handleSearchClick() {
         const shortUrl = extractShortUrl(inputValue)
         if (shortUrl === null || shortUrl.length !== 6) {
+            console.log("test")
             return;
         }
         postShortUrlSearch(shortUrl).then((res) => {
