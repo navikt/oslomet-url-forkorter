@@ -8,6 +8,7 @@ spec:
     - https://bachelor-url-forkorter.sandbox.test-nais.cloud.nais.io
   image: {{image}}
   port: 8080
+  ttl: 168h
   replicas:
     max: 1
     min: 1
