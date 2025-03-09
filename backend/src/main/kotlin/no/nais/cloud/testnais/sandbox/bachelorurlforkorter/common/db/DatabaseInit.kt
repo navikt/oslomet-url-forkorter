@@ -2,7 +2,7 @@ package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db
 
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Config
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Local
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -20,10 +20,11 @@ object ShortUrls : Table("short_urls") {
     override val primaryKey = PrimaryKey(id)
 }
 
-object DatabaseInitializer {
-    fun init(config: Config) {
+object DatabaseInit {
+    fun start(config: Config) {
+        logger.info { "Oppretter database connection ..." }
         try {
-            val db = if (config.environment == Env.Local) {
+            val db = if (config.environment == Local) {
                 logger.info("Kjører lokalt med H2 in-memory database")
                 Database.connect(config.dbConfig.jdbcUrl, driver = "org.h2.Driver")
             } else {
@@ -33,9 +34,8 @@ object DatabaseInitializer {
                 SchemaUtils.create(ShortUrls)
             }
         } catch (e: Exception) {
-            throw RuntimeException("Kunne ikke initialisere database connection", e)
+            throw RuntimeException("Kunne ikke opprette database connection", e)
         }
-
-        logger.info("Database connection initialisert!")
+        logger.info("Database connection opprettet!")
     }
 }

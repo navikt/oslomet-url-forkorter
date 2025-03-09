@@ -1,12 +1,14 @@
 import {Main} from "./pages.style.ts";
-import Search from "../components/Search/Search";
-import Button from "../components/Button/Button";
+import Button from "../components/shared/Button/Button";
+import SearchShortUrl from "../components/SearchShortUrl.tsx";
+import CreateShortUrl from "../components/CreateShortUrl.tsx";
 
 export default function LandingPage() {
 
     return (
         <Main>
-            <Search placeholder="Kontroller din lenke.." onClick={() => {}}/>
+            <CreateShortUrl/>
+            <SearchShortUrl/>
             <Button text="Logg inn" onClick={() => {console.log("Click")}}/>
         </Main>
     )

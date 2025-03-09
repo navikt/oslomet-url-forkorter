@@ -14,6 +14,12 @@ object ShortUrlDataAccessObject {
         }
     }
 
+    fun getAllShortUrls(): List<String> {
+        return transaction {
+            ShortUrls.selectAll().map { it[ShortUrls.shortUrl] }
+        }
+    }
+
     fun getLongUrl(shortUrl: String): String? {
         return transaction {
             ShortUrls.select { ShortUrls.shortUrl eq shortUrl }

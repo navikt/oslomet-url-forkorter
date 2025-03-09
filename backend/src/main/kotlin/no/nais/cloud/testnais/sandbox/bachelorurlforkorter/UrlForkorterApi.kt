@@ -12,14 +12,14 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInitializer
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
 import org.slf4j.MDC
 
 private val logger = KotlinLogging.logger {}
 
 fun main() {
     val config = createApplicationConfig()
-    DatabaseInitializer.init(config)
+    DatabaseInit.start(config)
     startAppServer(config);
 }
 
@@ -27,14 +27,21 @@ fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
         javalinConfig.router.apiBuilder {
             path("api") {
+                post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
                 get("test", UrlForkorterController::test, Rolle.Alle)
-                get("sjekk/{korturl}", UrlForkorterController::sjekk, Rolle.Alle)
 
-                post("test", UrlForkorterController::test, Rolle.NavInnloggetBruker)
-                post("forkort/{langurl}", UrlForkorterController::forkort, Rolle.Alle)
+                post("test", UrlForkorterController::test, Rolle.InternNavInnlogget)
+                post("forkort", UrlForkorterController::forkort, Rolle.Alle)
             }
         }
+        javalinConfig.router.apiBuilder {
+            get("{korturl}", UrlForkorterController::redirect, Rolle.Alle)
+        }
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
+        // TODO: Kun for lokal utvikling med hot reload
+        javalinConfig.bundledPlugins.enableCors {cors ->
+            cors.addRule {it.allowHost("http://localhost:5173")}
+        }
     }
 
     app.before { ctx ->
@@ -104,8 +111,9 @@ private fun validateAcceptHeader(ctx: Context) {
 }
 
 enum class Rolle : RouteRole {
-    NavInnloggetBruker,
-    Alle
+    Alle,
+    InternNavInnlogget,
+    AdminNavInnlogget
 }
 
 private fun checkAccessToEndpoint(ctx: Context, config: Config) {
@@ -115,7 +123,7 @@ private fun checkAccessToEndpoint(ctx: Context, config: Config) {
             throw UnauthorizedResponse()
         }
 
-        ctx.routeRoles().contains(Rolle.NavInnloggetBruker) -> {
+        ctx.routeRoles().contains(Rolle.InternNavInnlogget) -> {
             val isValidUsername = config.authConfig.basicAuthUsername == ctx.basicAuthCredentials()?.username
             val isValidPassword = config.authConfig.basicAuthPassword.value == ctx.basicAuthCredentials()?.password
 
