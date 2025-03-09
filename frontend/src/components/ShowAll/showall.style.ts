@@ -4,13 +4,13 @@ export const TableContainer = styled.div`
     width: 60vw;
     margin: 20px auto;
     padding: 15px;
-    border-radius: 10px;
-    background-color: #fdfdfd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+    border-radius: 15px;
 `;
 
 export const StyledTable = styled.table`
     width: 100%;
+    margin-top: 10px;
     border-collapse: collapse;
     background-color: white;
     border-radius: 8px;
@@ -40,7 +40,7 @@ export const TableHeaderCell = styled.th`
     padding: 7px;
     text-align: left;
     font-size: 14px;
-    border: 1px solid #ddd;
+    user-select: none;
 `;
 
 export const StyledLink = styled.a`
@@ -59,3 +59,4 @@ export const IconContainer = styled.div`
     gap: .4rem;
     width: 100%;
 `
+

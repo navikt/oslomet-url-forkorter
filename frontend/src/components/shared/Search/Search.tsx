@@ -1,16 +1,19 @@
 import {SearchContainer, StyledButton, StyledInput} from "./search.style.ts";
+import {CSSProperties} from "react";
 
 interface Props {
     placeholder?: string;
     onClick?: () => void;
     onChange?: (value: string) => void;
+    disableButton?: boolean;
+    style?: CSSProperties;
 }
 
-export default function Search({placeholder, onClick, onChange}: Props) {
+export default function Search({placeholder, onClick, onChange, disableButton, style}: Props) {
     return (
-        <SearchContainer>
+        <SearchContainer style={style}>
             <StyledInput type="search" placeholder={placeholder} onChange={(e) => onChange?.(e.target.value)}/>
-            <StyledButton text="Søk" onClick={onClick}/>
+            {!disableButton && <StyledButton text="Søk" onClick={onClick}/>}
         </SearchContainer>
     )
 }
