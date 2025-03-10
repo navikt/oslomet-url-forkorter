@@ -1,5 +1,7 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.apibuilder.ApiBuilder.path
@@ -9,8 +11,11 @@ import io.javalin.http.HttpResponseException
 import io.javalin.http.HttpStatus
 import io.javalin.http.UnauthorizedResponse
 import io.javalin.http.staticfiles.Location
+import io.javalin.json.JavalinJackson
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.auth.Auth
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.auth.Auth.validateJwtToken
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
 import org.slf4j.MDC
@@ -25,13 +30,17 @@ fun main() {
 
 fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
+        javalinConfig.jsonMapper(JavalinJackson(jacksonObjectMapper().registerKotlinModule()))
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
                 post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
-                post("forkort", UrlForkorterController::forkort, Rolle.Alle)
+                post("forkort", UrlForkorterController::forkort, Rolle.InternNavInnlogget)
                 post("slett", UrlForkorterController::slett, Rolle.Alle)
                 get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.Alle)
+                post("logginn", Auth::loggInn, Rolle.Alle)
+                get("bruker", Auth::hentInnloggetBruker, Rolle.Alle)
+                post("loggut", Auth::loggUt, Rolle.Alle)
             }
             get("{korturl}") { ctx ->
                 if (ctx.pathParam("korturl") == "index.html") {
@@ -70,7 +79,7 @@ fun startAppServer(config: Config) {
 
     app.beforeMatched { ctx ->
         if (ctx.path().startsWith("/api/")) {
-            checkAccessToEndpoint(ctx, config)
+            checkAccessToEndpoint(ctx)
         }
     }
 
@@ -97,20 +106,21 @@ enum class Rolle : RouteRole {
     AdminNavInnlogget
 }
 
-private fun checkAccessToEndpoint(ctx: Context, config: Config) {
+private fun checkAccessToEndpoint(ctx: Context) {
     when {
         ctx.routeRoles().isEmpty() -> {
             logger.error { "Manglende tilgangsstyring på endepunkt ${ctx.path()}" }
             throw UnauthorizedResponse()
         }
 
-        ctx.routeRoles().contains(Rolle.InternNavInnlogget) -> {
-            val isValidUsername = config.authConfig.basicAuthUsername == ctx.basicAuthCredentials()?.username
-            val isValidPassword = config.authConfig.basicAuthPassword.value == ctx.basicAuthCredentials()?.password
+        ctx.routeRoles().contains(Rolle.InternNavInnlogget) || ctx.routeRoles().contains(Rolle.AdminNavInnlogget) -> {
+            val (username, role) = validateJwtToken(ctx)
+                ?: throw UnauthorizedResponse("Invalid or expired token")
 
-            if (!isValidUsername || !isValidPassword) {
-                logger.error { "Feil ved autentisering av innlogget bruker" }
-                throw UnauthorizedResponse()
+            ctx.attribute("username", username)
+
+            if (!ctx.routeRoles().contains(role)) {
+                throw UnauthorizedResponse("Manglende autorisasjon på endepunkt")
             }
         }
 

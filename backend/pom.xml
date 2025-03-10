@@ -26,6 +26,8 @@
         <exposed.version>0.44.0</exposed.version>
         <logback.version>1.5.0</logback.version>
         <kotlin-logging.version>3.0.5</kotlin-logging.version>
+        <jose.version>9.31</jose.version>
+        <bcrypt.version>0.10.2</bcrypt.version>
 
         <!-- ===================== -->
         <!-- Dev dependencies      -->
@@ -53,9 +55,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>${bcrypt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${jose.version}</version>
         </dependency>
 
         <dependency>

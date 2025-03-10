@@ -6,7 +6,8 @@ export async function apiRequest<T>(
     body?: unknown,
     headers: HeadersInit = {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "credentials": "include"
     }
 ): Promise<T> {
     const response = await fetch(API_BASE_URL + endpoint, {

@@ -1,17 +1,13 @@
-import {Main} from "./pages.style.ts";
-import Button from "../components/shared/Button/Button";
+import {InfoText, LogoText, Main, WelcomeText} from "./pages.style.ts";
 import SearchShortUrl from "../components/SearchShortUrl.tsx";
-import CreateShortUrl from "../components/CreateShortUrl.tsx";
-import ShowAllUrls from "../components/ShowAll/ShowAll.tsx";
 
 export default function LandingPage() {
 
     return (
         <Main>
-            <CreateShortUrl/>
+            <WelcomeText>Velkommen!</WelcomeText>
+            <InfoText><LogoText>n.av</LogoText> er en tjeneste levert av NAV. <br/> Har du mottatt en link fra oss og vil dobbelsjekke denne? <br/> Lim den inn i søkefeltet under!</InfoText>
             <SearchShortUrl/>
-            <Button text="Logg inn" onClick={() => {console.log("Click")}}/>
-            <ShowAllUrls/>
         </Main>
     )
 }

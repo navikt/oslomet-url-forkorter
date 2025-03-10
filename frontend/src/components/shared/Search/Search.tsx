@@ -12,7 +12,16 @@ interface Props {
 export default function Search({placeholder, onClick, onChange, disableButton, style}: Props) {
     return (
         <SearchContainer style={style}>
-            <StyledInput type="search" placeholder={placeholder} onChange={(e) => onChange?.(e.target.value)}/>
+            <StyledInput
+                type="search"
+                placeholder={placeholder}
+                onChange={(e) => onChange?.(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        onClick?.();
+                    }
+                }}
+            />
             {!disableButton && <StyledButton text="Søk" onClick={onClick}/>}
         </SearchContainer>
     )

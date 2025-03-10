@@ -43,16 +43,6 @@ export const TableHeaderCell = styled.th`
     user-select: none;
 `;
 
-export const StyledLink = styled.a`
-    color: var(--theme-color);
-    text-decoration: none;
-    font-weight: bold;
-
-    &:hover {
-        text-decoration: underline;
-    }
-`;
-
 export const IconContainer = styled.div`
     display: flex;
     align-items: center;

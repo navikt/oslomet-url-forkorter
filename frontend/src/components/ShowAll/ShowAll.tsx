@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
 import {
     IconContainer,
-    StyledLink,
     StyledTable,
     TableCell,
     TableContainer,
@@ -12,6 +11,7 @@ import {
 } from "./showall.style.ts";
 import Icon from "../shared/Icon/Icon.tsx";
 import Search from "../shared/Search/Search.tsx";
+import Link from "../shared/Link/Link.tsx";
 
 interface UrlData {
     id: number;
@@ -37,7 +37,7 @@ export default function ShowAllUrls() {
                 const data = await apiRequest<UrlData[]>("hentalle");
                 setUrls(data);
             } catch (err) {
-                setError("Failed to fetch URLs");
+                setError("Feil ved henting av liste over URLer");
                 console.error("API error:", err);
             }
         }
@@ -146,17 +146,17 @@ export default function ShowAllUrls() {
                                         <Icon icon="copy" onClick={() => {
                                             handleCopyClick(import.meta.env.VITE_BASE_URL + url.shortUrl)
                                         }}/>
-                                        <StyledLink href={import.meta.env.VITE_BASE_URL + url.shortUrl}
+                                        <Link href={import.meta.env.VITE_BASE_URL + url.shortUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
                                             {url.shortUrl}
-                                        </StyledLink>
+                                        </Link>
                                     </IconContainer>
                                 </TableCell>
                                 <TableCell>
-                                    <StyledLink href={url.longUrl} target="_blank" rel="noopener noreferrer">
+                                    <Link href={url.longUrl} target="_blank" rel="noopener noreferrer">
                                         {url.longUrl}
-                                    </StyledLink>
+                                    </Link>
                                 </TableCell>
                                 <TableCell>{url.createdBy || "Unknown"}</TableCell>
                                 <TableCell>
