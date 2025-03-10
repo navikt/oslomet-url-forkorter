@@ -21,7 +21,7 @@
         <javalin.version>6.4.0</javalin.version>
         <jackson.version>2.18.2</jackson.version>
         <slf4j-api.version>2.0.16</slf4j-api.version>
-        <postgresql.version>42.5.0</postgresql.version>
+        <postgresql.version>42.5.5</postgresql.version>
         <hikaricp.version>5.0.1</hikaricp.version>
         <exposed.version>0.44.0</exposed.version>
         <logback.version>1.5.0</logback.version>
