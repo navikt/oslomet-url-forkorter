@@ -26,7 +26,7 @@
         <exposed.version>0.44.0</exposed.version>
         <logback.version>1.5.0</logback.version>
         <kotlin-logging.version>3.0.5</kotlin-logging.version>
-        <jose.version>9.31</jose.version>
+        <jose.version>9.37.2</jose.version>
         <bcrypt.version>0.10.2</bcrypt.version>
 
         <!-- ===================== -->
