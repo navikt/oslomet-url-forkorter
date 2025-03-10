@@ -7,12 +7,14 @@ import {useAuth} from "../../util/hooks/useAuth.ts";
 
 export default function Header() {
     const [showLogin, setShowLogin] = useState(false);
-    const {isLoggedIn, user, logout} = useAuth();
+    const {isLoggedIn, user, loading, logout} = useAuth();
 
     return (
         <HeaderContainer>
             <LogoText>n.av</LogoText>
-            {isLoggedIn ? (
+            {loading ? (
+                <DisplayUser>Loading...</DisplayUser>
+            ) : isLoggedIn ? (
                 <div style={{display: "flex", alignItems: "center"}}>
                     <DisplayUser>Velkommen, {user}!</DisplayUser>
                     <Button text="Logg ut" onClick={logout}/>

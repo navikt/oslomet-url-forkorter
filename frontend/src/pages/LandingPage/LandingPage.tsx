@@ -1,5 +1,6 @@
-import {InfoText, LogoText, Main, WelcomeText} from "./pages.style.ts";
-import SearchShortUrl from "../components/SearchShortUrl.tsx";
+import {InfoText, LogoText, WelcomeText} from "./landingpage.style.ts";
+import {Main} from "../pages.style.ts";
+import SearchShortUrl from "../../components/SearchShortUrl.tsx";
 
 export default function LandingPage() {
 

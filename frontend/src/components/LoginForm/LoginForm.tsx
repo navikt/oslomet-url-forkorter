@@ -2,6 +2,7 @@ import {FormEvent, useState} from "react";
 import { LoginContainer, LoginInput, LoginButton } from "./loginform.style.ts";
 import Link from "../shared/Link/Link.tsx";
 import {apiRequest} from "../../util/api/apiRequest.ts";
+import {useNavigate} from "react-router-dom";
 
 interface LoginFormProps {
     onLogin: () => void;
@@ -11,6 +12,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -21,10 +23,11 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
         apiRequest<{ token: string }>("logginn", "POST", body).then(() => {
             onLogin();
+            navigate("/dashboard");
         }).catch(error => {
             setError(error.message);
             console.error(error);
-        });
+        })
     };
 
     return (

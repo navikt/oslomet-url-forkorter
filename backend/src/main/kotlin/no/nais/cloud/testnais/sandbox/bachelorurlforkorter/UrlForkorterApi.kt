@@ -36,14 +36,14 @@ fun startAppServer(config: Config) {
             path("api") {
                 post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
                 post("forkort", UrlForkorterController::forkort, Rolle.InternNavInnlogget)
-                post("slett", UrlForkorterController::slett, Rolle.Alle)
-                get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.Alle)
+                post("slett", UrlForkorterController::slett, Rolle.InternNavInnlogget)
+                get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
                 post("logginn", Auth::loggInn, Rolle.Alle)
                 get("bruker", Auth::hentInnloggetBruker, Rolle.Alle)
                 post("loggut", Auth::loggUt, Rolle.Alle)
             }
             get("{korturl}") { ctx ->
-                if (ctx.pathParam("korturl") == "index.html") {
+                if (ctx.pathParam("korturl") == "index.html" || ctx.pathParam("korturl") == "dashboard") {
                     val asset =
                         UrlForkorterController::class.java.getResourceAsStream("/public/index.html")
                     if (asset != null) {

@@ -24,7 +24,7 @@ interface UrlData {
 
 type SortColumn = "createdAt" | "clicks" | null;
 
-export default function ShowAllUrls() {
+export default function ShowAll() {
     const [urls, setUrls] = useState<UrlData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
