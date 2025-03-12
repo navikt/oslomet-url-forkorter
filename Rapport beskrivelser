@@ -37,3 +37,71 @@ feat: Legg til teknologi- og verktøyliste
 feat: Inkluderer "Veien videre" for prosjektet
 - Beskriver neste steg, inkludert testing, brukeropplæring og videreutvikling.
 
+VIDERE ENDRINGER: 
+DelKapittel 
+1.8 Teknologi og verktøy (Foreløpig ikke helt fastsatt)
+Beskrivelse av teknologivalgene for backend, frontend, infrastruktur og sikkerhet.
+
+Backend:
+Kotlin valgt for sin kompatibilitet med JVM og gode støtte for backend-utvikling.
+Javalin brukes for å bygge RESTful API-er.
+PostgreSQL valgt som database for produksjon, med H2 for lokal testing.
+Logging håndteres med Logback, med planlagt overvåkning via Grafana og Prometheus.
+
+Frontend:
+React benyttes for sin komponentbaserte arkitektur.
+Tailwind CSS brukes for rask og modulær styling.
+Tilstandshåndtering via React Context/Zustand (Redux vurderes).
+
+Infrastruktur og distribusjon:
+NAVs NAIS-plattform brukes for hosting og drift av applikasjonen.
+CI/CD via GitHub Actions for automatisert testing og utrulling.
+
+Sikkerhet og tilgangsstyring:
+OAuth 2.0 / OpenID Connect planlagt for autentisering.
+Logging av API-kall for sikkerhet og revisjonssporing.
+
+Kapittel 2: Teknologier og verktøy
+Detaljert beskrivelse av hver teknologi og verktøy benyttet i prosjektet.
+Backend-teknologier: Kotlin, Ktor, PostgreSQL, OAuth 2.0, Prometheus & Grafana.
+Frontend-teknologier: React, Redux (mulig implementering), Tailwind CSS.
+Infrastruktur: NAIS-plattform, GitHub Actions for CI/CD.
+Sikkerhet: Rate limiting, logging, kryptering for GDPR-overholdelse.
+Utviklings- og testverktøy: Postman for API-testing, Docker for containerisering, Jira/Trello for prosjektstyring.
+
+Kapittel 3: Prosessdokumentasjon
+3.1 Forord
+
+Gjennomgang av utviklingsprosessen fra idé til ferdig produkt.
+Dokumentasjon av teknologivalg, designvalg og implementasjon.
+
+3.2 Metodikk og planlegging
+
+Smidig utviklingsmetodikk inspirert av Scrum.
+Sprintplanlegging med standup-møter via Teams/Discord.
+GitHub Projects benyttet for oppgavehåndtering med Kanban-brett.
+Evaluering og justering etter hver sprint for optimal utviklingsflyt.
+
+3.3 Utviklingsprosessen
+
+Tidlig planlegging:
+
+Backend utviklet først for stabil API-struktur før frontend-integrasjon.
+Bruk av databasehåndtering og autentisering via ID-porten vurdert.
+UI/UX Design og skisser:
+
+Prototyper laget i Figma med fokus på minimalistisk og intuitivt design.
+Responsivt grensesnitt for mobil og desktop.
+Utvikling av flyten:
+
+Beskrivelse av hvordan en URL forkortes, lagres og omdirigeres i systemet.
+Sekvensdiagrammer for API-flyten mellom frontend og backend.
+Databaseutforming:
+
+Beskrivelse av databasevalg (PostgreSQL for produksjon, H2 for testing).
+ER-diagram over databasearkitekturen.
+Implementering av indeksering for raskere oppslag av korte URL-er.
+Systemarkitektur:
+
+Oversikt over frontend-backend-database strukturen.
+Bruk av Javalin for API, PostgreSQL for datalagring og Kotlin for backend.
