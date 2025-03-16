@@ -1,0 +1,17 @@
+### Forkort URL lokal
+POST localhost:8080/api/forkort/asd
+Content-Type: application/json
+Accept: application/json
+
+### Sjekk URL lokal
+GET localhost:8080/api/sjekk/123
+Accept: application/json
+
+### Forkort URL cluster
+POST https://bachelor-url-forkorter.sandbox.test-nais.cloud.nais.io/api/forkort/asd
+Content-Type: application/json
+Accept: application/json
+
+### Sjekk URL cluster
+GET https://bachelor-url-forkorter.sandbox.test-nais.cloud.nais.io/api/sjekk/123
+Accept: application/json
