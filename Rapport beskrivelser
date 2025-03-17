@@ -114,11 +114,18 @@ og vi gikk fra OAuth 2.0 til en enklere token-basert løsning før vi senere opt
 Frontend-design møtte utfordringer med responsivitet, som ble løst gjennom iterasjoner med grid-layout og Tailwind CSS. API-feilhåndtering ble forbedret med logging og tydelige statuskoder, 
 mens klikkstatistikk ble implementert ved hjelp av en egen tabell med asynkron oppdatering for å redusere belastningen på databasen.
 
+🔹 Grafisk innhold: Figur 6 - Aktivitetsdiagram som viser arbeidsflyten fra innsending av en URL til lagring og bruk av en kort URL.
+
+
 3.3 Utviklingsprosessen
 Backend-utviklingen ble prioritert i tidlig fase for å sikre stabilitet i databasekommunikasjon og API-håndtering før frontend-integrasjon. 
 Vi etablerte en klar systemarkitektur, med PostgreSQL som database og H2 for lokal testing. API-strukturen ble designet for enkelhet og sikkerhet,
 mens GitHub ble brukt til versjonskontroll med separate grener for utvikling og testing. Frontend-teamet startet utviklingen etter at backend-funksjonaliteten var stabil, 
 noe som muliggjorde raskere testing og iterasjoner. Vi brukte Javalin for API-håndtering og bygde en sømløs frontend-backend-integrasjon.
+
+🔹 Grafisk innhold: Figur 5 - Use Case-diagram som viser samspillet mellom brukere og systemet, inkludert rollebasert tilgang.
+
+
 
 3.3.1 UI/UX Design og skisser
 For å skape en intuitiv brukeropplevelse utviklet vi tidlige skisser i Figma. 
@@ -126,13 +133,34 @@ Designet fokuserte på enkelhet og tydelig informasjonsstruktur. Tidlige iterasj
 noe som førte til justeringer i layout, farger og typografi. Designet ble tilpasset NAVs retningslinjer for å sikre god brukervennlighet og tilgjengelighet. 
 Endelige skisser viste forbedringer i struktur, navigasjon og responsivitet sammenlignet med første versjon.
 
+🔹 Grafisk innhold:
+
+Figur 2 - Første Figma-skisse av brukergrensesnittet.
+Figur 3 - Sammenligning mellom tidlig skisse og endelig UI-versjon.
+Figur 4 - Endelig brukergrensesnitt etter flere iterasjoner.
+
+
 3.3.1.2 Utvikling av flyten
 Et Use Case-diagram ble utviklet for å tydeliggjøre interaksjonen mellom brukere og systemet. 
 Diagrammet viste hvordan brukere kan generere korte URL-er, mens NAV-ansatte har administrative rettigheter. 
 Et aktivitetsdiagram illustrerte den tekniske arbeidsflyten fra innsending av en lang URL til lagring og henting av korte URL-er i databasen. 
 Dette ga en strukturert oversikt over hvordan systemet håndterer brukernes forespørsler.
 
+🔹 Grafisk innhold: Figur 6 - Aktivitetsdiagram som viser den tekniske flyten fra innsending av en URL til generering og bruk av korte lenker.
+
 3.3.1.3 Databaseutforming
 Databasen ble designet med fokus på effektiv lagring av forkortede URL-er og tilhørende metadata. PostgreSQL ble valgt som primær database, 
 mens H2 ble brukt for testing. Vi implementerte indeksering for raskere oppslag, samt en dedikert tabell for logging av klikk på URL-er. 
 Databaseoppsettet inkluderer tabeller for brukere, forkortede URL-er, klikkstatistikk og systemlogging for å sikre sporing og vedlikehold av data.
+
+🔹 Grafisk innhold:
+
+Figur 7 - Databasestruktur med tabeller og relasjoner.
+Figur 8 - Endelig databasemodell etter optimalisering.
+
+
+
+
+
+
+
