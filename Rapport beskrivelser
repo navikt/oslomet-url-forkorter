@@ -105,3 +105,18 @@ Systemarkitektur:
 
 Oversikt over frontend-backend-database strukturen.
 Bruk av Javalin for API, PostgreSQL for datalagring og Kotlin for backend.
+
+3.2.3 Tekniske utfordringer
+Under utviklingen av URL-forkorteren oppstod utfordringer knyttet til databasehåndtering, autentisering, API-kommunikasjon og responsiv UI-design. For å sikre unike korte URL-er vurderte vi flere genereringsmetoder og implementerte en sjekk i databasen for å hindre duplisering. Autentiseringsløsningen måtte tilpasses tidsbegrensninger, og vi gikk fra OAuth 2.0 til en enklere token-basert løsning før vi senere optimaliserte sikkerheten. Frontend-design møtte utfordringer med responsivitet, som ble løst gjennom iterasjoner med grid-layout og Tailwind CSS. API-feilhåndtering ble forbedret med logging og tydelige statuskoder, mens klikkstatistikk ble implementert ved hjelp av en egen tabell med asynkron oppdatering for å redusere belastningen på databasen.
+
+3.3 Utviklingsprosessen
+Backend-utviklingen ble prioritert i tidlig fase for å sikre stabilitet i databasekommunikasjon og API-håndtering før frontend-integrasjon. Vi etablerte en klar systemarkitektur, med PostgreSQL som database og H2 for lokal testing. API-strukturen ble designet for enkelhet og sikkerhet, mens GitHub ble brukt til versjonskontroll med separate grener for utvikling og testing. Frontend-teamet startet utviklingen etter at backend-funksjonaliteten var stabil, noe som muliggjorde raskere testing og iterasjoner. Vi brukte Javalin for API-håndtering og bygde en sømløs frontend-backend-integrasjon.
+
+3.3.1 UI/UX Design og skisser
+For å skape en intuitiv brukeropplevelse utviklet vi tidlige skisser i Figma. Designet fokuserte på enkelhet og tydelig informasjonsstruktur. Tidlige iterasjoner viste behov for forbedret skalering, noe som førte til justeringer i layout, farger og typografi. Designet ble tilpasset NAVs retningslinjer for å sikre god brukervennlighet og tilgjengelighet. Endelige skisser viste forbedringer i struktur, navigasjon og responsivitet sammenlignet med første versjon.
+
+3.3.1.2 Utvikling av flyten
+Et Use Case-diagram ble utviklet for å tydeliggjøre interaksjonen mellom brukere og systemet. Diagrammet viste hvordan brukere kan generere korte URL-er, mens NAV-ansatte har administrative rettigheter. Et aktivitetsdiagram illustrerte den tekniske arbeidsflyten fra innsending av en lang URL til lagring og henting av korte URL-er i databasen. Dette ga en strukturert oversikt over hvordan systemet håndterer brukernes forespørsler.
+
+3.3.1.3 Databaseutforming
+Databasen ble designet med fokus på effektiv lagring av forkortede URL-er og tilhørende metadata. PostgreSQL ble valgt som primær database, mens H2 ble brukt for testing. Vi implementerte indeksering for raskere oppslag, samt en dedikert tabell for logging av klikk på URL-er. Databaseoppsettet inkluderer tabeller for brukere, forkortede URL-er, klikkstatistikk og systemlogging for å sikre sporing og vedlikehold av data.
