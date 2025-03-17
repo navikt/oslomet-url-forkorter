@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Logginn from './Logginn';
-import Url from './Url';
+import Logginn from './pages/Logginn.tsx';
+import Url from './pages/Url.tsx';
 
 function App() {
     return (
