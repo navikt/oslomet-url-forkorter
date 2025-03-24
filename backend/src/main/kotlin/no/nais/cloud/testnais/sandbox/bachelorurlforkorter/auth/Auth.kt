@@ -28,7 +28,7 @@ private val logger = KotlinLogging.logger {}
 
 object Auth {
 
-    private const val SECRET_KEY = "U29tZXN1cGVyc2VjdXJlcGFzc3BocmFzZQ==\n"
+    private const val SECRET_KEY = "U29tZXN1cGVyc2VjdXJlcGFzc3BocmFzZQ"
     private const val TOKEN_EXPIRATION_TIME = 1000 * 60 * 60
 
     fun loggInn(ctx: Context) {

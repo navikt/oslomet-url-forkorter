@@ -15,13 +15,13 @@ object UrlForkorterController {
             ctx.status(204)
             return
         }
-        logger.info("🔍 Received redirect request for short URL: $korturl")
         try {
             val langurl = ShortUrlDataAccessObject.getLongUrl(korturl.toString())
             if (langurl.isNullOrBlank()) {
                 ctx.status(404).json(mapOf("message" to "Finner ingen URL i databasen"))
                 return
             }
+            logger.info("Videsendt URL: $korturl til $langurl")
             ShortUrlDataAccessObject.incrementClicks(korturl)
             ctx.status(307).redirect(langurl)
         } catch (e: Exception) {

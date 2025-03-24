@@ -9,12 +9,16 @@ export default function Header() {
     const [showLogin, setShowLogin] = useState(false);
     const {isLoggedIn, user, loading, logout} = useAuth();
 
+    if (loading) {
+        return (
+            <DisplayUser>Loading...</DisplayUser>
+        )
+    }
+
     return (
         <HeaderContainer>
             <LogoText>n.av</LogoText>
-            {loading ? (
-                <DisplayUser>Loading...</DisplayUser>
-            ) : isLoggedIn ? (
+            {isLoggedIn ? (
                 <div style={{display: "flex", alignItems: "center"}}>
                     <DisplayUser>Velkommen, {user}!</DisplayUser>
                     <Button text="Logg ut" onClick={logout}/>
