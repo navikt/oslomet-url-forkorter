@@ -18,7 +18,7 @@ jobs:
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
-          team: the-g-team
+          team: bachelor-url-forkorter
           identity_provider: nais-management-ddba
           project_id: projects/636929582051/locations/global/workloadIdentityPools/test-nais-identity-pool/providers/github-oidc-provider
       - uses: nais/deploy/actions/deploy@v2
