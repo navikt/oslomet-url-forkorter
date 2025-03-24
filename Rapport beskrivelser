@@ -159,6 +159,44 @@ Figur 7 - Databasestruktur med tabeller og relasjoner.
 Figur 8 - Endelig databasemodell etter optimalisering.
 
 
+✅ 3.3.1 Databaseutforming
+Forklarer hvorfor vi designet databasen tidlig.
+
+Viser ER-diagram og relasjonsforutsetninger (Users → ShortURLs → ClickStatistics → Logging).
+
+Inkluderer vurdering av 3NF og begrunnelse for at vi ikke trengte mange-til-mange-relasjoner.
+
+Indeksering av shortUrl nevnes for ytelse.
+
+✅ 3.3.1.4 Systemarkitektur
+Beskriver frontend (React/Vite) og backend (Kotlin + Javalin).
+
+Viser arkitekturflyt fra frontend → controller → service → database (med fargekodet figur).
+
+Forklarer modularitet og støtte for fremtidig utvidelse som ID-porten og klikk-analyse.
+
+✅ 3.3.2 Funksjonalitet i applikasjonen
+Kort forklaring på hvordan URL-forkorteren fungerer teknisk.
+
+Har med støtte for ID-porten/Azure AD (dersom vi rekker).
+
+Mulig støtte for adminpanel (roller, statistikk og sletting av lenker).
+
+✅ 3.4 Backend og API
+Beskriver databasevalg (PostgreSQL i prod, H2 lokalt).
+
+Viser eksempel på Exposed-tabell (ShortURLs).
+
+Forklarer Flyway-migrasjoner og hvordan det brukes.
+
+Dokumenterer API-endepunktene: POST /shorten, GET /:shortUrl, GET /stats/:shortUrl.
+
+Viser hvordan rollebasert tilgang er implementert.
+
+Inkluderer kode for logging og observability (via Logging-tabell og logback).
+
+
+
 
 
 
