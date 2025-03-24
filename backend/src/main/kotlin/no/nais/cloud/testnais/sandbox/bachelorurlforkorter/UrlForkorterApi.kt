@@ -56,7 +56,10 @@ fun startAppServer(config: Config) {
         }
         // TODO: Kun for lokal utvikling med hot reload
         javalinConfig.bundledPlugins.enableCors { cors ->
-            cors.addRule { it.allowHost("http://localhost:5173") }
+            cors.addRule {
+                it.allowHost("http://localhost:5173")
+                it.allowCredentials = true
+            }
         }
     }
 

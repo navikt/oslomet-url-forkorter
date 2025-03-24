@@ -44,8 +44,10 @@ object Auth {
 
         val encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString())
 
-        ctx.header("Set-Cookie",
-            "session_token=$encodedToken; Path=/; Max-Age=${TOKEN_EXPIRATION_TIME / 3600}; Secure; HttpOnly; SameSite=Strict"
+        ctx.cookie(
+            name = "session_token",
+            value = encodedToken,
+            maxAge = TOKEN_EXPIRATION_TIME / 1000, // maxAge is in seconds
         )
 
         logger.info("Innlogging suksessfull for: {}", loginRequest.username)

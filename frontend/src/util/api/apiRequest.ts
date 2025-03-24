@@ -7,12 +7,12 @@ export async function apiRequest<T>(
     headers: HeadersInit = {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "credentials": "include"
     }
 ): Promise<T> {
     const response = await fetch(API_BASE_URL + endpoint, {
         method,
         headers,
+        credentials: "include",
         body: body ? JSON.stringify(body) : undefined,
     });
 
