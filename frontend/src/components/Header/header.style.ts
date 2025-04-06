@@ -16,7 +16,7 @@ export const LogoText = styled.img`
     padding: 0;
     max-width: 100%;     /* Prevent it from stretching */
     object-fit: contain; /* Keeps aspect ratio */
-    transform: translateX(-100px); /* Skyv 20px til venstre */
+    transform: translateX(-150px); /* Skyv 20px til venstre */
 
 `;
 
@@ -27,7 +27,7 @@ export const DisplayUser = styled.p`
 export const StyledButton = styled.button`
   background: none;
   border: none;
-  color: #00347d;
+  color: #003049;
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
