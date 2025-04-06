@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const WelcomeText = styled.h2`
-  color: #000000; /* Sort tekst */
+  color: #003049; /* Sort tekst */
   font-size: 2.4rem;
   font-weight: 600;
   text-align: center;
