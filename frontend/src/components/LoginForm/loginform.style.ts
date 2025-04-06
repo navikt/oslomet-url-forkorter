@@ -14,7 +14,7 @@ export const LoginContainer = styled.form`
     gap: .5rem;
 
     h2 {
-        color: var(--theme-color);
+        color: black;
         margin-bottom: 15px;
         font-size: 22px;
     }
@@ -37,11 +37,12 @@ export const LoginButton = styled.button`
     border-radius: 5px;
     background: var(--theme-color);
     color: white;
+    background-color: #003049;
     font-size: 14px;
     cursor: pointer;
     transition: background 0.2s;
 
     &:hover {
-        background: var(--theme-color-focus);
+        background: #ced4da;
     }
 `;

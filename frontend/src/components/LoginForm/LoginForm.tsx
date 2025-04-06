@@ -46,7 +46,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                 onChange={(e) => setPassword(e.target.value)}
             />
             {error && <p style={{color: "red"}}>{error}</p>}
-            <Link href="/">Glemt passord?</Link>
+            <Link href="/" > <a className=" hover:underline"  style={{ color: "#003049" }}>Glemt passord? </a> </Link>
             <LoginButton type="submit">Logg inn</LoginButton>
         </LoginContainer>
     );
