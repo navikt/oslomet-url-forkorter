@@ -31,7 +31,7 @@ html, body, #root {
     padding: 0;
     height: 100%;
     box-sizing: border-box;
-    background-color: white; /* 👈 hele siden skal være hvit */
+    background-color: white;
 }
 
 
