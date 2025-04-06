@@ -19,10 +19,10 @@ export const FooterContent = styled.div`
 
 
 export const FooterLogo = styled.img`
-  height: 170px;
+  height: 200px;
   object-fit: contain;
-  margin-bottom: -50px;
-    transform: translateX(-30px);
+  margin-bottom: -65px;
+    transform: translateX(-100px);
 
 `;
 

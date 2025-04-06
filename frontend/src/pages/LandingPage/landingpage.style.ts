@@ -19,5 +19,5 @@ export const InfoText = styled.p`
 
 export const LogoText = styled.span`
   font-weight: bold;
-  color: var(--theme-color);
+  color: #003049;
 `;
