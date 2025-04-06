@@ -32,7 +32,8 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
     return (
         <LoginContainer onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
-            <h2>Velkommen tilbake!</h2>
+            <h2 style={{ display: "flex", alignItems: "center", gap: "8px", color: "#003049" }}>
+            <img src="/icons/lock.svg" alt="Brukerikon" style={{ width: "24px", height: "30px" }} />Velkommen tilbake!</h2>
             <LoginInput
                 type="text"
                 placeholder="Brukernavn"
