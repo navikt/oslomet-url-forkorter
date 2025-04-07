@@ -1,36 +1,42 @@
-import {DisplayUser, HeaderContainer, LogoText} from "./header.style.ts";
-import Button from "../shared/Button/Button.tsx";
+import {
+    DisplayUser,
+    HeaderContainer,
+    LogoText,
+    StyledButton
+} from "./header.style.ts";
 import Modal from "../shared/Modal/Modal.tsx";
-import {useState} from "react";
+import { useState } from "react";
 import LoginForm from "../LoginForm/LoginForm.tsx";
-import {useAuth} from "../../util/hooks/useAuth.ts";
+import { useAuth } from "../../util/hooks/useAuth.ts";
 
 export default function Header() {
     const [showLogin, setShowLogin] = useState(false);
-    const {isLoggedIn, user, loading, logout} = useAuth();
+    const { isLoggedIn, user, loading, logout } = useAuth();
 
     if (loading) {
-        return (
-            <DisplayUser>Loading...</DisplayUser>
-        )
+        return <DisplayUser>Loading...</DisplayUser>;
     }
 
     return (
         <HeaderContainer>
-            <LogoText>n.av</LogoText>
+            <LogoText src="/icons/nav-logo.svg" alt="NAV logo" />
+
             {isLoggedIn ? (
-                <div style={{display: "flex", alignItems: "center"}}>
+                <div style={{ display: "flex", alignItems: "center" }}>
                     <DisplayUser>Velkommen, {user}!</DisplayUser>
-                    <Button text="Logg ut" onClick={logout}/>
+                    <StyledButton onClick={logout}>Logg ut</StyledButton>
                 </div>
             ) : (
                 <>
-                    <Button text="Logg inn" onClick={() => setShowLogin(true)}/>
+                    <StyledButton onClick={() => setShowLogin(true)}>
+                        <img src="/icons/logg-inn.svg" alt="logg inn ikon" height="30" />Logg inn
+
+                    </StyledButton>
                     <Modal showModal={showLogin} setShowModal={setShowLogin}>
-                        <LoginForm onLogin={() => setShowLogin(false)}/>
+                        <LoginForm onLogin={() => setShowLogin(false)} />
                     </Modal>
                 </>
             )}
         </HeaderContainer>
-    )
+    );
 }

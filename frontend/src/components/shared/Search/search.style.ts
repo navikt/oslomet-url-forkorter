@@ -13,10 +13,12 @@ export const StyledInput = styled.input`
     padding: 10px;
     border-radius: 5px;
     outline: none;
-    border: 2px solid var(--theme-color);
+    border: 2px solid;
+    color: #003049;
 
     &:focus {
-        border: 2px solid var(--theme-color-focus);
+        border: 2px solid;
+        color:#003049;
     }
 `
 
@@ -27,4 +29,6 @@ export const StyledButton = styled(Button)`
     width: 5em;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    color: white;
+    background-color: #003049;
 `
