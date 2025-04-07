@@ -4,6 +4,10 @@ metadata:
   name: oslomet-url-forkorter
   namespace: bachelor-url-forkorter
 spec:
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
   ingresses:
     - https://url-forkorter.nav.no
   image: {{image}}
