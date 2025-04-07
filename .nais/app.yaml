@@ -10,7 +10,6 @@ spec:
       enabled: true
   ingresses:
     - https://url-forkorter.nav.no
-  image: {{image}}
   port: 8080
   ttl: 168h
   replicas:
