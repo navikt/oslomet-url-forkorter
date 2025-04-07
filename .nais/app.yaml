@@ -5,7 +5,7 @@ metadata:
   namespace: bachelor-url-forkorter
 spec:
   ingresses:
-    - https://bachelor-url-forkorter.sandbox.test-nais.cloud.nais.io
+    - https://url-forkorter.nav.no
   image: {{image}}
   port: 8080
   ttl: 168h
