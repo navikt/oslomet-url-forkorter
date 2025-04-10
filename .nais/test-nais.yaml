@@ -1,0 +1,27 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: oslomet-url-forkorter
+  namespace: bachelor-url-forkorter
+spec:
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+  ingresses:
+    - https://url-forkorter.sandbox.test-nais.cloud.nais.io
+  port: 8080
+  ttl: 168h
+  replicas:
+    max: 1
+    min: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        tier: db-f1-micro
+        databases:
+          - name: postgres-url-forkorter

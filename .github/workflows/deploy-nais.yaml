@@ -1,4 +1,4 @@
-name: Build and deploy
+name: Deploy to test-nais
 on:
   workflow_dispatch:
   push:
@@ -49,6 +49,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: sandbox
-          RESOURCE: .nais/app.yaml
+          RESOURCE: .nais/test-nais.yaml
           VAR: image=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           DEPLOY_SERVER: deploy.test-nais.cloud.nais.io:443

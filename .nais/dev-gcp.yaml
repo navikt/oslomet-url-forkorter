@@ -4,12 +4,14 @@ metadata:
   name: url-forkorter
   namespace: the-g-team
 spec:
-  idporten:
-    enabled: true
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: true
     sidecar:
       enabled: true
   ingresses:
-    - https://url-forkorter.nav.no
+    - https://url-forkorter.ekstern.dev.nav.no
   port: 8080
   ttl: 168h
   replicas:
