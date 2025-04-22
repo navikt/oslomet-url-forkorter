@@ -8,19 +8,17 @@ import Modal from "../shared/Modal/Modal.tsx";
 import { useState } from "react";
 import LoginForm from "../LoginForm/LoginForm.tsx";
 import { useAuth } from "../../util/hooks/useAuth.ts";
-import {useNavigate} from "react-router-dom";
 
 export default function Header() {
     const [showLogin, setShowLogin] = useState(false);
     const { isLoggedIn, user, loading, logout } = useAuth();
-    let navigate = useNavigate();
 
     if (loading) {
         return <DisplayUser>Loading...</DisplayUser>;
     }
 
     const redirectToIdPorten = () => {
-        navigate("/oauth2/login")
+        window.location.replace("/oauth2/login");
     }
 
     return (

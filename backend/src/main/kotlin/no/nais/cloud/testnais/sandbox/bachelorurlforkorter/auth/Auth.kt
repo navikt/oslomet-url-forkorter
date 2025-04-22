@@ -56,7 +56,7 @@ object Auth {
     }
 
     fun hentInnloggetBruker(ctx: Context): Context {
-        val token = ctx.cookie("session_token") ?: return ctx.status(401)
+        val token = ctx.cookie("selvbetjening-idporten") ?: return ctx.status(401)
 
         val decodedToken = URLDecoder.decode(token, StandardCharsets.UTF_8.toString())
         val signedJWT = SignedJWT.parse(decodedToken)
