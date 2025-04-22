@@ -50,5 +50,5 @@ jobs:
         env:
           CLUSTER: sandbox
           RESOURCE: .nais/test-nais.yaml
-          VAR: image=${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+          WORKLOAD_IMAGE: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           DEPLOY_SERVER: deploy.test-nais.cloud.nais.io:443
