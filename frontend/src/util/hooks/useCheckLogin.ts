@@ -12,17 +12,20 @@ export function useCheckLogin() {
 
     const checkLoginStatus = () => {
         setLoading(true);
-        apiRequest<{  }>("bruker", "GET").then((data) => {
+        apiRequest<any>("bruker", "GET").then((data) => {
             if (data) {
                 setIsLoggedIn(true);
 /*                setUser(data.username);*/
-                console.log("Logget inn som: " + data);
+                console.log("Logget inn som: ", data);
             } else {
                 setIsLoggedIn(false);
                 setUser(null);
             }
         }).catch((error) => {
-            console.error("Innloggetstatus:", error);
+            console.error("Innloggetstatus:", {
+                message: error.message,
+                response: error.response
+            });
             setIsLoggedIn(false);
             setUser(null);
         }).finally(() => {
