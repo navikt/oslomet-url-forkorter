@@ -37,7 +37,7 @@ object Auth {
         val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
         if (response.statusCode() > 300) {
-            throw UnauthorizedResponse("Token verification failed: ${response.statusCode()}")
+            ctx.status(201).result(response.body())
         }
 
        ctx.status(200).result(response.body())

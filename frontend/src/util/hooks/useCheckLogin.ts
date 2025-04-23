@@ -22,7 +22,7 @@ export function useCheckLogin() {
                 setUser(null);
             }
         }).catch((error) => {
-            console.error("Innloggetstatus:", error.message);
+            console.error("Innloggetstatus:", error);
             setIsLoggedIn(false);
             setUser(null);
         }).finally(() => {
