@@ -17,29 +17,47 @@ object Auth {
     private val introspectionUrl = System.getenv("NAIS_TOKEN_INTROSPECTION_ENDPOINT")
 
     fun autoriserBrukerMotTexas(ctx: Context) {
-        val token = ctx.header("Authorization")?.removePrefix("Bearer ")
-            ?: throw UnauthorizedResponse("Mangler Authorization header")
+        try {
+            val token = ctx.header("Authorization")?.removePrefix("Bearer ")
+                ?: throw UnauthorizedResponse("Mangler Authorization header")
 
-        val jsonBody = """
-            {
-              "identity_provider": "azuread",
-              "token": "$token"
-            }
+            val jsonBody = """
+        {
+          "identity_provider": "azuread",
+          "token": "$token"
+        }
         """.trimIndent()
 
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(introspectionUrl))
-            .timeout(Duration.ofSeconds(10))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-            .build()
+            val request = HttpRequest.newBuilder()
+                .uri(URI.create(introspectionUrl))
+                .timeout(Duration.ofSeconds(10))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build()
 
-        val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
+            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
-        if (response.statusCode() > 300) {
-            ctx.status(201).result(response.body())
+            val debugInfo = mapOf(
+                "introspectionUrl" to introspectionUrl,
+                "requestBody" to jsonBody,
+                "responseCode" to response.statusCode(),
+                "responseBody" to response.body()
+            )
+
+            if (response.statusCode() > 300) {
+                ctx.status(201).json(debugInfo)
+            } else {
+                ctx.status(200).json(debugInfo)
+            }
+        } catch (e: Exception) {
+            ctx.status(400).json(
+                mapOf(
+                    "error" to e.message,
+                    "stackTrace" to e.stackTraceToString(),
+                    "introspectionUrl" to introspectionUrl
+                )
+            )
         }
-
-       ctx.status(200).result(response.body())
     }
+
 }
