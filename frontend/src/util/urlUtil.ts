@@ -1,5 +1,5 @@
 const ACCEPTED_DOMAINS = [
-    "https://bachelor-url-forkorter.sandbox.test-nais.cloud.nais.io",
+    "https://url-forkorter.ekstern.dev.nav.no/",
     "https://url-forkorter.nav.no",
     "http://localhost:8080"
 ];

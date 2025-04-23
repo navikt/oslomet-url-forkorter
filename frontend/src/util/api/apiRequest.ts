@@ -15,13 +15,12 @@ export async function apiRequest<T>(
         credentials: "include",
         body: body ? JSON.stringify(body) : undefined,
     });
-
     if (!response.ok) {
         const error = new Error(`Error ${response.status}: ${response.statusText}`);
         (error as any).response = response.json();
         throw error;
     }
-
     if (response.status === 204) return null as T;
+
     return response.json();
 }
