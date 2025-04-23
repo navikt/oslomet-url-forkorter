@@ -7,7 +7,6 @@ spec:
   ingresses:
     - https://url-forkorter.sandbox.test-nais.cloud.nais.io
   port: 8080
-  ttl: 168h
   replicas:
     max: 1
     min: 1
