@@ -3,7 +3,7 @@ import LandingPage from "./pages/LandingPage/LandingPage.tsx"
 import "./App.css"
 import Header from "./components/Header/Header.tsx";
 import Footer from "./components/Footer/Footer.tsx";
-import {useAuth} from "./util/hooks/useAuth.ts";
+import {useCheckLogin} from "./util/hooks/useCheckLogin.ts";
 import {ReactNode} from "react";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.tsx";
 
@@ -35,7 +35,7 @@ export default function App() {
 }
 
 function ProtectedRoute({children}: { children: ReactNode }) {
-    const {isLoggedIn, loading} = useAuth();
+    const {isLoggedIn, loading} = useCheckLogin();
     if (loading) {
         return <div>Loading...</div>;
     }

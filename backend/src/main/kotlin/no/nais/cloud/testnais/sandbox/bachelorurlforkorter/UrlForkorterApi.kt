@@ -14,8 +14,7 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.json.JavalinJackson
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.auth.Auth
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.auth.Auth.validateJwtToken
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
 import org.slf4j.MDC
@@ -38,9 +37,7 @@ fun startAppServer(config: Config) {
                 post("forkort", UrlForkorterController::forkort, Rolle.InternNavInnlogget)
                 post("slett", UrlForkorterController::slett, Rolle.InternNavInnlogget)
                 get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
-                post("logginn", Auth::loggInn, Rolle.Alle)
-                get("bruker", Auth::hentInnloggetBruker, Rolle.Alle)
-                post("loggut", Auth::loggUt, Rolle.Alle)
+                get("bruker", Auth::autoriserBrukerMotTexas, Rolle.Alle)
             }
             get("{korturl}") { ctx ->
                 if (ctx.pathParam("korturl") == "index.html" || ctx.pathParam("korturl") == "dashboard") {
@@ -117,14 +114,7 @@ private fun checkAccessToEndpoint(ctx: Context) {
         }
 
         ctx.routeRoles().contains(Rolle.InternNavInnlogget) || ctx.routeRoles().contains(Rolle.AdminNavInnlogget) -> {
-            val (username, role) = validateJwtToken(ctx)
-                ?: throw UnauthorizedResponse("Invalid or expired token")
-
-            ctx.attribute("username", username)
-
-            if (!ctx.routeRoles().contains(role)) {
-                throw UnauthorizedResponse("Manglende autorisasjon på endepunkt")
-            }
+            // TODO: Valider med texas-opplegg
         }
 
         ctx.routeRoles().contains(Rolle.Alle) -> return

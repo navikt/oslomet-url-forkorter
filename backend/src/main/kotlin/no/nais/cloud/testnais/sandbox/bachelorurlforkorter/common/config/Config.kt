@@ -14,11 +14,8 @@ private val logger = KotlinLogging.logger {}
 data class Config(
     val environment: Env,
     val appPort: Int,
-    val authConfig: AuthConfig,
     val dbConfig: DbConfig
 )
-
-data class AuthConfig(val basicAuthUsername: String, val basicAuthPassword: Password)
 
 data class DbConfig(
     val jdbcUrl: String
@@ -83,10 +80,6 @@ fun createApplicationConfig(): Config {
             ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox og prod."),
         appPort = props.getProperty("PORT")?.toInt()
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
-        authConfig = AuthConfig(
-            basicAuthUsername = props.getProperty("basicauth.username") ?: "",
-            basicAuthPassword = Password(props.getProperty("basicauth.password") ?: "")
-        ),
         dbConfig = DbConfig(
             jdbcUrl = props.getProperty("NAIS_DATABASE_OSLOMET_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
                 ?: throw RuntimeException("Property \"NAIS_DATABASE_X_Y_JDBC_URL\" er ikke satt.")

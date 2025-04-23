@@ -1,12 +1,10 @@
 import {useState, useEffect} from "react";
 import {apiRequest} from "../api/apiRequest.ts";
-import {useNavigate} from "react-router-dom";
 
-export function useAuth() {
+export function useCheckLogin() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         checkLoginStatus()
@@ -14,11 +12,11 @@ export function useAuth() {
 
     const checkLoginStatus = () => {
         setLoading(true);
-        apiRequest<{ username: string }>("bruker", "GET").then((data) => {
-            if (data && data.username) {
+        apiRequest<{  }>("bruker", "GET").then((data) => {
+            if (data) {
                 setIsLoggedIn(true);
-                setUser(data.username);
-                console.log("Logget inn som: " + data.username + isLoggedIn);
+/*                setUser(data.username);*/
+                console.log("Logget inn som: " + data);
             } else {
                 setIsLoggedIn(false);
                 setUser(null);
@@ -32,14 +30,5 @@ export function useAuth() {
         });
     }
 
-    const logout = async () => {
-        apiRequest<void>("loggut", "POST").then(() => {
-            setIsLoggedIn(false);
-            setUser(null);
-            navigate("/")
-        }).catch((error) => {
-            console.error("Klarte ikke å logge ut:", error.message);
-        });
-    }
-    return {isLoggedIn, user, loading, checkLoginStatus, logout};
+    return {isLoggedIn, user, loading, checkLoginStatus};
 }
