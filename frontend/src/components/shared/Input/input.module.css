@@ -18,10 +18,10 @@
 }
 
 .button {
-    position: absolute;
-    right: 0;
-    height: 100%;
-    width: 5em;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    position: absolute !important;;
+    right: 0 !important;;
+    height: 100% !important;;
+    width: 5em !important;;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
 }

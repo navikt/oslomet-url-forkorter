@@ -30,6 +30,7 @@ export default function CreateShortUrl({user}: CreateShortUrlProps) {
     return (
         <>
             <Input placeholder="Lim inn lenken du ønsker å forkorte.."
+                   buttonText="Opprett"
                    onClick={handleCreateClick}
                    onChange={setInputValue}>
             </Input>

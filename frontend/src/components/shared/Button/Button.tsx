@@ -8,7 +8,7 @@ interface Props {
 
 export default function Button({text, onClick, className}: Props) {
     return (
-        <button onClick={onClick} className={`${classes.button} ${className}`}>
+        <button onClick={onClick} className={`${classes.button} ${className ? className : ""}`}>
             {text}
         </button>
     )

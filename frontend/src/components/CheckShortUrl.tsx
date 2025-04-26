@@ -1,7 +1,7 @@
-import Search from "./shared/Search/Search.tsx";
 import {extractShortUrl} from "../util/urlUtil.ts";
 import {apiRequest} from "../util/api/apiRequest.ts";
 import {useState} from "react";
+import Input from "./shared/Input/Input.tsx";
 
 export default function CheckShortUrl() {
     const [inputValue, setInputValue] = useState("");
@@ -24,10 +24,10 @@ export default function CheckShortUrl() {
 
     return (
         <>
-            <Search placeholder="Kontroller din lenke.."
+            <Input placeholder="Kontroller din lenke.."
                     onClick={handleSearchClick}
                     onChange={setInputValue}>
-            </Search>
+            </Input>
 
 
 

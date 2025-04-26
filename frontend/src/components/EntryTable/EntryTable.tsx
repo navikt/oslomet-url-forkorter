@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
 import Icon from "../shared/Icon/Icon.tsx";
-import Search from "../shared/Search/Search.tsx";
 import Link from "../shared/Link/Link.tsx";
 import classes from "./entrytable.module.css"
+import Input from "../shared/Input/Input.tsx";
 
 interface UrlData {
     id: number;
@@ -91,7 +91,7 @@ export default function EntryTable() {
             <section className={classes.container}>
                 {loading && <p>Loading...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
-                <Search
+                <Input
                     onChange={(text) => setSearchTerm(text)}
                     placeholder="Søk etter URL eller bruker.."
                     disableButton
