@@ -144,9 +144,9 @@ export default function ShowAll() {
                                 <TableCell>
                                     <IconContainer>
                                         <Icon icon="copy" onClick={() => {
-                                            handleCopyClick(import.meta.env.VITE_BASE_URL + url.shortUrl)
+                                            handleCopyClick(window.location.origin + "/" + url.shortUrl)
                                         }}/>
-                                        <Link href={import.meta.env.VITE_BASE_URL + url.shortUrl}
+                                        <Link href={window.location.origin + "/" + url.shortUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
                                             {url.shortUrl}

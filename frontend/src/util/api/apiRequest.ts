@@ -1,8 +1,9 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.DEV ? "http://localhost:8080/api/" : window.location.origin + "/api/";
 
 export async function apiRequest<T>(
     endpoint: string,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+    includeCredentials: boolean = false,
     body?: unknown,
     headers: HeadersInit = {
         "Content-Type": "application/json",
@@ -12,7 +13,7 @@ export async function apiRequest<T>(
     const response = await fetch(API_BASE_URL + endpoint, {
         method,
         headers,
-        credentials: "include",
+        credentials: includeCredentials ? "same-origin" : "omit",
         body: body ? JSON.stringify(body) : undefined,
     });
     if (!response.ok) {
@@ -22,5 +23,5 @@ export async function apiRequest<T>(
     }
     if (response.status === 204) return null as T;
 
-    return response.json();
+    return await response.json();
 }

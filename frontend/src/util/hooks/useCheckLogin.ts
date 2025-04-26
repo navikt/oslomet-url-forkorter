@@ -31,7 +31,7 @@ export function useCheckLogin() {
                 setUser(null);
             }
         }).catch((error) => {
-            console.error("Innloggetstatus:", {
+            console.error("Login status feil:", {
                 message: error.message,
                 response: error.response
             });

@@ -3,7 +3,7 @@ import {apiRequest} from "../util/api/apiRequest.ts";
 import {useState} from "react";
 import Input from "./shared/Input/Input.tsx";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const BASE_URL = window.location.origin;
 
 export default function CreateShortUrl() {
     const [inputValue, setInputValue] = useState("");
@@ -11,7 +11,7 @@ export default function CreateShortUrl() {
 
     function handleCreateClick() {
         if (!isValidUrl(inputValue)) return;
-        apiRequest<{ forkortetUrl: string }>(`forkort?langurl=${inputValue}`, "POST").then((res) => {
+        apiRequest<{ forkortetUrl: string }>(`forkort?langurl=${inputValue}`, "POST", true).then((res) => {
             if (res) setResult(res.forkortetUrl);
         }).catch(error => {
             setResult(null);

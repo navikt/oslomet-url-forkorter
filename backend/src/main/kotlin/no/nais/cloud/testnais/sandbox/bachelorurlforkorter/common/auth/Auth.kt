@@ -26,7 +26,7 @@ object Auth {
     )
 
     fun autoriserBrukerMotTexas(ctx: Context) {
-        val response = sendRequest(ctx)
+        val response = sendTexasRequest(ctx)
         if (response.active) {
             ctx.status(200).json(
                 BrukerResponse(
@@ -41,7 +41,7 @@ object Auth {
 
     }
 
-    private fun sendRequest(ctx: Context): TexasIntrospectionResponse {
+    private fun sendTexasRequest(ctx: Context): TexasIntrospectionResponse {
         try {
             val token = ctx.header("Authorization")?.removePrefix("Bearer ")
                 ?: throw UnauthorizedResponse("Mangler Authorization header")
