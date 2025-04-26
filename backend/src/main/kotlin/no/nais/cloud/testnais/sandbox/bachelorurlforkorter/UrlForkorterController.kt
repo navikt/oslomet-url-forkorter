@@ -2,7 +2,10 @@ package no.nais.cloud.testnais.sandbox.bachelorurlforkorter
 
 import io.javalin.http.Context
 import mu.KotlinLogging
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.ShortUrlDataAccessObject
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.BrukerResponse
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.hentBrukerInfo
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.EntryDataAccessObject
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto.CreateEntryRequest
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.forkorter.Forkorter
 
 private val logger = KotlinLogging.logger {}
@@ -10,19 +13,19 @@ private val logger = KotlinLogging.logger {}
 object UrlForkorterController {
 
     fun redirect(ctx: Context) {
-        val korturl = ctx.pathParam("korturl")
+        val korturl = ctx.pathParam("val")
         if (!korturl.matches(Regex("^[a-z0-9]{6}$"))) {
             ctx.status(204)
             return
         }
         try {
-            val langurl = ShortUrlDataAccessObject.getEntryLongUrl(korturl.toString())
+            val langurl = EntryDataAccessObject.getEntryLongUrl(korturl.toString())
             if (langurl.isNullOrBlank()) {
                 ctx.status(404).json(mapOf("message" to "Finner ingen URL i databasen"))
                 return
             }
             logger.info("Videsendt URL: $korturl til $langurl")
-            ShortUrlDataAccessObject.incrementClicks(korturl)
+            EntryDataAccessObject.incrementClicks(korturl)
             ctx.status(307).redirect(langurl)
         } catch (e: Exception) {
             logger.error("Feil ved redirect: {}", korturl, e)
@@ -37,7 +40,7 @@ object UrlForkorterController {
             return
         }
         try {
-            val langurl = ShortUrlDataAccessObject.getEntryLongUrl(korturl.toString())
+            val langurl = EntryDataAccessObject.getEntryLongUrl(korturl.toString())
             if (langurl == null) {
                 ctx.status(404)
                 return
@@ -50,25 +53,25 @@ object UrlForkorterController {
     }
 
     fun opprett(ctx: Context) {
-        val originalUrl = ctx.queryParam("langurl")
-        val bruker = ctx.body()
-        if (originalUrl.isNullOrBlank()) {
-            ctx.status(400).json(mapOf("message" to "Mangler URL"))
-            return
-        }
+        // TODO: Ikke send bruker fra frontend, sjekk innlogging i backend
+        val request = ctx.bodyValidator(CreateEntryRequest::class.java)
+            .check({ !it.url.isNullOrBlank() }, "Url kan ikke være tom")
+            .check({ !it.bruker.isNullOrBlank() }, "Bruker kan ikke være tom")
+            .get()
+
         try {
             val forkortetUrl = Forkorter.lagUnikKortUrl()
-            ShortUrlDataAccessObject.storeNewEntry(forkortetUrl, originalUrl.toString(), "Sigurd")
+            EntryDataAccessObject.storeNewEntry(forkortetUrl, request.url.toString(), request.bruker)
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
         } catch (e: Exception) {
-            logger.error("Feil ved forkorting av url: {}", originalUrl, e)
+            logger.error("Feil ved forkorting av url: {}", request.url, e)
             ctx.status(500)
         }
     }
 
     fun hentAlleMedMetadata(ctx: Context) {
         try {
-            val urls = ShortUrlDataAccessObject.getAllEntriesWithMetadata()
+            val urls = EntryDataAccessObject.getAllEntriesWithMetadata()
             ctx.status(200).json(urls)
         } catch (e: Exception) {
             logger.error("Feil ved henting av alle URLer", e)
@@ -79,11 +82,26 @@ object UrlForkorterController {
     fun slett(ctx: Context) {
         val id = ctx.queryParam("id")
         try {
-            ShortUrlDataAccessObject.deleteEntryByID(Integer.parseInt(id))
+            EntryDataAccessObject.deleteEntryByID(Integer.parseInt(id))
             ctx.status(204)
         } catch (e: Exception) {
             logger.error("Feil ved sletting av URL", e)
             ctx.status(500)
+        }
+    }
+
+    fun hentBruker(ctx: Context) {
+        val response = hentBrukerInfo(ctx)
+        if (response.active) {
+            ctx.status(200).json(
+                BrukerResponse(
+                    navIdent = response.NAVident,
+                    name = response.name,
+                    preferredUsername = response.preferred_username
+                )
+            )
+        } else {
+            ctx.status(401)
         }
     }
 }

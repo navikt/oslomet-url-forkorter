@@ -92,6 +92,8 @@ export default function ShowAll() {
         filteredUrls = [...filteredUrls].sort((a, b) => a.id - b.id);
     }
 
+    const BASE_URL = import.meta.env.DEV ? "http://localhost:8080/" : window.location.origin + "/";
+
     return (
         <>
             <TableContainer>
@@ -138,27 +140,27 @@ export default function ShowAll() {
                             </TableRow>
                         </TableHeader>
                         <tbody>
-                        {filteredUrls.map((url) => (
-                            <TableRow key={url.id}>
-                                <TableCell>{url.id}</TableCell>
+                        {filteredUrls.map((entry) => (
+                            <TableRow key={entry.id}>
+                                <TableCell>{entry.id}</TableCell>
                                 <TableCell>
                                     <IconContainer>
                                         <Icon icon="copy" onClick={() => {
-                                            handleCopyClick(window.location.origin + "/" + url.shortUrl)
+                                            handleCopyClick(BASE_URL + entry.shortUrl)
                                         }}/>
-                                        <Link href={window.location.origin + "/" + url.shortUrl}
+                                        <Link href={BASE_URL + entry.shortUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer">
-                                            {url.shortUrl}
+                                            {entry.shortUrl}
                                         </Link>
                                     </IconContainer>
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={url.longUrl} target="_blank" rel="noopener noreferrer">
-                                        {url.longUrl}
+                                    <Link href={entry.longUrl} target="_blank" rel="noopener noreferrer">
+                                        {entry.longUrl}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{url.createdBy || "Unknown"}</TableCell>
+                                <TableCell>{entry.createdBy || "Unknown"}</TableCell>
                                 <TableCell>
                                     {new Intl.DateTimeFormat("nb-NO", {
                                         day: "2-digit",
@@ -166,11 +168,11 @@ export default function ShowAll() {
                                         hour: "2-digit",
                                         minute: "2-digit",
                                         hour12: false
-                                    }).format(new Date(url.createdAt)).replace(",", " kl.")}
+                                    }).format(new Date(entry.createdAt)).replace(",", " kl.")}
                                 </TableCell>
-                                <TableCell>{url.clicks}</TableCell>
+                                <TableCell>{entry.clicks}</TableCell>
                                 <TableCell><Icon icon="close" onClick={() => {
-                                    handleDeleteClick(url.id)
+                                    handleDeleteClick(entry.id)
                                 }}></Icon></TableCell>
                             </TableRow>
                         ))}

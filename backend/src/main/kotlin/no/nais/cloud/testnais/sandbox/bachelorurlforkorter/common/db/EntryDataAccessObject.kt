@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
-object ShortUrlDataAccessObject {
+object EntryDataAccessObject {
     fun storeNewEntry(shortUrl: String, longUrl: String, createdBy: String?) {
         transaction {
             entries.insert {

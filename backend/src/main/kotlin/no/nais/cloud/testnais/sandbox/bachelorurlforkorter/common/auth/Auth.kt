@@ -25,20 +25,15 @@ object Auth {
         val preferredUsername: String
     )
 
-    fun autoriserBrukerMotTexas(ctx: Context) {
+    fun hentBrukerInfo(ctx: Context): TexasIntrospectionResponse {
         val response = sendTexasRequest(ctx)
-        if (response.active) {
-            ctx.status(200).json(
-                BrukerResponse(
-                    navIdent = response.NAVident,
-                    name = response.name,
-                    preferredUsername = response.preferred_username
-                )
-            )
-        } else {
-            ctx.status(401)
-        }
+        if (!response.active) return throw UnauthorizedResponse()
+        return response;
 
+    }
+
+    fun brukerErNavInnlogget(ctx: Context): Boolean {
+        return sendTexasRequest(ctx).active
     }
 
     private fun sendTexasRequest(ctx: Context): TexasIntrospectionResponse {

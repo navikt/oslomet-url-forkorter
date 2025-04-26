@@ -17,12 +17,15 @@ export const LogoText = styled.img`
     max-width: 100%;     /* Prevent it from stretching */
     object-fit: contain; /* Keeps aspect ratio */
     transform: translateX(-150px); /* Skyv 20px til venstre */
-
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 
 export const DisplayUser = styled.p`
-    margin: 0 15px;
+    margin: 1.5px 10px 0 5px;
+    text-decoration: underline;
 `
 export const StyledButton = styled.button`
   background: none;

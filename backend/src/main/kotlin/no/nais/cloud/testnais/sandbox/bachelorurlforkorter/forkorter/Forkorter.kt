@@ -1,11 +1,11 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.forkorter
 
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.ShortUrlDataAccessObject
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.EntryDataAccessObject
 
 object Forkorter {
 
     fun lagUnikKortUrl(lengde: Int = 6): String {
-        val existingShortUrls = ShortUrlDataAccessObject.getAllShortUrls()
+        val existingShortUrls = EntryDataAccessObject.getAllEntries()
         var newShortUrl: String
         do {
             newShortUrl = lagKortUrl(lengde)

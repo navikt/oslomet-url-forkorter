@@ -5,9 +5,12 @@ import {
     StyledButton
 } from "./header.style.ts";
 import {useCheckLogin} from "../../util/hooks/useCheckLogin.ts";
+import {useNavigate} from "react-router-dom";
+import Icon from "../shared/Icon/Icon.tsx";
 
 export default function Header() {
     const {isLoggedIn, user, loading} = useCheckLogin();
+    const navigate = useNavigate();
 
     if (loading) {
         return <DisplayUser>Loading...</DisplayUser>;
@@ -19,12 +22,11 @@ export default function Header() {
 
     return (
         <HeaderContainer>
-            <LogoText src="/icons/nav-logo.svg" alt="NAV logo"/>
-
+            <LogoText onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
             {isLoggedIn ? (
-                <div style={{display: "flex", alignItems: "center"}}>
-                    <DisplayUser>Velkommen, {user}!</DisplayUser>
-                    <StyledButton onClick={() => {}}>Logg ut</StyledButton>
+                <div style={{display: "flex"}}>
+                    <Icon icon="user"/>
+                    <DisplayUser>{user}</DisplayUser>
                 </div>
             ) : (
                 <>

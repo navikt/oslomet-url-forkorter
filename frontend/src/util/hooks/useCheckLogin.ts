@@ -20,7 +20,7 @@ export function useCheckLogin() {
 
     const checkLoginStatus = () => {
         setLoading(true);
-        apiRequest<BrukerResponse>("bruker/sjekk", true, "GET").then((data) => {
+        apiRequest<BrukerResponse>("bruker/hent", true, "GET").then((data) => {
             if (data) {
                 setIsLoggedIn(true);
                 setUser(data.navIdent);
@@ -31,12 +31,19 @@ export function useCheckLogin() {
                 setUser(null);
             }
         }).catch((error) => {
-            console.error("Login status feil:", {
-                message: error.message,
-                response: error.response
-            });
-            setIsLoggedIn(false);
-            setUser(null);
+            if (import.meta.env.DEV) {
+                console.warn("Kjører i DEV, setter dummy-bruker");
+                setIsLoggedIn(true);
+                setUser("Dev Testuser");
+                navigate("/dashboard");
+            } else {
+                console.error("Login status feil:", {
+                    message: error.message,
+                    response: error.response
+                });
+                setIsLoggedIn(false);
+                setUser(null);
+            }
         }).finally(() => {
             setLoading(false);
         });

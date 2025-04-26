@@ -14,7 +14,7 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.json.JavalinJackson
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.brukerErNavInnlogget
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
 import org.slf4j.MDC
@@ -34,7 +34,7 @@ fun startAppServer(config: Config) {
         javalinConfig.router.apiBuilder {
             path("api") {
                 path("bruker") {
-                    get("sjekk", Auth::autoriserBrukerMotTexas, Rolle.Alle)
+                    get("hent", UrlForkorterController::hentBruker, Rolle.Alle)
                 }
                 path("url") {
                     post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
@@ -43,8 +43,9 @@ fun startAppServer(config: Config) {
                     get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
                 }
             }
-            get("{korturl}") { ctx ->
-                if (ctx.pathParam("korturl") == "index.html" || ctx.pathParam("korturl") == "dashboard") {
+            // Dersom ingen endepunkter treffes skal man enten serve assets eller redirecte
+            get("{val}") { ctx ->
+                if (ctx.pathParam("val") == "index.html" || ctx.pathParam("val") == "dashboard") {
                     val asset =
                         UrlForkorterController::class.java.getResourceAsStream("/public/index.html")
                     if (asset != null) {
@@ -83,7 +84,7 @@ fun startAppServer(config: Config) {
 
     app.beforeMatched { ctx ->
         if (ctx.path().startsWith("/api/")) {
-            checkAccessToEndpoint(ctx)
+            checkAccessToEndpoint(ctx, config)
         }
     }
 
@@ -110,7 +111,7 @@ enum class Rolle : RouteRole {
     AdminNavInnlogget
 }
 
-private fun checkAccessToEndpoint(ctx: Context) {
+private fun checkAccessToEndpoint(ctx: Context, config: Config) {
     when {
         ctx.routeRoles().isEmpty() -> {
             logger.error { "Manglende tilgangsstyring på endepunkt ${ctx.path()}" }
@@ -118,7 +119,14 @@ private fun checkAccessToEndpoint(ctx: Context) {
         }
 
         ctx.routeRoles().contains(Rolle.InternNavInnlogget) || ctx.routeRoles().contains(Rolle.AdminNavInnlogget) -> {
-            // TODO: Valider med texas-opplegg
+            if (config.environment == Env.Local) {
+                logger.warn { "Bruker ikke innlogget, men tillates i lokal utvikling på endepunkt ${ctx.path()}" }
+                return
+            }
+            if (!brukerErNavInnlogget(ctx)) {
+                logger.warn { "Bruker ikke autorisert på endepunkt ${ctx.path()}" }
+                throw UnauthorizedResponse()
+            }
         }
 
         ctx.routeRoles().contains(Rolle.Alle) -> return
