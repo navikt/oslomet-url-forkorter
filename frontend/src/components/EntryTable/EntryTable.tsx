@@ -1,17 +1,9 @@
 import {useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
-import {
-    IconContainer,
-    StyledTable,
-    TableCell,
-    TableContainer,
-    TableHeader,
-    TableHeaderCell,
-    TableRow
-} from "./showall.style.ts";
 import Icon from "../shared/Icon/Icon.tsx";
 import Search from "../shared/Search/Search.tsx";
 import Link from "../shared/Link/Link.tsx";
+import classes from "./entrytable.module.css"
 
 interface UrlData {
     id: number;
@@ -24,7 +16,7 @@ interface UrlData {
 
 type SortColumn = "createdAt" | "clicks" | null;
 
-export default function ShowAll() {
+export default function EntryTable() {
     const [urls, setUrls] = useState<UrlData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -96,7 +88,7 @@ export default function ShowAll() {
 
     return (
         <>
-            <TableContainer>
+            <section className={classes.container}>
                 {loading && <p>Loading...</p>}
                 {error && <p style={{color: "red"}}>{error}</p>}
                 <Search
@@ -105,15 +97,15 @@ export default function ShowAll() {
                     disableButton
                     style={{width: "100%"}}/>
                 {!loading && !error && (
-                    <StyledTable>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHeaderCell>ID</TableHeaderCell>
-                                <TableHeaderCell>Kort URL</TableHeaderCell>
-                                <TableHeaderCell>Lang URL</TableHeaderCell>
-                                <TableHeaderCell>Av bruker</TableHeaderCell>
-                                <TableHeaderCell onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
-                                    <IconContainer style={{justifyContent: "space-between"}}>
+                    <table className={classes.table}>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Kort URL</th>
+                                <th>Lang URL</th>
+                                <th>Av bruker</th>
+                                <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
+                                    <div className={classes.icon}>
                                         Opprettet
                                         {sortConfig?.column === "createdAt"
                                             ? sortConfig.direction === "asc"
@@ -122,10 +114,10 @@ export default function ShowAll() {
                                                     ? <Icon icon="sort-up"/>
                                                     : <Icon icon="sort"/>
                                             : <Icon icon="sort"/>}
-                                    </IconContainer>
-                                </TableHeaderCell>
-                                <TableHeaderCell onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}>
-                                    <IconContainer style={{justifyContent: "space-between"}}>
+                                    </div>
+                                </th>
+                                <th onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}>
+                                    <div className={classes.icon}>
                                         Antall besøk
                                         {sortConfig?.column === "clicks"
                                             ? sortConfig.direction === "asc"
@@ -134,17 +126,17 @@ export default function ShowAll() {
                                                     ? <Icon icon="sort-up"/>
                                                     : <Icon icon="sort"/>
                                             : <Icon icon="sort"/>}
-                                    </IconContainer>
-                                </TableHeaderCell>
-                                <TableHeaderCell>Slett</TableHeaderCell>
-                            </TableRow>
-                        </TableHeader>
+                                    </div>
+                                </th>
+                                <th>Slett</th>
+                            </tr>
+                        </thead>
                         <tbody>
                         {filteredUrls.map((entry) => (
-                            <TableRow key={entry.id}>
-                                <TableCell>{entry.id}</TableCell>
-                                <TableCell>
-                                    <IconContainer>
+                            <tr key={entry.id}>
+                                <td>{entry.id}</td>
+                                <td>
+                                    <div className={classes.icon}>
                                         <Icon icon="copy" onClick={() => {
                                             handleCopyClick(BASE_URL + entry.shortUrl)
                                         }}/>
@@ -153,15 +145,15 @@ export default function ShowAll() {
                                                     rel="noopener noreferrer">
                                             {entry.shortUrl}
                                         </Link>
-                                    </IconContainer>
-                                </TableCell>
-                                <TableCell>
+                                    </div>
+                                </td>
+                                <td>
                                     <Link href={entry.longUrl} target="_blank" rel="noopener noreferrer">
                                         {entry.longUrl}
                                     </Link>
-                                </TableCell>
-                                <TableCell>{entry.createdBy || "Unknown"}</TableCell>
-                                <TableCell>
+                                </td>
+                                <td>{entry.createdBy || "Unknown"}</td>
+                                <td>
                                     {new Intl.DateTimeFormat("nb-NO", {
                                         day: "2-digit",
                                         month: "long",
@@ -169,17 +161,17 @@ export default function ShowAll() {
                                         minute: "2-digit",
                                         hour12: false
                                     }).format(new Date(entry.createdAt)).replace(",", " kl.")}
-                                </TableCell>
-                                <TableCell>{entry.clicks}</TableCell>
-                                <TableCell><Icon icon="close" onClick={() => {
+                                </td>
+                                <td>{entry.clicks}</td>
+                                <td><Icon icon="close" onClick={() => {
                                     handleDeleteClick(entry.id)
-                                }}></Icon></TableCell>
-                            </TableRow>
+                                }}></Icon></td>
+                            </tr>
                         ))}
                         </tbody>
-                    </StyledTable>
+                    </table>
                 )}
-            </TableContainer>
+            </section>
         </>
     );
 }

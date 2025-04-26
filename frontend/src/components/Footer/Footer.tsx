@@ -1,12 +1,12 @@
-import {FooterContainer, FooterContent, FooterLogo, FooterText} from "./footer.style.ts";
+import classes from "./footer.module.css"
 
 export default function Footer() {
     return (
-        <FooterContainer>
-            <FooterContent>
-                <FooterLogo src="/icons/nav-logo-hvit.svg" alt="NAV logo" />
-                <FooterText>Arbeids- og velferdsetaten</FooterText>
-            </FooterContent>
-        </FooterContainer>
+        <footer className={classes.footer}>
+            <div>
+                <img src="/icons/nav-logo-hvit.svg" alt="NAV logo" />
+                <p>Arbeids- og velferdsetaten</p>
+            </div>
+        </footer>
     );
 }

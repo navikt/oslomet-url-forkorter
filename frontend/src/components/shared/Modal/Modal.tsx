@@ -1,5 +1,5 @@
-import {Backdrop, ModalContainer} from "./modal.style.ts";
 import {ReactNode} from "react";
+import classes from "./modal.module.css"
 
 interface CopyModalProps {
     showModal: boolean;
@@ -19,11 +19,11 @@ export default function Modal({
     return (
         <>
             {showModal && (
-                <Backdrop onClick={() => setShowModal(false)}>
-                    <ModalContainer>
+                <div className={classes.backdrop} onClick={() => setShowModal(false)}>
+                    <div className={classes.container}>
                         {children}
-                    </ModalContainer>
-                </Backdrop>
+                    </div>
+                </div>
             )}
         </>
     )

@@ -1,4 +1,4 @@
-const BASE_URL = window.location.origin;
+const BASE_URL = import.meta.env.DEV ? "http://localhost:8080" : window.location.origin;
 
 function escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

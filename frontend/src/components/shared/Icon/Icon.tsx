@@ -1,4 +1,4 @@
-import {StyledIcon} from "./icon.style.ts";
+import classes from "./icon.module.css"
 
 interface Props {
     icon: string;
@@ -8,6 +8,6 @@ interface Props {
 
 export default function Icon({icon, onClick}: Props) {
     return (
-        <StyledIcon src={`icons/${icon}.svg`} onClick={onClick}/>
+        <img className={classes.icon} src={`icons/${icon}.svg`} onClick={onClick}/>
     )
 }

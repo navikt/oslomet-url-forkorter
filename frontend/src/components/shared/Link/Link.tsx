@@ -1,5 +1,5 @@
-import {StyledLink} from "./link.style.ts";
 import {ReactNode} from "react";
+import classes from "./Link.module.css";
 
 interface LinkProps{
     children: ReactNode;
@@ -11,8 +11,8 @@ interface LinkProps{
 export default function Link({children, href, target, rel}: LinkProps) {
 
     return (
-        <StyledLink href={href} target={target} rel={rel}>
+        <a className={classes.link} href={href} target={target} rel={rel}>
             {children}
-        </StyledLink>
+        </a>
     )
 }

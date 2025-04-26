@@ -1,6 +1,4 @@
-import styled from "styled-components";
-
-export const Backdrop = styled.div`
+.backdrop {
     position: fixed;
     background: rgba(51, 51, 51, 0.94);
     top: 0;
@@ -8,9 +6,9 @@ export const Backdrop = styled.div`
     height: 100%;
     width: 100%;
     z-index: 998;
-`;
+}
 
-export const ModalContainer = styled.div`
+.container {
     position: fixed;
     width: 80vw;
     max-width: fit-content;
@@ -19,8 +17,7 @@ export const ModalContainer = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     background: #fffffe;
-    border: 5px solid $kj-blaa-4;
     border-radius: 5px;
     font-size: 12px;
     z-index: 999;
-`
+}

@@ -1,6 +1,4 @@
-import styled from "styled-components";
-
-export const StyledButton = styled.button`
+.button {
     height: 2.5em;
     width: 6em;
     padding: 5px;
@@ -13,4 +11,4 @@ export const StyledButton = styled.button`
         background: var(--theme-color-focus);
         cursor: pointer;
     }
-`
+}

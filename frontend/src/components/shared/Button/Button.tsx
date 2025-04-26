@@ -1,4 +1,4 @@
-import {StyledButton} from "./button.style.ts";
+import classes from "./button.module.css"
 
 interface Props {
     text: string;
@@ -8,8 +8,8 @@ interface Props {
 
 export default function Button({text, onClick, className}: Props) {
     return (
-        <StyledButton onClick={onClick} className={className}>
+        <button onClick={onClick} className={`${classes.button} ${className}`}>
             {text}
-        </StyledButton>
+        </button>
     )
 }

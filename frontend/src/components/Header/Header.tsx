@@ -1,19 +1,14 @@
-import {
-    DisplayUser,
-    HeaderContainer,
-    LogoText,
-    StyledButton
-} from "./header.style.ts";
 import {useCheckLogin} from "../../util/hooks/useCheckLogin.ts";
 import {useNavigate} from "react-router-dom";
 import Icon from "../shared/Icon/Icon.tsx";
+import classes from "./header.module.css"
 
 export default function Header() {
     const {isLoggedIn, user, loading} = useCheckLogin();
     const navigate = useNavigate();
 
     if (loading) {
-        return <DisplayUser>Loading...</DisplayUser>;
+        return <p>Loading...</p>;
     }
 
     const redirectToLogin = () => {
@@ -21,21 +16,21 @@ export default function Header() {
     }
 
     return (
-        <HeaderContainer>
-            <LogoText onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
+        <header className={classes.header}>
+            <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
             {isLoggedIn ? (
                 <div style={{display: "flex"}}>
                     <Icon icon="user"/>
-                    <DisplayUser>{user}</DisplayUser>
+                    <p className={classes.userText}>{user}</p>
                 </div>
             ) : (
                 <>
-                    <StyledButton onClick={redirectToLogin}>
+                    <button className={classes.button} onClick={redirectToLogin}>
                         <img src="/icons/logg-inn.svg" alt="logg inn ikon" height="30"/>
                         Logg inn
-                    </StyledButton>
+                    </button>
                 </>
             )}
-        </HeaderContainer>
+        </header>
     );
 }

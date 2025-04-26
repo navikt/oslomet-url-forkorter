@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 40vw;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: 2px solid var(--theme-color);
+
+    &:focus {
+        border: 2px solid var(--theme-color-focus);
+    }
+}
+
+.button {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 5em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

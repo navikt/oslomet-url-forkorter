@@ -1,5 +1,6 @@
-import {SearchContainer, StyledButton, StyledInput} from "./search.style.ts";
 import {CSSProperties} from "react";
+import classes from "./Search.module.css";
+import Button from "../Button/Button.tsx";
 
 interface Props {
     placeholder?: string;
@@ -11,8 +12,8 @@ interface Props {
 
 export default function Search({placeholder, onClick, onChange, disableButton, style}: Props) {
     return (
-        <SearchContainer style={style}>
-            <StyledInput
+        <div className={classes.container} style={style}>
+            <input className={classes.input}
                 type="search"
                 placeholder={placeholder}
                 onChange={(e) => onChange?.(e.target.value)}
@@ -22,7 +23,7 @@ export default function Search({placeholder, onClick, onChange, disableButton, s
                     }
                 }}
             />
-            {!disableButton && <StyledButton text="Søk" onClick={onClick}/>}
-        </SearchContainer>
+            {!disableButton && <Button className={classes.button} text="Søk" onClick={onClick}/>}
+        </div>
     )
 }
