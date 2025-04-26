@@ -3,7 +3,7 @@ import {extractShortUrl} from "../util/urlUtil.ts";
 import {apiRequest} from "../util/api/apiRequest.ts";
 import {useState} from "react";
 
-export default function SearchShortUrl() {
+export default function CheckShortUrl() {
     const [inputValue, setInputValue] = useState("");
     const [searchResult, setSearchResult] = useState<string | null>(null);
 
@@ -13,7 +13,7 @@ export default function SearchShortUrl() {
             console.log("test")
             return;
         }
-        apiRequest<{langurl: string }>(`sjekk?korturl=${shortUrl}`, "POST").then((res) => {
+        apiRequest<{langurl: string }>(`url/sjekk?korturl=${shortUrl}`, false, "POST").then((res) => {
             if (res) setSearchResult(res.langurl);
             else setSearchResult(null);
         }).catch(error => {

@@ -5,48 +5,54 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 object ShortUrlDataAccessObject {
-    fun storeShortUrl(shortUrl: String, longUrl: String, createdBy: String?) {
+    fun storeNewEntry(shortUrl: String, longUrl: String, createdBy: String?) {
         transaction {
-            ShortUrls.insert {
-                it[ShortUrls.shortUrl] = shortUrl
-                it[ShortUrls.longUrl] = longUrl
-                it[ShortUrls.createdBy] = createdBy
+            entries.insert {
+                it[entries.shortUrl] = shortUrl
+                it[entries.longUrl] = longUrl
+                it[entries.createdBy] = createdBy
             }
         }
     }
 
-    fun getAllShortUrls(): List<String> {
+    fun getAllEntries(): List<String> {
         return transaction {
-            ShortUrls.selectAll().map { it[ShortUrls.shortUrl] }
+            entries.selectAll().map { it[entries.shortUrl] }
         }
     }
 
-    fun getAllUrlsWithMetadata(): List<Map<String, Any?>> {
+    fun getAllEntriesWithMetadata(): List<Map<String, Any?>> {
         return transaction {
-            ShortUrls.selectAll().map {
+            entries.selectAll().map {
                 mapOf(
-                    "id" to it[ShortUrls.id],
-                    "shortUrl" to it[ShortUrls.shortUrl],
-                    "longUrl" to it[ShortUrls.longUrl],
-                    "createdAt" to it[ShortUrls.createdAt].toString(),
-                    "createdBy" to it[ShortUrls.createdBy],
-                    "clicks" to it[ShortUrls.clicks]
+                    "id" to it[entries.id],
+                    "shortUrl" to it[entries.shortUrl],
+                    "longUrl" to it[entries.longUrl],
+                    "createdAt" to it[entries.createdAt].toString(),
+                    "createdBy" to it[entries.createdBy],
+                    "clicks" to it[entries.clicks]
                 )
             }
         }
     }
 
-    fun getLongUrl(shortUrl: String): String? {
+    fun getEntryLongUrl(shortUrl: String): String? {
         return transaction {
-            ShortUrls.select { ShortUrls.shortUrl eq shortUrl }
-                .map { it[ShortUrls.longUrl] }
+            entries.select { entries.shortUrl eq shortUrl }
+                .map { it[entries.longUrl] }
                 .firstOrNull()
         }
     }
 
     fun incrementClicks(shortUrl: String) {
         transaction {
-            ShortUrls.update({ ShortUrls.shortUrl eq shortUrl }) {
+            val id = findEntryByID(shortUrl)
+
+            entryClicks.insert {
+                it[shortUrlId] = id
+            }
+
+            entries.update({ entries.shortUrl eq shortUrl }) {
                 with(SqlExpressionBuilder) {
                     it.update(clicks, clicks + 1)
                 }
@@ -54,10 +60,17 @@ object ShortUrlDataAccessObject {
         }
     }
 
-    fun deleteShortUrlById(id: Int): Boolean {
+    fun deleteEntryByID(id: Int): Boolean {
         return transaction {
-            ShortUrls.deleteWhere { ShortUrls.id eq id } > 0
+            entries.deleteWhere { entries.id eq id } > 0
         }
     }
+}
 
+private fun findEntryByID(shortUrl: String): Int {
+    return entries
+        .select { entries.shortUrl eq shortUrl }
+        .singleOrNull()
+        ?.get(entries.id)
+        ?: throw IllegalArgumentException("Short URL not found: $shortUrl")
 }

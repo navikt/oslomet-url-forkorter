@@ -1,6 +1,6 @@
 import {} from "./dashboardpage.style.ts";
 import {Main} from "../pages.style.ts";
-import SearchShortUrl from "../../components/SearchShortUrl.tsx";
+import CheckShortUrl from "../../components/CheckShortUrl.tsx";
 import CreateShortUrl from "../../components/CreateShortUrl.tsx";
 import ShowAll from "../../components/ShowAll/ShowAll.tsx";
 
@@ -8,7 +8,7 @@ export default function DashboardPage() {
 
     return (
         <Main>
-            <SearchShortUrl/>
+            <CheckShortUrl/>
             <CreateShortUrl/>
             <ShowAll/>
         </Main>

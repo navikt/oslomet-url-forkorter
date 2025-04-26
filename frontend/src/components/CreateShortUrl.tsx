@@ -3,15 +3,13 @@ import {apiRequest} from "../util/api/apiRequest.ts";
 import {useState} from "react";
 import Input from "./shared/Input/Input.tsx";
 
-const BASE_URL = window.location.origin;
-
 export default function CreateShortUrl() {
     const [inputValue, setInputValue] = useState("");
     const [result, setResult] = useState<string | null>(null);
 
     function handleCreateClick() {
         if (!isValidUrl(inputValue)) return;
-        apiRequest<{ forkortetUrl: string }>(`forkort?langurl=${inputValue}`, "POST", true).then((res) => {
+        apiRequest<{ forkortetUrl: string }>(`url/opprett?langurl=${inputValue}`, true, "POST").then((res) => {
             if (res) setResult(res.forkortetUrl);
         }).catch(error => {
             setResult(null);
@@ -19,7 +17,7 @@ export default function CreateShortUrl() {
         });
     }
 
-    const url = BASE_URL + result;
+    const url =  window.location.origin + result;
 
     return (
         <>

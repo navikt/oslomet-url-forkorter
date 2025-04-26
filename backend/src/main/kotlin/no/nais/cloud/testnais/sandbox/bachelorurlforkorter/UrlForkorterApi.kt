@@ -33,11 +33,15 @@ fun startAppServer(config: Config) {
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
-                post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
-                post("forkort", UrlForkorterController::forkort, Rolle.InternNavInnlogget)
-                post("slett", UrlForkorterController::slett, Rolle.InternNavInnlogget)
-                get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
-                get("bruker", Auth::autoriserBrukerMotTexas, Rolle.Alle)
+                path("bruker") {
+                    get("sjekk", Auth::autoriserBrukerMotTexas, Rolle.Alle)
+                }
+                path("url") {
+                    post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
+                    post("opprett", UrlForkorterController::opprett, Rolle.InternNavInnlogget)
+                    post("slett", UrlForkorterController::slett, Rolle.InternNavInnlogget)
+                    get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
+                }
             }
             get("{korturl}") { ctx ->
                 if (ctx.pathParam("korturl") == "index.html" || ctx.pathParam("korturl") == "dashboard") {

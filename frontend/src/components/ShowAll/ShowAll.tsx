@@ -34,7 +34,7 @@ export default function ShowAll() {
     useEffect(() => {
         async function fetchUrls() {
             try {
-                const data = await apiRequest<UrlData[]>("hentalle");
+                const data = await apiRequest<UrlData[]>("url/hentalle", true);
                 setUrls(data);
             } catch (err) {
                 setError("Feil ved henting av liste over URLer");
@@ -46,7 +46,7 @@ export default function ShowAll() {
     }, []);
 
     function handleDeleteClick(id: number) {
-        apiRequest<{ forkortetUrl: string }>(`slett?id=${id}`, "POST")
+        apiRequest<{ forkortetUrl: string }>(`url/slett?id=${id}`, true, "POST")
             .then(() => setUrls((prevUrls) => prevUrls.filter((url) => url.id !== id)))
             .catch((error: Error) => {
                 console.error("API error:", error);

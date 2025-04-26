@@ -20,7 +20,7 @@ export function useCheckLogin() {
 
     const checkLoginStatus = () => {
         setLoading(true);
-        apiRequest<BrukerResponse>("bruker", "GET").then((data) => {
+        apiRequest<BrukerResponse>("bruker/sjekk", true, "GET").then((data) => {
             if (data) {
                 setIsLoggedIn(true);
                 setUser(data.navIdent);

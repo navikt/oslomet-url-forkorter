@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 
 private val logger = KotlinLogging.logger {}
 
-object ShortUrls : Table("short_urls") {
+object entries : Table("short_urls") {
     val id = integer("id").autoIncrement()
     val shortUrl = varchar("short_url", 255).uniqueIndex()
     val longUrl = text("long_url")
@@ -19,6 +19,14 @@ object ShortUrls : Table("short_urls") {
     val clicks = integer("clicks").default(0)
     override val primaryKey = PrimaryKey(id)
 }
+
+object entryClicks : Table("short_url_clicks") {
+    val id = integer("id").autoIncrement()
+    val shortUrlId = integer("short_url_id").references(entries.id, onDelete = ReferenceOption.CASCADE)
+    val clickedAt = datetime("clicked_at").defaultExpression(CurrentDateTime)
+    override val primaryKey = PrimaryKey(id)
+}
+
 
 object DatabaseInit {
     fun start(config: Config) {
@@ -31,7 +39,7 @@ object DatabaseInit {
                 Database.connect(config.dbConfig.getDbConnection())
             }
             transaction(db) {
-                SchemaUtils.create(ShortUrls)
+                SchemaUtils.create(entries, entryClicks)
             }
         } catch (e: Exception) {
             throw RuntimeException("Kunne ikke opprette database connection", e)

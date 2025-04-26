@@ -16,7 +16,7 @@ object UrlForkorterController {
             return
         }
         try {
-            val langurl = ShortUrlDataAccessObject.getLongUrl(korturl.toString())
+            val langurl = ShortUrlDataAccessObject.getEntryLongUrl(korturl.toString())
             if (langurl.isNullOrBlank()) {
                 ctx.status(404).json(mapOf("message" to "Finner ingen URL i databasen"))
                 return
@@ -37,7 +37,7 @@ object UrlForkorterController {
             return
         }
         try {
-            val langurl = ShortUrlDataAccessObject.getLongUrl(korturl.toString())
+            val langurl = ShortUrlDataAccessObject.getEntryLongUrl(korturl.toString())
             if (langurl == null) {
                 ctx.status(404)
                 return
@@ -49,15 +49,16 @@ object UrlForkorterController {
         }
     }
 
-    fun forkort(ctx: Context) {
+    fun opprett(ctx: Context) {
         val originalUrl = ctx.queryParam("langurl")
+        val bruker = ctx.body()
         if (originalUrl.isNullOrBlank()) {
             ctx.status(400).json(mapOf("message" to "Mangler URL"))
             return
         }
         try {
             val forkortetUrl = Forkorter.lagUnikKortUrl()
-            ShortUrlDataAccessObject.storeShortUrl(forkortetUrl, originalUrl.toString(), "Sigurd")
+            ShortUrlDataAccessObject.storeNewEntry(forkortetUrl, originalUrl.toString(), "Sigurd")
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
         } catch (e: Exception) {
             logger.error("Feil ved forkorting av url: {}", originalUrl, e)
@@ -67,7 +68,7 @@ object UrlForkorterController {
 
     fun hentAlleMedMetadata(ctx: Context) {
         try {
-            val urls = ShortUrlDataAccessObject.getAllUrlsWithMetadata()
+            val urls = ShortUrlDataAccessObject.getAllEntriesWithMetadata()
             ctx.status(200).json(urls)
         } catch (e: Exception) {
             logger.error("Feil ved henting av alle URLer", e)
@@ -78,7 +79,7 @@ object UrlForkorterController {
     fun slett(ctx: Context) {
         val id = ctx.queryParam("id")
         try {
-            ShortUrlDataAccessObject.deleteShortUrlById(Integer.parseInt(id))
+            ShortUrlDataAccessObject.deleteEntryByID(Integer.parseInt(id))
             ctx.status(204)
         } catch (e: Exception) {
             logger.error("Feil ved sletting av URL", e)

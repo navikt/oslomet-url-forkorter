@@ -2,8 +2,8 @@ const API_BASE_URL = import.meta.env.DEV ? "http://localhost:8080/api/" : window
 
 export async function apiRequest<T>(
     endpoint: string,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     includeCredentials: boolean = false,
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     body?: unknown,
     headers: HeadersInit = {
         "Content-Type": "application/json",
