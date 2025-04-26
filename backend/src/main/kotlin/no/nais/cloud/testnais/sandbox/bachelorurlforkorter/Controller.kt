@@ -10,7 +10,25 @@ import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.forkorter.Forkorter
 
 private val logger = KotlinLogging.logger {}
 
-object UrlForkorterController {
+object BrukerController {
+
+    fun hentBruker(ctx: Context) {
+        val response = hentBrukerInfo(ctx)
+        if (response.active) {
+            ctx.status(200).json(
+                BrukerResponse(
+                    navIdent = response.NAVident,
+                    name = response.name,
+                    preferredUsername = response.preferred_username
+                )
+            )
+        } else {
+            ctx.status(401)
+        }
+    }
+}
+
+object UrlController {
 
     fun redirect(ctx: Context) {
         val korturl = ctx.pathParam("val")
@@ -87,21 +105,6 @@ object UrlForkorterController {
         } catch (e: Exception) {
             logger.error("Feil ved sletting av URL", e)
             ctx.status(500)
-        }
-    }
-
-    fun hentBruker(ctx: Context) {
-        val response = hentBrukerInfo(ctx)
-        if (response.active) {
-            ctx.status(200).json(
-                BrukerResponse(
-                    navIdent = response.NAVident,
-                    name = response.name,
-                    preferredUsername = response.preferred_username
-                )
-            )
-        } else {
-            ctx.status(401)
         }
     }
 }

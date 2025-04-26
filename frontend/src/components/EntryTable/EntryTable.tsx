@@ -64,6 +64,7 @@ export default function EntryTable() {
     }
 
     let filteredUrls = urls.filter((url) =>
+        url.shortUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
         url.longUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (url.createdBy && url.createdBy.toLowerCase().includes(searchTerm.toLowerCase()))
     );
@@ -100,10 +101,9 @@ export default function EntryTable() {
                     <table className={classes.table}>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Kort URL</th>
                                 <th>Lang URL</th>
-                                <th>Av bruker</th>
+                                <th>Eier</th>
                                 <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
                                     <div className={classes.icon}>
                                         Opprettet
@@ -134,9 +134,8 @@ export default function EntryTable() {
                         <tbody>
                         {filteredUrls.map((entry) => (
                             <tr key={entry.id}>
-                                <td>{entry.id}</td>
                                 <td>
-                                    <div className={classes.icon}>
+                                    <div className={classes.copyicon}>
                                         <Icon icon="copy" onClick={() => {
                                             handleCopyClick(BASE_URL + entry.shortUrl)
                                         }}/>

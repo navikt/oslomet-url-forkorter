@@ -53,3 +53,10 @@
     width: 100%;
 }
 
+.copyicon {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    width: 100%;
+}
+

@@ -34,25 +34,26 @@ fun startAppServer(config: Config) {
         javalinConfig.router.apiBuilder {
             path("api") {
                 path("bruker") {
-                    get("hent", UrlForkorterController::hentBruker, Rolle.Alle)
+                    get("hent", BrukerController::hentBruker, Rolle.Alle)
                 }
                 path("url") {
-                    post("sjekk", UrlForkorterController::sjekk, Rolle.Alle)
-                    post("opprett", UrlForkorterController::opprett, Rolle.InternNavInnlogget)
-                    post("slett", UrlForkorterController::slett, Rolle.InternNavInnlogget)
-                    get("hentalle", UrlForkorterController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
+                    post("sjekk", UrlController::sjekk, Rolle.Alle)
+                    post("opprett", UrlController::opprett, Rolle.InternNavInnlogget)
+                    post("slett", UrlController::slett, Rolle.InternNavInnlogget)
+/*                    get("hentforbruker", UrlController::hentForBrukerMedMetadata, Rolle.InternNavInnlogget)*/
+                    get("hentalle", UrlController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
                 }
             }
-            // Dersom ingen endepunkter treffes skal man enten serve assets eller redirecte
+            // Dersom ingen endepunkter treffes skal man enten serve assets eller redirecte til ekstern url
             get("{val}") { ctx ->
                 if (ctx.pathParam("val") == "index.html" || ctx.pathParam("val") == "dashboard") {
                     val asset =
-                        UrlForkorterController::class.java.getResourceAsStream("/public/index.html")
+                        UrlController::class.java.getResourceAsStream("/public/index.html")
                     if (asset != null) {
                         ctx.contentType("text/html").result(asset)
                     }
                 } else {
-                    UrlForkorterController.redirect(ctx)
+                    UrlController.redirect(ctx)
                 }
             }
         }

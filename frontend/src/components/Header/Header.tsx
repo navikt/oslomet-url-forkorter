@@ -17,20 +17,37 @@ export default function Header() {
 
     return (
         <header className={classes.header}>
-            <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
-            {isLoggedIn ? (
-                <div style={{display: "flex"}}>
-                    <Icon icon="user"/>
-                    <p className={classes.userText}>{user}</p>
-                </div>
-            ) : (
-                <>
-                    <button className={classes.button} onClick={redirectToLogin}>
-                        <img src="/icons/logg-inn.svg" alt="logg inn ikon" height="30"/>
+            <div className={classes.left}>
+                <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
+                <nav className={classes.nav}>
+                    <button className={classes.navbutton}>
+                        Opprett ny lenke
+                    </button>
+                    <button className={classes.navbutton}>
+                        Oversikt
+                    </button>
+                    <button className={classes.navbutton}>
+                        Statistikk
+                    </button>
+                </nav>
+            </div>
+            <div className={classes.right}>
+                {isLoggedIn ? (
+                    <button className={classes.rightButton}>
+                        <Icon icon="user" height={1.5}/>
+                        <p className={classes.rightText}>{user}</p>
+                    </button>
+                ) : (
+                    <button className={classes.loginButton} onClick={redirectToLogin}>
+                        <Icon icon={"logg-inn"} height={2}/>
                         Logg inn
                     </button>
-                </>
-            )}
+                )}
+                <button className={classes.rightButton}>
+                    <Icon icon="menu" height={1.5}/>
+                    <p className={classes.rightText}>Meny</p>
+                </button>
+            </div>
         </header>
     );
 }
