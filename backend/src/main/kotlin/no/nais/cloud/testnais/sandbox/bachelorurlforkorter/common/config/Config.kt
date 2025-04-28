@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Local
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Sandbox
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Dev
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Prod
 import java.util.Properties
 import javax.sql.DataSource
@@ -59,7 +59,7 @@ data class Password(val value: String) {
 }
 
 enum class Env {
-    Local, Sandbox, Prod
+    Local, Dev, Prod
 }
 
 fun createApplicationConfig(): Config {
@@ -89,7 +89,7 @@ fun createApplicationConfig(): Config {
 }
 
 private fun logConfig(config: Config) {
-    if (config.environment in listOf(Local, Sandbox, Prod)) {
+    if (config.environment in listOf(Local, Dev, Prod)) {
         logger.info("Opprettet config : $config")
     }
 }
@@ -108,7 +108,7 @@ private fun addLocalProperties(props: Properties): Properties {
 private fun getEnv(props: Properties): Env? =
     when (props.getProperty("NAIS_CLUSTER_NAME")) {
         "local" -> Local
-        "sandbox" -> Sandbox
-        "prod" -> Prod
+        "sandbox", "dev-gcp", "ekstern-dev" -> Dev
+        "prod-gcp", "ekstern" -> Prod
         else -> null
     }
