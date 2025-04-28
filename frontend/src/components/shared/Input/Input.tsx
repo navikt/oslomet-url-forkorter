@@ -13,6 +13,7 @@ interface Props {
     disabled?: boolean;
     disableButton?: boolean;
     statusIcon?: string;
+    loading?: boolean;
     style?: CSSProperties;
 }
 
@@ -26,6 +27,7 @@ export default function Input({
                                   disabled,
                                   disableButton,
                                   statusIcon,
+                                  loading,
                                   style
                               }: Props) {
     const inputId = useId();
@@ -51,10 +53,10 @@ export default function Input({
                     }}/>
                 {statusIcon && (
                     <div className={classes.statusIcon}>
-                        <Icon icon={statusIcon} />
+                        <Icon icon={statusIcon}/>
                     </div>
                 )}
-                {!disableButton && <Button className={classes.button} text={buttonText} onClick={onClick}/>}
+                {!disableButton && <Button loading={loading} className={classes.button} text={buttonText} onClick={onClick}/>}
             </div>
         </div>
     )

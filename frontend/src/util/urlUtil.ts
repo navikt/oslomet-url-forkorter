@@ -24,7 +24,7 @@ export function isValidShortenedLink(input: string): boolean {
 }
 
 export function extractShortUrl(input: string): string | null {
-    const regex = new RegExp(`^${escapeRegex(BASE_URL)}/([a-z0-9]{6})$`);
+    const regex = new RegExp(`^${escapeRegex(BASE_URL)}/([a-z0-9]{3,15})$`);
     const match = input.match(regex);
     if (match) return match[1];
     return null;

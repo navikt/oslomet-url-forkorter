@@ -16,8 +16,8 @@ export async function apiRequest<T>(
         body: body ? JSON.stringify(body) : undefined,
     });
     if (!response.ok) {
-        const error = new Error(`Error ${response.status}: ${response.statusText}`);
-        (error as any).response = response.json();
+        const error: any = new Error(`Error ${response.status}: ${response.statusText}`);
+        error.response = response;
         throw error;
     }
     if (response.status === 204) return null as T;

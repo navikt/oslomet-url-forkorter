@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import {apiRequest} from "../api/apiRequest.ts";
+import {useNavigate} from "react-router-dom";
 
 interface BrukerResponse {
     navIdent: string;
@@ -11,6 +12,7 @@ export function useCheckLogin() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         checkLoginStatus()
@@ -22,6 +24,7 @@ export function useCheckLogin() {
             if (data) {
                 setIsLoggedIn(true);
                 setUser(data.navIdent);
+                navigate("/opprettnylenke");
                 console.log("Logget inn som: ", data);
             } else {
                 setIsLoggedIn(false);

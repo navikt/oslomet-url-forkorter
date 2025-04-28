@@ -184,6 +184,7 @@ export default function EntryTable() {
                                             <div className={classes.expandContent}>
                                                 {/* Expanded content here */}
                                                 <strong>Original URL:</strong> <pre>{entry.longUrl}</pre>
+                                                <p>{entry.description}</p>
                                                 <Button text="Slett" onClick={() => handleDeleteClick(entry.id)}/>
                                             </div>
                                         </td>
