@@ -5,13 +5,14 @@ interface LinkProps{
     children: ReactNode;
     href: string;
     target?: string;
+    onClick?: (e: any) => unknown;
     rel?: string;
 }
 
-export default function Link({children, href, target, rel}: LinkProps) {
+export default function Link({children, href, target, onClick, rel}: LinkProps) {
 
     return (
-        <a className={classes.link} href={href} target={target} rel={rel}>
+        <a onClick={onClick} className={classes.link} href={href} target={target} rel={rel}>
             {children}
         </a>
     )

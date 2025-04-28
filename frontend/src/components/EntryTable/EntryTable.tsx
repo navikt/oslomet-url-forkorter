@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
 import Icon from "../shared/Icon/Icon.tsx";
 import Link from "../shared/Link/Link.tsx";
 import Input from "../shared/Input/Input.tsx";
 import classes from "./entrytable.module.css"
 
-interface UrlData {
+interface EntryData {
     id: number;
     description: string;
     shortUrl: string;
@@ -18,17 +18,18 @@ interface UrlData {
 type SortColumn = "createdAt" | "clicks" | null;
 
 export default function EntryTable() {
-    const [urls, setUrls] = useState<UrlData[]>([]);
+    const [entries, setEntries] = useState<EntryData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortConfig, setSortConfig] = useState<{ column: SortColumn, direction: "asc" | "desc" | null } | null>(null);
+    const [expandedRow, setExpandedRow] = useState<number | null>(null);
 
     useEffect(() => {
         async function fetchUrls() {
             try {
-                const data = await apiRequest<UrlData[]>("url/hentalle");
-                setUrls(data);
+                const data = await apiRequest<EntryData[]>("url/hentalle");
+                setEntries(data);
             } catch (err) {
                 setError("Feil ved henting av liste over URLer");
                 console.error("API error:", err);
@@ -38,9 +39,13 @@ export default function EntryTable() {
         fetchUrls().then(() => setLoading(false));
     }, []);
 
+    function handleRowClick(id: number) {
+        setExpandedRow((prevId) => (prevId === id ? null : id));
+    }
+
     function handleDeleteClick(id: number) {
         apiRequest<{ forkortetUrl: string }>(`url/slett?id=${id}`, "POST")
-            .then(() => setUrls((prevUrls) => prevUrls.filter((url) => url.id !== id)))
+            .then(() => setEntries((prevUrls) => prevUrls.filter((url) => url.id !== id)))
             .catch((error: Error) => {
                 console.error("API error:", error);
             });
@@ -64,14 +69,14 @@ export default function EntryTable() {
         });
     }
 
-    let filteredUrls = urls.filter((url) =>
-        url.shortUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        url.longUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (url.createdBy && url.createdBy.toLowerCase().includes(searchTerm.toLowerCase()))
+    let filteredEntries = entries.filter((entry) =>
+        entry.shortUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.longUrl.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (entry.createdBy && entry.createdBy.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     if (sortConfig?.direction) {
-        filteredUrls = [...filteredUrls].sort((a, b) => {
+        filteredEntries = [...filteredEntries].sort((a, b) => {
             if (sortConfig.column === "createdAt") {
                 return sortConfig.direction === "asc"
                     ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -83,14 +88,14 @@ export default function EntryTable() {
             return 0;
         });
     } else {
-        filteredUrls = [...filteredUrls].sort((a, b) => a.id - b.id);
+        filteredEntries = [...filteredEntries].sort((a, b) => a.id - b.id);
     }
 
     const BASE_URL = import.meta.env.DEV ? "http://localhost:8080/" : window.location.origin + "/";
 
     return (
         <section className={classes.container}>
-            <h2>asd</h2>
+            <h2>Oversikt over kortlenker</h2>
             {loading && <p>Loading...</p>}
             {error && <p style={{color: "red"}}>{error}</p>}
             <div>
@@ -103,8 +108,8 @@ export default function EntryTable() {
                     <table className={classes.table}>
                         <thead>
                         <tr>
-                            <th>Kort URL</th>
-                            <th>Lang URL</th>
+                            <th>Kortlenke</th>
+                            <th>Original URL</th>
                             <th>Eier</th>
                             <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
                                 <div className={classes.icon}>
@@ -120,7 +125,7 @@ export default function EntryTable() {
                             </th>
                             <th onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}>
                                 <div className={classes.icon}>
-                                    Antall besøk
+                                    Besøk
                                     {sortConfig?.column === "clicks"
                                         ? sortConfig.direction === "asc"
                                             ? <Icon icon="sort-down"/>
@@ -130,44 +135,59 @@ export default function EntryTable() {
                                         : <Icon icon="sort"/>}
                                 </div>
                             </th>
-                            <th>Slett</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {filteredUrls.map((entry) => (
-                            <tr key={entry.id}>
-                                <td>
-                                    <div className={classes.copyicon}>
-                                        <Icon icon="copy" onClick={() => {
-                                            handleCopyClick(BASE_URL + entry.shortUrl)
-                                        }}/>
-                                        <Link href={BASE_URL + entry.shortUrl}
+                        {filteredEntries.map((entry) => (
+                            <Fragment key={entry.id}>
+                                <tr onClick={() => handleRowClick(entry.id)}>
+                                    <td>
+                                        <div className={classes.copy}>
+                                            <Icon icon="copy"
+                                                  successIcon
+                                                  onClick={(e) => {
+                                                      handleCopyClick(BASE_URL + entry.shortUrl)
+                                                      e.stopPropagation()
+                                                  }}/>
+                                            <Link href={BASE_URL + entry.shortUrl}
+                                                  target="_blank"
+                                                  onClick={(e) => {e.stopPropagation()}}
+                                                  rel="noopener noreferrer">
+                                                {entry.shortUrl}
+                                            </Link>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <Link href={entry.longUrl}
                                               target="_blank"
+                                              onClick={(e) => {e.stopPropagation()}}
                                               rel="noopener noreferrer">
-                                            {entry.shortUrl}
+                                            {entry.longUrl}
                                         </Link>
-                                    </div>
-                                </td>
-                                <td>
-                                    <Link href={entry.longUrl} target="_blank" rel="noopener noreferrer">
-                                        {entry.longUrl}
-                                    </Link>
-                                </td>
-                                <td>{entry.createdBy || "Unknown"}</td>
-                                <td>
-                                    {new Intl.DateTimeFormat("nb-NO", {
-                                        day: "2-digit",
-                                        month: "long",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: false
-                                    }).format(new Date(entry.createdAt)).replace(",", " kl.")}
-                                </td>
-                                <td>{entry.clicks}</td>
-                                <td><Icon icon="xmark" onClick={() => {
-                                    handleDeleteClick(entry.id)
-                                }}></Icon></td>
-                            </tr>
+                                    </td>
+                                    <td>{entry.createdBy || "Unknown"}</td>
+                                    <td>
+                                        {new Intl.DateTimeFormat("nb-NO", {
+                                            day: "2-digit",
+                                            month: "long",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hour12: false
+                                        }).format(new Date(entry.createdAt)).replace(",", " kl.")}
+                                    </td>
+                                    <td>{entry.clicks}</td>
+                                </tr>
+                                {expandedRow === entry.id && (
+                                    <tr className={classes.expandRow}>
+                                        <td colSpan={6}>
+                                            <div className={classes.expandContent}>
+                                                {/* Expanded content here */}
+                                                <strong>Original URL:</strong> <pre>{entry.longUrl}</pre>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
+                            </Fragment>
                         ))}
                         </tbody>
                     </table>

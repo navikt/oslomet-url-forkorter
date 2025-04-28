@@ -1,7 +1,8 @@
-import {extractShortUrl} from "../util/urlUtil.ts";
-import {apiRequest} from "../util/api/apiRequest.ts";
+import {extractShortUrl} from "../../util/urlUtil.ts";
+import {apiRequest} from "../../util/api/apiRequest.ts";
 import {useState} from "react";
-import Input from "./shared/Input/Input.tsx";
+import Input from "../shared/Input/Input.tsx";
+import classes from "./checkshorturl.module.css";
 
 export default function CheckShortUrl() {
     const [inputValue, setInputValue] = useState("");
@@ -23,13 +24,13 @@ export default function CheckShortUrl() {
     }
 
     return (
-        <>
+        <section className={classes.section}>
             <Input placeholder="Kontroller din lenke.."
                     onClick={handleSearchClick}
                     onChange={setInputValue}>
             </Input>
 
             <div>{searchResult}</div>
-        </>
+        </section>
     )
 }

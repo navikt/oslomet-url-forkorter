@@ -29,19 +29,19 @@ object UrlController {
 
     fun videresend(ctx: Context) {
         val korturl = ctx.pathParam("path")
-        if (!korturl.matches(Regex("^[a-z0-9]{6}$"))) {
+        if (!korturl.matches(Regex("^[a-z0-9]{3,15}$"))) {
             ctx.status(204)
             return
         }
         try {
-            val langurl = EntryDataAccessObject.getEntryLongUrl(korturl.toString())
-            if (langurl.isNullOrBlank()) {
+            val originalurl = EntryDataAccessObject.getEntryLongUrl(korturl.toString())
+            if (originalurl.isNullOrBlank()) {
                 ctx.status(404).json(mapOf("message" to "Finner ingen URL i databasen"))
                 return
             }
-            logger.info("Videsendt URL: $korturl til $langurl")
+            logger.info("Videsendt URL: $korturl til $originalurl")
             EntryDataAccessObject.incrementClicks(korturl)
-            ctx.status(307).redirect(sanitizeCRLF(langurl) ?: "/")
+            ctx.status(307).redirect(sanitizeCRLF(originalurl) ?: "/")
         } catch (e: Exception) {
             logger.error("Feil ved redirect: {}", korturl, e)
             ctx.status(500)
@@ -75,7 +75,7 @@ object UrlController {
             .get()
 
         try {
-            // TODO: Valider korturl
+            // TODO: Valider korturl fra klient før lagring
             val forkortetUrl = request.korturl?: Forkorter.lagUnikKortUrl()
             EntryDataAccessObject.storeNewEntry(request.beskrivelse, forkortetUrl, request.originalurl.toString(), request.bruker)
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))

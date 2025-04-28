@@ -8,13 +8,12 @@
     border-radius: 5px;
 }
 
-
 .table {
     width: 100%;
     margin-top: 10px;
     border-collapse: collapse;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 5px;
     overflow: hidden;
 
     thead {
@@ -23,9 +22,9 @@
 
         tr {
             th {
-                padding: 7px;
+                padding: 8px 12px;
                 text-align: left;
-                font-size: 14px;
+                font-size: 16px;
                 user-select: none;
             }
         }
@@ -36,27 +35,46 @@
             &:nth-child(even) {
                 background-color: #f8f9fa;
             }
+            &:hover {
+                background-color: #eee;
+            }
             td {
-                padding: 6px;
+                padding: 8px 10px;
                 position: relative;
                 border: 1px solid #ddd;
                 text-align: left;
-                font-size: 14px;
+                font-size: 16px;
+                max-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
+            }
+        }
+        .expandRow {
+            background-color: white !important;
+
+            &:hover {
+                background-color: inherit;
+            }
+
+            td {
+                cursor: default;
             }
         }
     }
 }
 
-.icon {
+.copy {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: .4rem;
+    gap: .5rem;
     width: 100%;
 }
 
-.copyicon {
+.icon {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: .4rem;
     width: 100%;

@@ -30,9 +30,6 @@ export default function Header() {
                             Oversikt
                         </button>
                     </Link>
-                    <button className={classes.navbutton}>
-                        Statistikk
-                    </button>
                 </nav>
             </div>
             <div className={classes.right}>

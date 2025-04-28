@@ -1,4 +1,4 @@
-import CheckShortUrl from "../../components/CheckShortUrl.tsx";
+import CheckShortUrl from "../../components/CheckShortUrl/CheckShortUrl.tsx";
 import classes from "./landingpage.module.css"
 
 export default function LandingPage() {

@@ -8,7 +8,7 @@
 
 :root {
     --theme-color-blue: #003453;
-    --theme-color-purple: #412B5D;
+    --theme-color-purple: #003453;
     --theme-color-purple-focus: #301F46;
 }
 
@@ -24,7 +24,7 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 html,body, #root {
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     max-width: 100%;
     background-color: white;
@@ -37,6 +37,7 @@ html,body, #root {
 
 main {
     display: flex;
+    flex: 1;
     height: 100%;
     gap: 1rem;
     flex-direction: column;

@@ -13,8 +13,13 @@ export function isValidHttpsUrl(input: string): boolean {
     }
 }
 
+export function isValidShortLink(input: string): boolean {
+    const regex = new RegExp("[a-z0-9]{3,15}$");
+    return regex.test(input);
+}
+
 export function isValidShortenedLink(input: string): boolean {
-    const regex = new RegExp(`^${escapeRegex(BASE_URL)}/[a-z0-9]{6}$`);
+    const regex = new RegExp(`^${escapeRegex(BASE_URL)}/[a-z0-9]{3,15}$`);
     return regex.test(input);
 }
 
