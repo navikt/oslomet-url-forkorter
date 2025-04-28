@@ -4,6 +4,7 @@ import Icon from "../shared/Icon/Icon.tsx";
 import Link from "../shared/Link/Link.tsx";
 import Input from "../shared/Input/Input.tsx";
 import classes from "./entrytable.module.css"
+import Button from "../shared/Button/Button.tsx";
 
 interface EntryData {
     id: number;
@@ -183,6 +184,7 @@ export default function EntryTable() {
                                             <div className={classes.expandContent}>
                                                 {/* Expanded content here */}
                                                 <strong>Original URL:</strong> <pre>{entry.longUrl}</pre>
+                                                <Button text="Slett" onClick={() => handleDeleteClick(entry.id)}/>
                                             </div>
                                         </td>
                                     </tr>

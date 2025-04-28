@@ -1,11 +1,12 @@
 import {useCheckLogin} from "../../util/hooks/useCheckLogin.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import Icon from "../../components/shared/Icon/Icon.tsx";
 import classes from "./header.module.css"
 
 export default function Header() {
     const {isLoggedIn, user, loading} = useCheckLogin();
     const navigate = useNavigate();
+    const location = useLocation();
 
     if (loading) {
         return <p>Loading...</p>;
@@ -21,12 +22,12 @@ export default function Header() {
                 <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
                 <nav className={classes.nav}>
                     <Link to={"/opprettnylenke"}>
-                        <button className={classes.navbutton}>
+                        <button className={`${location.pathname === "/opprettnylenke" ? classes.active : ""} ${classes.navbutton}`}>
                             Opprett ny lenke
                         </button>
                     </Link>
                     <Link to={"/dashboard"}>
-                        <button className={classes.navbutton}>
+                        <button className={`${location.pathname === "/dashboard" ? classes.active : ""} ${classes.navbutton}`}>
                             Oversikt
                         </button>
                     </Link>

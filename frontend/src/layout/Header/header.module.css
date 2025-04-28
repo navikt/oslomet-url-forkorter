@@ -25,7 +25,7 @@
 }
 
 .navbutton {
-    height: 80px;
+    height: 79px;
     font-size: 18px;
     color: #23262a;
     border: none;
@@ -35,8 +35,16 @@
     padding: 0 1rem;
     border-bottom: 4px solid transparent;
 
-    &:hover {
+    &.active {
         border-bottom: 4px solid #0067c5;
+
+        &:hover {
+            border-bottom: 4px solid #0067c5;
+        }
+    }
+
+    &:hover {
+        border-bottom: 4px solid #ccc;
     }
 }
 
