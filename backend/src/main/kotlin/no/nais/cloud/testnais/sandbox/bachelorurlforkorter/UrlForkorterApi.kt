@@ -44,14 +44,6 @@ fun startAppServer(config: Config) {
                     get("hentalle", Controller::hentAlleMedMetadata, Rolle.InternNavInnlogget)
                 }
             }
-            get("/favicon.ico") { ctx ->
-                val faviconStream = Controller::class.java.getResourceAsStream("/public/favicon.ico")
-                if (faviconStream != null) {
-                    ctx.contentType("image/x-icon").result(faviconStream)
-                } else {
-                    ctx.status(404)
-                }
-            }
             // Dersom ingen endepunkter treffes skal man enten serve assets eller videresende til ekstern url
             get("{path}") { ctx ->
                 when (ctx.pathParam("path")) {
