@@ -20,7 +20,7 @@ export default function Header() {
         <header className={classes.header}>
             <div className={classes.left}>
                 <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
-                <nav className={classes.nav}>
+                <nav className={`${isLoggedIn ? "" : classes.hide} ${classes.nav}`}>
                     <Link to={"/opprettnylenke"}>
                         <button className={`${location.pathname === "/opprettnylenke" ? classes.active : ""} ${classes.navbutton}`}>
                             Opprett ny lenke
@@ -45,7 +45,7 @@ export default function Header() {
                         <p className={classes.rightText}>Logg inn</p>
                     </button>
                 )}
-                <button className={classes.rightButton}>
+                <button className={`${isLoggedIn ? "" : classes.hide} ${classes.rightButton}`}>
                     <Icon icon="menu" height={1.5}/>
                     <p className={classes.rightText}>Meny</p>
                 </button>
