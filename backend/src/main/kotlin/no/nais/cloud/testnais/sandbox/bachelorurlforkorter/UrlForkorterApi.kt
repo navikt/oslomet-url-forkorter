@@ -37,19 +37,32 @@ fun startAppServer(config: Config) {
                     get("hent", BrukerController::hentBruker, Rolle.Alle)
                 }
                 path("url") {
-                    post("sjekk", UrlController::sjekk, Rolle.Alle)
-                    post("opprett", UrlController::opprett, Rolle.InternNavInnlogget)
-                    post("slett", UrlController::slett, Rolle.InternNavInnlogget)
+                    post("sjekk", Controller::sjekk, Rolle.Alle)
+                    post("opprett", Controller::opprett, Rolle.InternNavInnlogget)
+                    post("slett", Controller::slett, Rolle.InternNavInnlogget)
                     /*                    get("hentforbruker", UrlController::hentForBrukerMedMetadata, Rolle.InternNavInnlogget)*/
-                    get("hentalle", UrlController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
+                    get("hentalle", Controller::hentAlleMedMetadata, Rolle.InternNavInnlogget)
+                }
+            }
+            get("/favicon.ico") { ctx ->
+                val faviconStream = Controller::class.java.getResourceAsStream("/public/favicon.ico")
+                if (faviconStream != null) {
+                    ctx.contentType("image/x-icon").result(faviconStream)
+                } else {
+                    ctx.status(404)
                 }
             }
             // Dersom ingen endepunkter treffes skal man enten serve assets eller videresende til ekstern url
             get("{path}") { ctx ->
-                UrlController::class.java.getResourceAsStream("/public/index.html")
-                    ?.takeIf { ctx.pathParam("path") == "index.html" }
-                    ?.let { ctx.contentType("text/html").result(it) }
-                    ?: UrlController.videresend(ctx)
+                when (ctx.pathParam("path")) {
+                    "index.html" -> Controller::class.java.getResourceAsStream("/public/index.html")
+                        ?.let { ctx.contentType("text/html").result(it) }
+                        ?: ctx.status(404)
+                    "favicon.ico" -> Controller::class.java.getResourceAsStream("/public/favicon.ico")
+                        ?.let { ctx.contentType("image/x-icon").result(it) }
+                        ?: ctx.status(404)
+                    else -> Controller.videresend(ctx)
+                }
             }
         }
 

@@ -25,7 +25,7 @@ object BrukerController {
     }
 }
 
-object UrlController {
+object Controller {
 
     fun videresend(ctx: Context) {
         val korturl = ctx.pathParam("path")
