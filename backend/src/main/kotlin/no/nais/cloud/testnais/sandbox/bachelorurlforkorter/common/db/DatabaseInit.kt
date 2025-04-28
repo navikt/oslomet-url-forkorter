@@ -40,6 +40,7 @@ object DatabaseInit {
                 Database.connect(config.dbConfig.getDbConnection())
             }
             transaction(db) {
+                SchemaUtils.drop(entries, entryClicks)
                 SchemaUtils.create(entries, entryClicks)
             }
         } catch (e: Exception) {

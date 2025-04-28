@@ -3,12 +3,15 @@ package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.javalin.http.Context
 import io.javalin.http.UnauthorizedResponse
+import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto.TexasIntrospectionResponse
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
+
+private val logger = KotlinLogging.logger {}
 
 object Auth {
 
@@ -38,6 +41,9 @@ object Auth {
     }
 
     private fun sendTexasRequest(ctx: Context): TexasIntrospectionResponse {
+        ctx.attribute<TexasIntrospectionResponse>("texas")?.let {
+            return it
+        }
         try {
             val token = ctx.header("Authorization")?.removePrefix("Bearer ")
                 ?: throw UnauthorizedResponse("Mangler Authorization header")
@@ -56,6 +62,7 @@ object Auth {
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build()
 
+            logger.info("Kaller texas for autorisasjon av token")
             val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
             if (response.statusCode() != 200) throw UnauthorizedResponse()

@@ -28,18 +28,12 @@ export function useCheckLogin() {
                 setUser(null);
             }
         }).catch((error) => {
-            if (import.meta.env.DEV) {
-                setIsLoggedIn(true);
-                setUser("Test Brukersen");
-                console.warn("Kjører i DEV, setter dummy-bruker");
-            } else {
-                console.error("Login status feil:", {
-                    message: error.message,
-                    response: error.response
-                });
-                setIsLoggedIn(false);
-                setUser(null);
-            }
+            console.error("Login status feil:", {
+                message: error.message,
+                response: error.response
+            });
+            setIsLoggedIn(false);
+            setUser(null);
         }).finally(() => {
             setLoading(false);
         });

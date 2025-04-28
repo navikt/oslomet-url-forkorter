@@ -68,16 +68,14 @@ object Controller {
     }
 
     fun opprett(ctx: Context) {
-        // TODO: Ikke send bruker fra frontend, sjekk innlogging i backend
         val request = ctx.bodyValidator(CreateEntryRequest::class.java)
             .check({ !it.originalurl.isNullOrBlank() }, "Url kan ikke være tom")
-            .check({ !it.bruker.isNullOrBlank() }, "Bruker kan ikke være tom")
             .get()
-
         try {
-            // TODO: Valider korturl fra klient før lagring
+            val bruker = hentBrukerInfo(ctx).NAVident
+            // TODO: Valider kort url
             val forkortetUrl = request.korturl?: Forkorter.lagUnikKortUrl()
-            EntryDataAccessObject.storeNewEntry(request.beskrivelse, forkortetUrl, request.originalurl.toString(), request.bruker)
+            EntryDataAccessObject.storeNewEntry(request.beskrivelse, forkortetUrl, request.originalurl.toString(), bruker)
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
         } catch (e: Exception) {
             logger.error("Feil ved forkorting av url: {}", request.originalurl, e)

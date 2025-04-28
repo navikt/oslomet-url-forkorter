@@ -17,6 +17,7 @@ import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.brukerErNavInnlogget
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto.TexasIntrospectionResponse
 import org.slf4j.MDC
 
 private val logger = KotlinLogging.logger {}
@@ -50,9 +51,11 @@ fun startAppServer(config: Config) {
                     "index.html" -> Controller::class.java.getResourceAsStream("/public/index.html")
                         ?.let { ctx.contentType("text/html").result(it) }
                         ?: ctx.status(404)
+
                     "favicon.ico" -> Controller::class.java.getResourceAsStream("/public/favicon.ico")
                         ?.let { ctx.contentType("image/x-icon").result(it) }
                         ?: ctx.status(404)
+
                     else -> Controller.videresend(ctx)
                 }
             }
@@ -86,6 +89,18 @@ fun startAppServer(config: Config) {
 
     app.beforeMatched { ctx ->
         if (ctx.path().startsWith("/api/")) {
+            // TODO: FJERN KUN LOKAL UTVIKLING
+            if (config.environment == Env.Local) {
+                logger.warn { "Bruker ikke innlogget, men tillates i lokal utvikling på endepunkt ${ctx.path()}" }
+                ctx.attribute(
+                    "texas", TexasIntrospectionResponse(
+                        active = true,
+                        NAVident = "Test Brukersen",
+                        name = "Test Brukersen",
+                        preferred_username = "Test Brukersen",
+                    )
+                )
+            }
             checkAccessToEndpoint(ctx, config)
         }
     }
@@ -121,8 +136,8 @@ private fun checkAccessToEndpoint(ctx: Context, config: Config) {
         }
 
         ctx.routeRoles().contains(Rolle.InternNavInnlogget) || ctx.routeRoles().contains(Rolle.AdminNavInnlogget) -> {
+            // TODO: FJERN KUN LOKAL UTVIKLING
             if (config.environment == Env.Local) {
-                logger.warn { "Bruker ikke innlogget, men tillates i lokal utvikling på endepunkt ${ctx.path()}" }
                 return
             }
             if (!brukerErNavInnlogget(ctx)) {
@@ -130,6 +145,7 @@ private fun checkAccessToEndpoint(ctx: Context, config: Config) {
                 throw UnauthorizedResponse()
             }
         }
+
         ctx.routeRoles().contains(Rolle.Alle) -> return
     }
 }

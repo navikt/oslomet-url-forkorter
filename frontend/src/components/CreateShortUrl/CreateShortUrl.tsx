@@ -7,11 +7,7 @@ import Button from "../shared/Button/Button.tsx";
 import classes from "./createshorturl.module.css"
 import Icon from "../shared/Icon/Icon.tsx";
 
-interface CreateShortUrlProps {
-    user: string | null;
-}
-
-export default function CreateShortUrl({user}: CreateShortUrlProps) {
+export default function CreateShortUrl() {
     const [beskrivelse, setBeskrivelse] = useState("");
     const [originalUrl, setOriginalUrl] = useState("");
     const [customShortUrl, setCustomShortUrl] = useState("");
@@ -22,13 +18,12 @@ export default function CreateShortUrl({user}: CreateShortUrlProps) {
 
     function handleSubmitClick() {
 
-        if (!isValidHttpsUrl(originalUrl) || !user) return;
+        if (!isValidHttpsUrl(originalUrl)) return;
         setLoading(true);
         const body = {
             beskrivelse: beskrivelse,
             originalurl: originalUrl,
-            korturl: customShortUrl ? customShortUrl : null,
-            bruker: user
+            korturl: customShortUrl ? customShortUrl : null
         };
         apiRequest<{ forkortetUrl: string }>("url/opprett", "POST", body).then((res) => {
             if (res) setResult(res.forkortetUrl);
