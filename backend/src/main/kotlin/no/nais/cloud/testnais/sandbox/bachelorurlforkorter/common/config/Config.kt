@@ -54,9 +54,9 @@ data class DbConfig(
     }
 }
 
-data class Password(val value: String) {
+/*data class Password(val value: String) {
     override fun toString() = "*****"
-}
+}*/
 
 enum class Env {
     Local, Dev, Prod
@@ -77,7 +77,7 @@ fun createApplicationConfig(): Config {
 
     return Config(
         environment = getEnv(props)
-            ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox og prod."),
+            ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox, dev-gcp, ekstern-dev, ekstern, prod-gcp og prod."),
         appPort = props.getProperty("PORT")?.toInt()
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
         dbConfig = DbConfig(
@@ -89,7 +89,7 @@ fun createApplicationConfig(): Config {
 }
 
 private fun logConfig(config: Config) {
-    if (config.environment in listOf(Local, Dev, Prod)) {
+    if (config.environment in listOf(Local, Dev)) {
         logger.info("Opprettet config : $config")
     }
 }
@@ -109,6 +109,6 @@ private fun getEnv(props: Properties): Env? =
     when (props.getProperty("NAIS_CLUSTER_NAME")) {
         "local" -> Local
         "sandbox", "dev-gcp", "ekstern-dev" -> Dev
-        "prod-gcp", "ekstern" -> Prod
+        "prod", "prod-gcp", "ekstern" -> Prod
         else -> null
     }
