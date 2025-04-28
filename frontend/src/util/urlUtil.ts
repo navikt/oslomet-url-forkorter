@@ -4,9 +4,13 @@ function escapeRegex(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-export function isValidUrl(input: string): boolean {
-    const regex = /^(https:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+\/?$/;
-    return regex.test(input);
+export function isValidHttpsUrl(input: string): boolean {
+    try {
+        const url = new URL(input);
+        return url.protocol === "https:";
+    } catch (_) {
+        return false;
+    }
 }
 
 export function isValidShortenedLink(input: string): boolean {

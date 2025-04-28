@@ -1,5 +1,5 @@
 .welcomeText {
-    color: var(--theme-color);
+    color: var(--theme-color-blue);
     font-size: 2.4rem;
     font-weight: 600;
     text-align: center;
@@ -17,5 +17,5 @@
 
 .logoText {
     font-weight: bold;
-    color: var(--theme-color);
+    color: var(--theme-color-blue);
 }

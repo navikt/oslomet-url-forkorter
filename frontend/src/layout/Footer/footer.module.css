@@ -3,7 +3,7 @@
     width: 100%;
     min-height: 20vh;
     max-height: 25vh;
-    background-color: #003049;
+    background-color: var(--theme-color-blue);
     display: flex;
     padding: 2rem 6rem;
 

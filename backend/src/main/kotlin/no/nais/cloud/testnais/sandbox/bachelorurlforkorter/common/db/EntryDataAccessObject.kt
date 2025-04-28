@@ -5,9 +5,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 object EntryDataAccessObject {
-    fun storeNewEntry(shortUrl: String, longUrl: String, createdBy: String?) {
+    fun storeNewEntry(description: String?, shortUrl: String, longUrl: String, createdBy: String?) {
         transaction {
             entries.insert {
+                it[entries.description] = description?: ""
                 it[entries.shortUrl] = shortUrl
                 it[entries.longUrl] = longUrl
                 it[entries.createdBy] = createdBy
@@ -26,6 +27,7 @@ object EntryDataAccessObject {
             entries.selectAll().map {
                 mapOf(
                     "id" to it[entries.id],
+                    "description" to it[entries.description],
                     "shortUrl" to it[entries.shortUrl],
                     "longUrl" to it[entries.longUrl],
                     "createdAt" to it[entries.createdAt].toString(),

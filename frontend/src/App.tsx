@@ -1,20 +1,26 @@
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {HashRouter, Navigate, Route, Routes} from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx"
-import Header from "./components/Header/Header.tsx";
-import Footer from "./components/Footer/Footer.tsx";
+import Header from "./layout/Header/Header.tsx";
+import Footer from "./layout/Footer/Footer.tsx";
 import {useCheckLogin} from "./util/hooks/useCheckLogin.ts";
 import {ReactNode} from "react";
 import DashboardPage from "./pages/DashboardPage/DashboardPage.tsx";
 import "./App.css"
+import OpprettNyLenkePage from "./pages/OpprettNyLenkePage/OpprettNyLenkePage.tsx";
 
 export default function App() {
 
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Header/>
             <main>
                 <Routes>
                     <Route path="/" element={<LandingPage/>}/>
+                    <Route path="/opprettnylenke" element={
+                        <ProtectedRoute>
+                            <OpprettNyLenkePage/>
+                        </ProtectedRoute>
+                    }/>
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <DashboardPage/>
@@ -23,7 +29,7 @@ export default function App() {
                 </Routes>
             </main>
             <Footer/>
-        </BrowserRouter>
+        </HashRouter>
     );
 }
 

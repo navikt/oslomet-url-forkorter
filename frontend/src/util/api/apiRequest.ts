@@ -2,7 +2,6 @@ const API_BASE_URL = import.meta.env.DEV ? "http://localhost:8080/api/" : window
 
 export async function apiRequest<T>(
     endpoint: string,
-    includeCredentials: boolean = false,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     body?: unknown,
     headers: HeadersInit = {
@@ -13,7 +12,7 @@ export async function apiRequest<T>(
     const response = await fetch(API_BASE_URL + endpoint, {
         method,
         headers,
-        credentials: includeCredentials ? "same-origin" : "omit",
+        credentials: "same-origin",
         body: body ? JSON.stringify(body) : undefined,
     });
     if (!response.ok) {

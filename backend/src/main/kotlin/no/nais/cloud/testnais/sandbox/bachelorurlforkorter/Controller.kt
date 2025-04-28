@@ -13,25 +13,22 @@ private val logger = KotlinLogging.logger {}
 object BrukerController {
 
     fun hentBruker(ctx: Context) {
-        val response = hentBrukerInfo(ctx)
-        if (response.active) {
-            ctx.status(200).json(
-                BrukerResponse(
-                    navIdent = response.NAVident,
-                    name = response.name,
-                    preferredUsername = response.preferred_username
-                )
+        val bruker = hentBrukerInfo(ctx)
+        if (!bruker.active) ctx.status(401)
+        ctx.status(200).json(
+            BrukerResponse(
+                navIdent = bruker.NAVident,
+                name = bruker.name,
+                preferredUsername = bruker.preferred_username
             )
-        } else {
-            ctx.status(401)
-        }
+        )
     }
 }
 
 object UrlController {
 
-    fun redirect(ctx: Context) {
-        val korturl = ctx.pathParam("val")
+    fun videresend(ctx: Context) {
+        val korturl = ctx.pathParam("path")
         if (!korturl.matches(Regex("^[a-z0-9]{6}$"))) {
             ctx.status(204)
             return
@@ -44,7 +41,7 @@ object UrlController {
             }
             logger.info("Videsendt URL: $korturl til $langurl")
             EntryDataAccessObject.incrementClicks(korturl)
-            ctx.status(307).redirect(langurl)
+            ctx.status(307).redirect(sanitizeCRLF(langurl) ?: "/")
         } catch (e: Exception) {
             logger.error("Feil ved redirect: {}", korturl, e)
             ctx.status(500)
@@ -73,16 +70,17 @@ object UrlController {
     fun opprett(ctx: Context) {
         // TODO: Ikke send bruker fra frontend, sjekk innlogging i backend
         val request = ctx.bodyValidator(CreateEntryRequest::class.java)
-            .check({ !it.url.isNullOrBlank() }, "Url kan ikke være tom")
+            .check({ !it.originalurl.isNullOrBlank() }, "Url kan ikke være tom")
             .check({ !it.bruker.isNullOrBlank() }, "Bruker kan ikke være tom")
             .get()
 
         try {
-            val forkortetUrl = Forkorter.lagUnikKortUrl()
-            EntryDataAccessObject.storeNewEntry(forkortetUrl, request.url.toString(), request.bruker)
+            // TODO: Valider korturl
+            val forkortetUrl = request.korturl?: Forkorter.lagUnikKortUrl()
+            EntryDataAccessObject.storeNewEntry(request.beskrivelse, forkortetUrl, request.originalurl.toString(), request.bruker)
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
         } catch (e: Exception) {
-            logger.error("Feil ved forkorting av url: {}", request.url, e)
+            logger.error("Feil ved forkorting av url: {}", request.originalurl, e)
             ctx.status(500)
         }
     }
@@ -107,4 +105,8 @@ object UrlController {
             ctx.status(500)
         }
     }
+}
+
+private fun sanitizeCRLF(dirty: String?): String? {
+    return dirty?.replace(Regex("[\r\n]+"), "")
 }

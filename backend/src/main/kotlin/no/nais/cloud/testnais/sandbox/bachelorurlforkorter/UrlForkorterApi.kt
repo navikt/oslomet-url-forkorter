@@ -40,28 +40,25 @@ fun startAppServer(config: Config) {
                     post("sjekk", UrlController::sjekk, Rolle.Alle)
                     post("opprett", UrlController::opprett, Rolle.InternNavInnlogget)
                     post("slett", UrlController::slett, Rolle.InternNavInnlogget)
-/*                    get("hentforbruker", UrlController::hentForBrukerMedMetadata, Rolle.InternNavInnlogget)*/
+                    /*                    get("hentforbruker", UrlController::hentForBrukerMedMetadata, Rolle.InternNavInnlogget)*/
                     get("hentalle", UrlController::hentAlleMedMetadata, Rolle.InternNavInnlogget)
                 }
             }
-            // Dersom ingen endepunkter treffes skal man enten serve assets eller redirecte til ekstern url
-            get("{val}") { ctx ->
-                if (ctx.pathParam("val") == "index.html" || ctx.pathParam("val") == "dashboard") {
-                    val asset =
-                        UrlController::class.java.getResourceAsStream("/public/index.html")
-                    if (asset != null) {
-                        ctx.contentType("text/html").result(asset)
-                    }
-                } else {
-                    UrlController.redirect(ctx)
-                }
+            // Dersom ingen endepunkter treffes skal man enten serve assets eller videresende til ekstern url
+            get("{path}") { ctx ->
+                UrlController::class.java.getResourceAsStream("/public/index.html")
+                    ?.takeIf { ctx.pathParam("path") == "index.html" }
+                    ?.let { ctx.contentType("text/html").result(it) }
+                    ?: UrlController.videresend(ctx)
             }
         }
-        // TODO: Kun for lokal utvikling med hot reload
-        javalinConfig.bundledPlugins.enableCors { cors ->
-            cors.addRule {
-                it.allowHost("http://localhost:5173")
-                it.allowCredentials = true
+
+        if (config.environment == Env.Local) {
+            javalinConfig.bundledPlugins.enableCors { cors ->
+                cors.addRule {
+                    it.allowHost("http://localhost:5173")
+                    it.allowCredentials = true
+                }
             }
         }
     }
@@ -76,7 +73,6 @@ fun startAppServer(config: Config) {
             ctx.contentType("application/json; charset=utf-8")
         }
 
-        // Security headers
         ctx.header("X-Content-Type-Options", "nosniff")
         ctx.header("X-Frame-Options", "DENY")
 
@@ -129,9 +125,6 @@ private fun checkAccessToEndpoint(ctx: Context, config: Config) {
                 throw UnauthorizedResponse()
             }
         }
-
         ctx.routeRoles().contains(Rolle.Alle) -> return
     }
 }
-
-private fun sanitizeCRLF(dirty: String?): String? = dirty?.replace("[\n\r]".toRegex(), "")

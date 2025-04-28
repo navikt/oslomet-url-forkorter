@@ -28,11 +28,12 @@ object Auth {
     fun hentBrukerInfo(ctx: Context): TexasIntrospectionResponse {
         val response = sendTexasRequest(ctx)
         if (!response.active) return throw UnauthorizedResponse()
-        return response;
+        return response
 
     }
 
     fun brukerErNavInnlogget(ctx: Context): Boolean {
+        if (ctx.header("Authorization").isNullOrBlank()) return false
         return sendTexasRequest(ctx).active
     }
 

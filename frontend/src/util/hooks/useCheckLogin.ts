@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 import {apiRequest} from "../api/apiRequest.ts";
-import {useNavigate} from "react-router-dom";
 
 interface BrukerResponse {
     navIdent: string;
@@ -12,7 +11,6 @@ export function useCheckLogin() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
     useEffect(() => {
         checkLoginStatus()
@@ -20,11 +18,10 @@ export function useCheckLogin() {
 
     const checkLoginStatus = () => {
         setLoading(true);
-        apiRequest<BrukerResponse>("bruker/hent", true, "GET").then((data) => {
+        apiRequest<BrukerResponse>("bruker/hent").then((data) => {
             if (data) {
                 setIsLoggedIn(true);
                 setUser(data.navIdent);
-                navigate("/dashboard");
                 console.log("Logget inn som: ", data);
             } else {
                 setIsLoggedIn(false);
@@ -32,10 +29,9 @@ export function useCheckLogin() {
             }
         }).catch((error) => {
             if (import.meta.env.DEV) {
-                console.warn("Kjører i DEV, setter dummy-bruker");
                 setIsLoggedIn(true);
-                setUser("Dev Testuser");
-                navigate("/dashboard");
+                setUser("Test Brukersen");
+                console.warn("Kjører i DEV, setter dummy-bruker");
             } else {
                 console.error("Login status feil:", {
                     message: error.message,

@@ -12,6 +12,7 @@ private val logger = KotlinLogging.logger {}
 
 object entries : Table("short_urls") {
     val id = integer("id").autoIncrement()
+    val description = text("description")
     val shortUrl = varchar("short_url", 255).uniqueIndex()
     val longUrl = text("long_url")
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)

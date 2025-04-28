@@ -13,7 +13,7 @@ export default function CheckShortUrl() {
             console.log("test")
             return;
         }
-        apiRequest<{langurl: string }>(`url/sjekk?korturl=${shortUrl}`, false, "POST").then((res) => {
+        apiRequest<{langurl: string }>(`url/sjekk?korturl=${shortUrl}`, "POST").then((res) => {
             if (res) setSearchResult(res.langurl);
             else setSearchResult(null);
         }).catch(error => {
@@ -28,8 +28,6 @@ export default function CheckShortUrl() {
                     onClick={handleSearchClick}
                     onChange={setInputValue}>
             </Input>
-
-
 
             <div>{searchResult}</div>
         </>

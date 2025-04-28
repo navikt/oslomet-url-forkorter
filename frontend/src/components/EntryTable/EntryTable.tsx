@@ -2,11 +2,12 @@ import {useEffect, useState} from "react";
 import {apiRequest} from "../../util/api/apiRequest.ts";
 import Icon from "../shared/Icon/Icon.tsx";
 import Link from "../shared/Link/Link.tsx";
-import classes from "./entrytable.module.css"
 import Input from "../shared/Input/Input.tsx";
+import classes from "./entrytable.module.css"
 
 interface UrlData {
     id: number;
+    description: string;
     shortUrl: string;
     longUrl: string;
     createdAt: string;
@@ -26,7 +27,7 @@ export default function EntryTable() {
     useEffect(() => {
         async function fetchUrls() {
             try {
-                const data = await apiRequest<UrlData[]>("url/hentalle", true);
+                const data = await apiRequest<UrlData[]>("url/hentalle");
                 setUrls(data);
             } catch (err) {
                 setError("Feil ved henting av liste over URLer");
@@ -38,7 +39,7 @@ export default function EntryTable() {
     }, []);
 
     function handleDeleteClick(id: number) {
-        apiRequest<{ forkortetUrl: string }>(`url/slett?id=${id}`, true, "POST")
+        apiRequest<{ forkortetUrl: string }>(`url/slett?id=${id}`, "POST")
             .then(() => setUrls((prevUrls) => prevUrls.filter((url) => url.id !== id)))
             .catch((error: Error) => {
                 console.error("API error:", error);
@@ -88,10 +89,11 @@ export default function EntryTable() {
     const BASE_URL = import.meta.env.DEV ? "http://localhost:8080/" : window.location.origin + "/";
 
     return (
-        <>
-            <section className={classes.container}>
-                {loading && <p>Loading...</p>}
-                {error && <p style={{color: "red"}}>{error}</p>}
+        <section className={classes.container}>
+            <h2>asd</h2>
+            {loading && <p>Loading...</p>}
+            {error && <p style={{color: "red"}}>{error}</p>}
+            <div>
                 <Input
                     onChange={(text) => setSearchTerm(text)}
                     placeholder="Søk etter URL eller bruker.."
@@ -100,36 +102,36 @@ export default function EntryTable() {
                 {!loading && !error && (
                     <table className={classes.table}>
                         <thead>
-                            <tr>
-                                <th>Kort URL</th>
-                                <th>Lang URL</th>
-                                <th>Eier</th>
-                                <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
-                                    <div className={classes.icon}>
-                                        Opprettet
-                                        {sortConfig?.column === "createdAt"
-                                            ? sortConfig.direction === "asc"
-                                                ? <Icon icon="sort-down"/>
-                                                : sortConfig.direction === "desc"
-                                                    ? <Icon icon="sort-up"/>
-                                                    : <Icon icon="sort"/>
-                                            : <Icon icon="sort"/>}
-                                    </div>
-                                </th>
-                                <th onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}>
-                                    <div className={classes.icon}>
-                                        Antall besøk
-                                        {sortConfig?.column === "clicks"
-                                            ? sortConfig.direction === "asc"
-                                                ? <Icon icon="sort-down"/>
-                                                : sortConfig.direction === "desc"
-                                                    ? <Icon icon="sort-up"/>
-                                                    : <Icon icon="sort"/>
-                                            : <Icon icon="sort"/>}
-                                    </div>
-                                </th>
-                                <th>Slett</th>
-                            </tr>
+                        <tr>
+                            <th>Kort URL</th>
+                            <th>Lang URL</th>
+                            <th>Eier</th>
+                            <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
+                                <div className={classes.icon}>
+                                    Opprettet
+                                    {sortConfig?.column === "createdAt"
+                                        ? sortConfig.direction === "asc"
+                                            ? <Icon icon="sort-down"/>
+                                            : sortConfig.direction === "desc"
+                                                ? <Icon icon="sort-up"/>
+                                                : <Icon icon="sort"/>
+                                        : <Icon icon="sort"/>}
+                                </div>
+                            </th>
+                            <th onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}>
+                                <div className={classes.icon}>
+                                    Antall besøk
+                                    {sortConfig?.column === "clicks"
+                                        ? sortConfig.direction === "asc"
+                                            ? <Icon icon="sort-down"/>
+                                            : sortConfig.direction === "desc"
+                                                ? <Icon icon="sort-up"/>
+                                                : <Icon icon="sort"/>
+                                        : <Icon icon="sort"/>}
+                                </div>
+                            </th>
+                            <th>Slett</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {filteredUrls.map((entry) => (
@@ -140,8 +142,8 @@ export default function EntryTable() {
                                             handleCopyClick(BASE_URL + entry.shortUrl)
                                         }}/>
                                         <Link href={BASE_URL + entry.shortUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer">
+                                              target="_blank"
+                                              rel="noopener noreferrer">
                                             {entry.shortUrl}
                                         </Link>
                                     </div>
@@ -162,7 +164,7 @@ export default function EntryTable() {
                                     }).format(new Date(entry.createdAt)).replace(",", " kl.")}
                                 </td>
                                 <td>{entry.clicks}</td>
-                                <td><Icon icon="close" onClick={() => {
+                                <td><Icon icon="xmark" onClick={() => {
                                     handleDeleteClick(entry.id)
                                 }}></Icon></td>
                             </tr>
@@ -170,7 +172,7 @@ export default function EntryTable() {
                         </tbody>
                     </table>
                 )}
-            </section>
-        </>
+            </div>
+        </section>
     );
 }

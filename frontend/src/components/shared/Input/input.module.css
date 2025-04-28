@@ -1,19 +1,36 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+}
+
+.label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--theme-color-purple);
+}
+
 .container {
     display: flex;
     align-items: center;
     position: relative;
-    width: 40vw;
 }
 
 .input {
     width: 100%;
-    padding: 10px;
+    padding: 10px 30px 10px 10px;
     border-radius: 5px;
     outline: none;
-    border: 2px solid var(--theme-color);
+    border: 2px solid var(--theme-color-purple);
+    font-size: .9rem;
+
+    &.disabled {
+        border: 2px solid #ddd;
+    }
 
     &:focus {
-        border: 2px solid var(--theme-color-focus);
+        border: 2px solid var(--theme-color-purple);
     }
 }
 
@@ -24,4 +41,13 @@
     width: 5em !important;;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
+}
+
+.statusIcon {
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

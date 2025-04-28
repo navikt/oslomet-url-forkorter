@@ -1,6 +1,6 @@
 import {useCheckLogin} from "../../util/hooks/useCheckLogin.ts";
-import {useNavigate} from "react-router-dom";
-import Icon from "../shared/Icon/Icon.tsx";
+import {Link, useNavigate} from "react-router-dom";
+import Icon from "../../components/shared/Icon/Icon.tsx";
 import classes from "./header.module.css"
 
 export default function Header() {
@@ -20,12 +20,16 @@ export default function Header() {
             <div className={classes.left}>
                 <img className={classes.logo} onClick={() => navigate("/")} src="/icons/nav-logo.svg" alt="NAV logo"/>
                 <nav className={classes.nav}>
-                    <button className={classes.navbutton}>
-                        Opprett ny lenke
-                    </button>
-                    <button className={classes.navbutton}>
-                        Oversikt
-                    </button>
+                    <Link to={"/opprettnylenke"}>
+                        <button className={classes.navbutton}>
+                            Opprett ny lenke
+                        </button>
+                    </Link>
+                    <Link to={"/dashboard"}>
+                        <button className={classes.navbutton}>
+                            Oversikt
+                        </button>
+                    </Link>
                     <button className={classes.navbutton}>
                         Statistikk
                     </button>
@@ -38,9 +42,9 @@ export default function Header() {
                         <p className={classes.rightText}>{user}</p>
                     </button>
                 ) : (
-                    <button className={classes.loginButton} onClick={redirectToLogin}>
-                        <Icon icon={"logg-inn"} height={2}/>
-                        Logg inn
+                    <button className={classes.rightButton} onClick={redirectToLogin}>
+                        <Icon icon={"logg-inn"} height={1.55}/>
+                        <p className={classes.rightText}>Logg inn</p>
                     </button>
                 )}
                 <button className={classes.rightButton}>
