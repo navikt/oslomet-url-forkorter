@@ -99,7 +99,7 @@ export default function CreateShortUrl() {
                     <p>
                         Great success! Her er din lenke:{" "}
                         <a href={url} target="_blank">{url}</a>{" "}
-                        ( kopier: <Icon icon="copy" onClick={handleCopyClick} successIcon/> )<br/>
+                        ( kopier: <Icon icon="copy" onClick={() => handleCopyClick(url)} useSuccessIcon/> )<br/>
                         Tips: Du finner den alltid igjen i oversikten din!
 
                     </p>

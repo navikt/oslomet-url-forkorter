@@ -145,7 +145,7 @@ export default function EntryTable() {
                                     <td>
                                         <div className={classes.copy}>
                                             <Icon icon="copy"
-                                                  successIcon
+                                                  useSuccessIcon
                                                   onClick={(e) => {
                                                       handleCopyClick(BASE_URL + entry.shortUrl)
                                                       e.stopPropagation()

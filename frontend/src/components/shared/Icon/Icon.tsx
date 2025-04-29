@@ -5,14 +5,14 @@ interface Props {
     icon: string;
     height?: number;
     onClick?: (e: any) => unknown;
-    successIcon?: boolean;
+    useSuccessIcon?: boolean;
 }
 
-export default function Icon({icon, height, onClick, successIcon}: Props) {
+export default function Icon({icon, height, onClick, useSuccessIcon}: Props) {
     const [success, setSuccess] = useState(false);
 
     function handleClick(e: any) {
-        if (successIcon) {
+        if (useSuccessIcon) {
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
