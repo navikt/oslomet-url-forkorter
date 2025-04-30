@@ -22,6 +22,10 @@ spec:
     requests:
       cpu: 50m
       memory: 32Mi
+  observability:
+    logging:
+      destinations:
+        - id: loki
   gcp:
     sqlInstances:
       - type: POSTGRES_16
