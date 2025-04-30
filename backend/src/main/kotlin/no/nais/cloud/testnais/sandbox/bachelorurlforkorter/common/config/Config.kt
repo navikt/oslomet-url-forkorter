@@ -81,7 +81,7 @@ fun createApplicationConfig(): Config {
         appPort = props.getProperty("PORT")?.toInt()
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
         dbConfig = DbConfig(
-            jdbcUrl = props.getProperty("NAIS_DATABASE_OSLOMET_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
+            jdbcUrl = props.getProperty("NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
                 ?: throw RuntimeException("Property \"NAIS_DATABASE_X_Y_JDBC_URL\" er ikke satt.")
 
         )
