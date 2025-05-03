@@ -1,8 +1,9 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --theme-color-blue: #003453;
-        --theme-color-purple: #301F46;
-        --theme-color-purple-focus: #523874;
+        --theme-color-purple: #0189dc;
+        --theme-color-purple-focus: #301F46;
+        --theme-color-red-alert: #C30000;
     }
 }
 
@@ -10,6 +11,7 @@
     --theme-color-blue: #003453;
     --theme-color-purple: #003453;
     --theme-color-purple-focus: #301F46;
+    --theme-color-red-alert: #C30000;
 }
 
 * {
@@ -24,7 +26,7 @@ h1,h2,h3,h4,h5,h6,p {
 }
 
 html,body, #root {
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
     max-width: 100%;
     background-color: white;
@@ -43,4 +45,5 @@ main {
     flex-direction: column;
     place-items: center;
     place-content: center;
+    overflow: hidden;
 }

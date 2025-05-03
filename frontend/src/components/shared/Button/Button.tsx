@@ -5,12 +5,15 @@ interface Props {
     text: string;
     onClick?: () => void;
     loading?: boolean;
+    disabled?: boolean;
     className?: string;
 }
 
-export default function Button({text, onClick, loading, className}: Props) {
+export default function Button({text, onClick, loading, disabled, className}: Props) {
     return (
-        <button onClick={onClick} className={`${classes.button} ${className ? className : ""}`} disabled={loading}>
+        <button onClick={disabled ? undefined : onClick}
+                className={`${classes.button} ${className ? className : ""}`}
+                disabled={loading || disabled}>
             {loading ? <LoadingSpinner/> : text}
         </button>
     )

@@ -1,0 +1,45 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 135px;
+}
+
+.label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--theme-color-purple);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input {
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 2px solid var(--theme-color-purple);
+    background-color: #fff;
+    color: var(--theme-color-purple);
+    font-size: 1rem;
+    appearance: none;
+    cursor: pointer;
+}
+
+.input:focus {
+    border: 2px solid var(--theme-color-purple);
+}
+
+.icon {
+    position: absolute;
+    top: 13px;
+    right: 12px;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

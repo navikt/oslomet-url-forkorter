@@ -14,6 +14,7 @@ interface Props {
     disableButton?: boolean;
     statusIcon?: string;
     loading?: boolean;
+    value?: string;
     style?: CSSProperties;
 }
 
@@ -28,6 +29,7 @@ export default function Input({
                                   disableButton,
                                   statusIcon,
                                   loading,
+                                  value,
                                   style
                               }: Props) {
     const inputId = useId();
@@ -43,6 +45,7 @@ export default function Input({
                     id={inputId}
                     className={`${classes.input} ${disabled && classes.disabled}`}
                     type={type}
+                    value={value ?? ""}
                     placeholder={placeholder}
                     disabled={disabled}
                     onChange={(e) => onChange?.(e.target.value)}
@@ -56,7 +59,8 @@ export default function Input({
                         <Icon icon={statusIcon}/>
                     </div>
                 )}
-                {!disableButton && <Button loading={loading} className={classes.button} text={buttonText} onClick={onClick}/>}
+                {!disableButton &&
+                    <Button loading={loading} className={classes.button} text={buttonText} onClick={onClick}/>}
             </div>
         </div>
     )

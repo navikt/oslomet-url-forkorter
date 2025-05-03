@@ -21,10 +21,10 @@ export function useCheckLogin() {
     const checkLoginStatus = () => {
         setLoading(true);
         apiRequest<BrukerResponse>("bruker/hent").then((data) => {
-            if (data) {
+            if (data.navIdent) {
                 setIsLoggedIn(true);
                 setUser(data.navIdent);
-                navigate("/opprettnylenke");
+                navigate("/dashboard");
                 console.log("Logget inn som: ", data);
             } else {
                 setIsLoggedIn(false);

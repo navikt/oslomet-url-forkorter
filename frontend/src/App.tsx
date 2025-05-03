@@ -4,9 +4,8 @@ import Header from "./layout/Header/Header.tsx";
 import Footer from "./layout/Footer/Footer.tsx";
 import {useCheckLogin} from "./util/hooks/useCheckLogin.ts";
 import {ReactNode} from "react";
-import DashboardPage from "./pages/DashboardPage/DashboardPage.tsx";
 import "./App.css"
-import OpprettNyLenkePage from "./pages/OpprettNyLenkePage/OpprettNyLenkePage.tsx";
+import DashboardPage from "./pages/DashboardPage/DashboardPage.tsx";
 
 export default function App() {
 
@@ -16,11 +15,6 @@ export default function App() {
             <main>
                 <Routes>
                     <Route path="/" element={<LandingPage/>}/>
-                    <Route path="/opprettnylenke" element={
-                        <ProtectedRoute>
-                            <OpprettNyLenkePage/>
-                        </ProtectedRoute>
-                    }/>
                     <Route path="/dashboard" element={
                         <ProtectedRoute>
                             <DashboardPage/>

@@ -4,5 +4,5 @@ data class CreateEntryRequest(
     val beskrivelse: String?,
     val originalurl: String?,
     val korturl: String?,
-    val bruker: String?
+    val entryid: String?
 )

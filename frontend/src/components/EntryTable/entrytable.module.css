@@ -1,24 +1,42 @@
 .container {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 1.5rem;
+    padding: 3rem 2rem;
     border: 2px solid var(--theme-color-purple);
     border-radius: 5px;
+    min-width: 650px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scrollContainer {
+
+    overflow-y: auto;
+    width: 100%;
+    border-radius: 5px;
+    margin: 10px 0;
+    scrollbar-width: none;
 }
 
 .table {
     width: 100%;
-    margin-top: 10px;
     border-collapse: collapse;
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
+    table-layout: fixed;
+    border: 1px solid #ddd;
+
 
     thead {
         background-color: var(--theme-color-purple);
         color: white;
+        position: sticky;
+        top: 0;
+        z-index: 10;
 
         tr {
             th {
@@ -26,41 +44,67 @@
                 text-align: left;
                 font-size: 16px;
                 user-select: none;
+                white-space: nowrap;
+                min-width: max-content;
             }
         }
     }
 
     tbody {
-        tr{
+        tr {
             &:nth-child(even) {
                 background-color: #f8f9fa;
             }
+
             &:hover {
                 background-color: #eee;
             }
+
             td {
                 padding: 8px 10px;
                 position: relative;
                 border: 1px solid #ddd;
                 text-align: left;
                 font-size: 16px;
-                max-width: 300px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 cursor: pointer;
+
+                &.rightalign {
+                    text-align: right;
+                }
+            }
+
+            &.expanded {
+                background-color: #dadada;
+
             }
         }
-        .expandRow {
-            background-color: white !important;
+    }
+}
 
-            &:hover {
-                background-color: inherit;
-            }
+.expandContent {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    padding: 2rem;
+    border: 1px solid var(--theme-color-purple);
+    border-radius: 5px;
+}
 
-            td {
-                cursor: default;
-            }
+.expandedButton {
+    padding: 5px 10px;
+    font-size: .9rem;
+
+    &.deleteButton {
+        background: var(--theme-color-red-alert);
+        color: #fff;
+        border: 2px solid var(--theme-color-red-alert);
+
+        &:hover {
+            background: #fff;
+            color: var(--theme-color-red-alert);
         }
     }
 }

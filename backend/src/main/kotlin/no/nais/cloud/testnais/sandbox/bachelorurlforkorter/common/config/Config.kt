@@ -54,10 +54,6 @@ data class DbConfig(
     }
 }
 
-/*data class Password(val value: String) {
-    override fun toString() = "*****"
-}*/
-
 enum class Env {
     Local, Dev, Prod
 }
@@ -82,8 +78,7 @@ fun createApplicationConfig(): Config {
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
         dbConfig = DbConfig(
             jdbcUrl = props.getProperty("NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
-                ?: throw RuntimeException("Property \"NAIS_DATABASE_X_Y_JDBC_URL\" er ikke satt.")
-
+                ?: throw RuntimeException("Property \"NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL\" er ikke satt.")
         )
     ).also(::logConfig)
 }

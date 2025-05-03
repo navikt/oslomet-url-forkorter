@@ -1,5 +1,6 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.javalin.Javalin
@@ -17,6 +18,7 @@ import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.brukerErNavInnlogget
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.insertTestData
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto.TexasIntrospectionResponse
 import org.slf4j.MDC
 
@@ -25,12 +27,14 @@ private val logger = KotlinLogging.logger {}
 fun main() {
     val config = createApplicationConfig()
     DatabaseInit.start(config)
-    startAppServer(config);
+    startAppServer(config)
+    // TEST-DATA:
+    insertTestData()
 }
 
 fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
-        javalinConfig.jsonMapper(JavalinJackson(jacksonObjectMapper().registerKotlinModule()))
+        javalinConfig.jsonMapper(JavalinJackson(jacksonObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())))
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
@@ -40,9 +44,11 @@ fun startAppServer(config: Config) {
                 path("url") {
                     post("sjekk", Controller::sjekk, Rolle.Alle)
                     post("opprett", Controller::opprett, Rolle.InternNavInnlogget)
+                    post("oppdater", Controller::oppdater, Rolle.InternNavInnlogget)
                     post("slett", Controller::slett, Rolle.InternNavInnlogget)
-                    /*                    get("hentforbruker", UrlController::hentForBrukerMedMetadata, Rolle.InternNavInnlogget)*/
                     get("hentalle", Controller::hentAlleMedMetadata, Rolle.InternNavInnlogget)
+                    get("hentforinnloggetbruker", Controller::hentForInnloggetBrukerMedMetadata, Rolle.InternNavInnlogget)
+                    get("hentklikkforlenkeid", Controller::hentKlikkForLenkeID, Rolle.InternNavInnlogget)
                 }
             }
             // Dersom ingen endepunkter treffes skal man enten serve assets eller videresende til ekstern url

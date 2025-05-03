@@ -20,7 +20,8 @@ export default function Modal({
         <>
             {showModal && (
                 <div className={classes.backdrop} onClick={() => setShowModal(false)}>
-                    <div className={classes.container}>
+                    <div className={classes.container} onClick={(e) => e.stopPropagation()}>
+                        <button className={classes.closeButton} onClick={() => setShowModal(false)}>×</button>
                         {children}
                     </div>
                 </div>

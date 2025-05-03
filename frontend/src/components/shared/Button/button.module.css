@@ -16,4 +16,12 @@
         border: 2px solid var(--theme-color-purple);
         cursor: pointer;
     }
+
+    &:disabled {
+        background-color: #eee;
+        border-color: #888;
+        color: #888;
+        cursor: auto;
+        opacity: 0.6;
+    }
 }
