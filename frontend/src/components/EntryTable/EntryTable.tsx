@@ -121,6 +121,8 @@ export default function EntryTable() {
 
     const BASE_URL = import.meta.env.DEV ? "http://localhost:8080/" : window.location.origin + "/";
 
+    const isMobile = window.innerWidth < 700;
+
     return (
 
         <section className={classes.container}>
@@ -129,13 +131,6 @@ export default function EntryTable() {
             {error && <p style={{color: "red"}}>{error}</p>}
             <div>
                 <div style={{display: "flex", gap: ".5rem"}}>
-                    <Input
-                        onChange={(text) => setSearchTerm(text)}
-                        value={searchTerm}
-                        label="Søk:"
-                        placeholder="Søk etter lenke eller eier.."
-                        disableButton
-                        style={{width: "100%"}}/>
                     <DropdownButton
                         changeCallback={(val) => setFilterType(val as "mine" | "alle")}
                         label="Vis eiere:"
@@ -143,23 +138,32 @@ export default function EntryTable() {
                             {label: "Meg selv", value: "mine"},
                             {label: "Alle", value: "alle"},
                         ]}/>
+                    <Input
+                        onChange={(text) => setSearchTerm(text)}
+                        value={searchTerm}
+                        label="Søk:"
+                        placeholder="Søk etter lenke eller eier.."
+                        disableButton
+                        style={{width: "100%"}}/>
                 </div>
                 {!loading && !error && (
                     <div className={classes.scrollContainer}>
                         <table className={classes.table}>
-                            <colgroup>
-                                <col style={{width: "20%"}}/>
-                                <col style={{width: "30%"}}/>
-                                <col style={{width: "20%"}}/>
-                                <col style={{width: "23%"}}/>
-                                <col style={{width: "7%"}}/>
-                            </colgroup>
+                            {!isMobile && (
+                                <colgroup>
+                                    <col style={{ width: "20%" }} />
+                                    <col style={{ width: "30%" }} />
+                                    <col style={{ width: "20%" }} />
+                                    <col style={{ width: "23%" }} />
+                                    <col style={{ width: "7%" }} />
+                                </colgroup>
+                            )}
                             <thead>
                             <tr>
                                 <th>Kortlenke</th>
                                 <th>Full lenke</th>
-                                <th>Eier</th>
-                                <th onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
+                                <th className={classes.hideMobile}>Eier</th>
+                                <th className={classes.hideMobile} onClick={() => handleSort("createdAt")} style={{cursor: "pointer"}}>
                                     <div className={classes.icon}>
                                         Opprettet
                                         {sortConfig?.column === "createdAt"
@@ -172,7 +176,7 @@ export default function EntryTable() {
                                     </div>
                                 </th>
                                 <th onClick={() => handleSort("clicks")} style={{cursor: "pointer"}}
-                                    className={classes.rightalign}>
+                                    className={`${classes.rightalign}`}>
                                     <div className={classes.icon}>
                                         #
                                         {sortConfig?.column === "clicks"
@@ -219,15 +223,15 @@ export default function EntryTable() {
                                                 {entry.longUrl}
                                             </Link>
                                         </td>
-                                        <td>{entry.createdBy || "Unknown"}</td>
-                                        <td>
+                                        <td className={classes.hideMobile}>{entry.createdBy || "Unknown"}</td>
+                                        <td className={classes.hideMobile}>
                                             {new Intl.DateTimeFormat("nb-NO", {
                                                 day: "2-digit",
                                                 month: "short",
                                                 year: "numeric",
                                             }).format(new Date(entry.createdAt)).replace(",", " kl.")}
                                         </td>
-                                        <td className={classes.rightalign}>{entry.clicks}</td>
+                                        <td className={`${classes.rightalign}`}>{entry.clicks}</td>
                                     </tr>
                                     <Modal showModal={expandedRow === entry.id}
                                            setShowModal={() => setExpandedRow(null)}>
@@ -236,8 +240,10 @@ export default function EntryTable() {
                                                 <div style={{marginRight: "auto"}}>
                                                     <h4>Full lenke:</h4>
                                                     <p>{entry.longUrl}</p>
-                                                    <h4>Beskrivelse:</h4>
-                                                    <p>{entry.description}</p>
+                                                    {entry.description && <>
+                                                        <h4>Beskrivelse:</h4>
+                                                        <p>{entry.description}</p>
+                                                    </>}
                                                     <div style={{display: "flex", gap: ".5rem"}}>
                                                         <h4>Opprettet:</h4>
                                                         <p>{new Intl.DateTimeFormat("nb-NO", {
@@ -250,47 +256,40 @@ export default function EntryTable() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            {clickDataMap[entry.id] && (
-                                                <div style={{
-                                                    background: "#eee",
-                                                    padding: ".5rem 0 1rem",
-                                                    margin: "1rem 0"
-                                                }}>
-                                                    <div style={{width: '100%', height: 200}}>
-                                                        <LineChart
-                                                            xAxis={[{
-                                                                data: clickDataMap[entry.id]
-                                                                    .filter((d) => {
-                                                                        const date = new Date(d.date);
-                                                                        const now = new Date();
-                                                                        const thirtyDaysAgo = new Date(now);
-                                                                        thirtyDaysAgo.setDate(now.getDate() - 30);
-                                                                        return date >= thirtyDaysAgo && date <= now;
-                                                                    })
-                                                                    .map((d) => d.date),
-                                                                scaleType: 'band',
-                                                                valueFormatter: (val) => new Date(val).toLocaleDateString('nb-NO', {
-                                                                    day: '2-digit',
-                                                                    month: 'short'
-                                                                }),
-                                                            }]}
-                                                            series={[{
-                                                                data: clickDataMap[entry.id]
-                                                                    .filter((d) => {
-                                                                        const date = new Date(d.date);
-                                                                        const now = new Date();
-                                                                        const thirtyDaysAgo = new Date(now);
-                                                                        thirtyDaysAgo.setDate(now.getDate() - 30);
-                                                                        return date >= thirtyDaysAgo && date <= now;
-                                                                    })
-                                                                    .map((d) => d.count),
-                                                                label: 'Klikk siste måned',
-                                                            }]}
-                                                            height={200}
-                                                        />
+                                            {clickDataMap[entry.id] && (() => {
+                                                const clicksMap = clickDataMap[entry.id]
+                                                    .filter((d) => {
+                                                        const date = new Date(d.date);
+                                                        const now = new Date();
+                                                        const thirtyDaysAgo = new Date(now);
+                                                        thirtyDaysAgo.setDate(now.getDate() - 30);
+                                                        return date >= thirtyDaysAgo && date <= now;
+                                                    })
+                                                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+                                                return (
+                                                    <div style={{ background: "#eee", padding: ".5rem 0 1rem", margin: "1rem 0" }}>
+                                                        <div style={{ width: '100%', height: 200 }}>
+                                                            <LineChart
+                                                                xAxis={[{
+                                                                    data: clicksMap.map(d => d.date),
+                                                                    scaleType: 'band',
+                                                                    valueFormatter: val => new Date(val).toLocaleDateString('nb-NO', {
+                                                                        day: '2-digit',
+                                                                        month: 'short'
+                                                                    }),
+                                                                }]}
+                                                                series={[{
+                                                                    data: clicksMap.map(d => d.count),
+                                                                    label: 'Klikk siste måned',
+                                                                }]}
+                                                                height={200}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                );
+                                            })()}
+
                                             <div style={{
                                                 display: "flex",
                                                 gap: ".5rem",
@@ -303,7 +302,7 @@ export default function EntryTable() {
                                                             onClick={() => setShowEditEntry(true)}
                                                     />
                                                     <Modal showModal={showEditEntry} setShowModal={setShowEditEntry}>
-                                                        <div style={{width: "580px"}}>
+                                                        <div className={classes.editContainer}>
                                                             <EntryForm entryId={entry.id}
                                                                        initialBeskrivelse={entry.description}
                                                                        initialCustomShortUrl={entry.shortUrl}

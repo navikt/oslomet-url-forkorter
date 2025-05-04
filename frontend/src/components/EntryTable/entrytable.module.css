@@ -10,6 +10,10 @@
     min-width: 650px;
     width: 100%;
     box-sizing: border-box;
+
+    @media only screen and (max-width: 800px) {
+        min-width: fit-content;
+    }
 }
 
 .scrollContainer {
@@ -30,6 +34,9 @@
     table-layout: fixed;
     border: 1px solid #ddd;
 
+    @media only screen and (max-width: 700px) {
+        table-layout: auto;
+    }
 
     thead {
         background-color: var(--theme-color-purple);
@@ -46,6 +53,7 @@
                 user-select: none;
                 white-space: nowrap;
                 min-width: max-content;
+                width: 100%;
             }
         }
     }
@@ -70,6 +78,8 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 cursor: pointer;
+                width: 100%;
+                max-width: 100px;
 
                 &.rightalign {
                     text-align: right;
@@ -91,6 +101,11 @@
     padding: 2rem;
     border: 1px solid var(--theme-color-purple);
     border-radius: 5px;
+
+    @media only screen and (max-width: 1200px) {
+        width: 80vw;
+    }
+
 }
 
 .expandedButton {
@@ -109,6 +124,15 @@
     }
 }
 
+.editContainer {
+    width: 580px;
+
+    @media only screen and (max-width: 1200px) {
+        width: 80vw;
+    }
+
+}
+
 .copy {
     display: flex;
     align-items: center;
@@ -122,5 +146,11 @@
     align-items: center;
     gap: .4rem;
     width: 100%;
+}
+
+.hideMobile {
+    @media only screen and (max-width: 700px) {
+        display: none;
+    }
 }
 
