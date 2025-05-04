@@ -58,6 +58,7 @@ export default function CheckShortUrl() {
     return (
         <section className={classes.section}>
             <Input placeholder="Kontroller din lenke.."
+                   value={shortLink}
                    loading={isLoading}
                    onClick={handleSearchClick}
                    onChange={setShortLink}>
