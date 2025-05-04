@@ -17,12 +17,15 @@
 }
 
 .scrollContainer {
-
+    position: relative;
+    max-height: 35vh;
     overflow-y: auto;
     width: 100%;
     border-radius: 5px;
     margin: 10px 0;
     scrollbar-width: none;
+
+    mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
 }
 
 .table {
