@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/backend/bachelor-url-forkorter.iml" filepath="$PROJECT_DIR$/backend/bachelor-url-forkorter.iml" />
       <module fileurl="file://$PROJECT_DIR$/oslomet-url-forkorter.iml" filepath="$PROJECT_DIR$/oslomet-url-forkorter.iml" />
     </modules>
   </component>

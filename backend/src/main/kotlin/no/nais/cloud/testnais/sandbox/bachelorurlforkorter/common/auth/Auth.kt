@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.javalin.http.Context
 import io.javalin.http.UnauthorizedResponse
 import mu.KotlinLogging
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Config
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto.TexasIntrospectionResponse
 import java.net.URI
 import java.net.http.HttpClient
@@ -20,8 +21,6 @@ object Auth {
         .connectTimeout(Duration.ofSeconds(10))
         .build()
 
-    private val introspectionUrl = System.getenv("NAIS_TOKEN_INTROSPECTION_ENDPOINT")
-
     data class BrukerResponse(
         val navIdent: String,
         val name: String,
@@ -29,21 +28,20 @@ object Auth {
     )
 
     fun hentBrukerInfo(ctx: Context): TexasIntrospectionResponse {
-        val response = sendTexasRequest(ctx)
-        if (!response.active) return throw UnauthorizedResponse()
-        return response
+        return ctx.attribute("texasresponse")
+            ?: throw UnauthorizedResponse("Bruker mangler. Har du kalt autoriserBruker først?")
 
     }
 
-    fun brukerErNavInnlogget(ctx: Context): Boolean {
+    fun autoriserBruker(ctx: Context, config: Config): Boolean {
         if (ctx.header("Authorization").isNullOrBlank()) return false
-        return sendTexasRequest(ctx).active
+        val response = sendTexasRequest(ctx, config)
+        ctx.attribute("texasresponse", response)
+        return response.active
     }
 
-    private fun sendTexasRequest(ctx: Context): TexasIntrospectionResponse {
-        ctx.attribute<TexasIntrospectionResponse>("texas")?.let {
-            return it
-        }
+    private fun sendTexasRequest(ctx: Context, config: Config): TexasIntrospectionResponse {
+        ctx.attribute<TexasIntrospectionResponse>("texasresponse")?.let { return it }
         try {
             val token = ctx.header("Authorization")?.removePrefix("Bearer ")
                 ?: throw UnauthorizedResponse("Mangler Authorization header")
@@ -56,7 +54,7 @@ object Auth {
         """.trimIndent()
 
             val request = HttpRequest.newBuilder()
-                .uri(URI.create(introspectionUrl))
+                .uri(URI.create(config.introspectionUrl))
                 .timeout(Duration.ofSeconds(10))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonBody))

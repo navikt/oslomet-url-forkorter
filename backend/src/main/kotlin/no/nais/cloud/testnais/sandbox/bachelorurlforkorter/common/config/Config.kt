@@ -6,6 +6,7 @@ import mu.KotlinLogging
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Local
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Dev
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.Env.Prod
+import java.lang.System
 import java.util.Properties
 import javax.sql.DataSource
 
@@ -14,6 +15,7 @@ private val logger = KotlinLogging.logger {}
 data class Config(
     val environment: Env,
     val appPort: Int,
+    val introspectionUrl: String,
     val dbConfig: DbConfig
 )
 
@@ -76,9 +78,34 @@ fun createApplicationConfig(): Config {
             ?: throw RuntimeException("Property \"NAIS_CLUSTER_NAME\" er ikke satt. Gyldige miljøer er: local, sandbox, dev-gcp, ekstern-dev, ekstern, prod-gcp og prod."),
         appPort = props.getProperty("PORT")?.toInt()
             ?: throw RuntimeException("Property \"PORT\" er ikke satt."),
+        introspectionUrl = props.getProperty("NAIS_TOKEN_INTROSPECTION_ENDPOINT")
+            ?: throw RuntimeException("Property \"NAIS_TOKEN_INTROSPECTION_ENDPOINT\" er ikke satt."),
         dbConfig = DbConfig(
             jdbcUrl = props.getProperty("NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
                 ?: throw RuntimeException("Property \"NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL\" er ikke satt.")
+        )
+    ).also(::logConfig)
+}
+
+fun createApplicationConfigFromFile(fileName: String): Config {
+    val props = Properties()
+
+    System.getenv().forEach { (k, v) -> props.setProperty(k, v) }
+
+    ({}.javaClass.getResourceAsStream("/$fileName"))?.use {
+        props.load(it)
+    } ?: throw RuntimeException("Could not load $fileName")
+
+    return Config(
+        environment = getEnv(props)
+            ?: throw RuntimeException("Property NAIS_CLUSTER_NAME er ikke satt"),
+        appPort = props.getProperty("PORT")?.toInt()
+            ?: throw RuntimeException("PORT er ikke satt"),
+        introspectionUrl = props.getProperty("NAIS_TOKEN_INTROSPECTION_ENDPOINT")
+            ?: throw RuntimeException("Introspection URL mangler"),
+        dbConfig = DbConfig(
+            jdbcUrl = props.getProperty("NAIS_DATABASE_URL_FORKORTER_POSTGRES_URL_FORKORTER_JDBC_URL")
+                ?: throw RuntimeException("DB URL mangler")
         )
     ).also(::logConfig)
 }

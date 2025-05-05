@@ -33,7 +33,7 @@ object DatabaseInit {
     fun start(config: Config) {
         logger.info { "Oppretter database connection ..." }
         try {
-            val db = if (config.environment == Local) {
+            val db = if (config.environment == Local || config.dbConfig.jdbcUrl.contains("h2")) {
                 logger.info("Kjører lokalt med H2 in-memory database")
                 Database.connect(config.dbConfig.jdbcUrl, driver = "org.h2.Driver")
             } else {

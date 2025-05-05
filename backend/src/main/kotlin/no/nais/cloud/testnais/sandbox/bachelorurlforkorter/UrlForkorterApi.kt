@@ -15,7 +15,7 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.json.JavalinJackson
 import io.javalin.security.RouteRole
 import mu.KotlinLogging
-import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.brukerErNavInnlogget
+import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.auth.Auth.autoriserBruker
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.config.*
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.DatabaseInit
 import no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.db.insertTestData
@@ -95,7 +95,6 @@ fun startAppServer(config: Config) {
 
     app.beforeMatched { ctx ->
         if (ctx.path().startsWith("/api/")) {
-            // TODO: FJERN KUN LOKAL UTVIKLING
             if (config.environment == Env.Local) {
                 logger.warn { "Bruker ikke innlogget, men tillates i lokal utvikling på endepunkt ${ctx.path()}" }
                 ctx.attribute(
@@ -142,11 +141,10 @@ private fun checkAccessToEndpoint(ctx: Context, config: Config) {
         }
 
         ctx.routeRoles().contains(Rolle.InternNavInnlogget) || ctx.routeRoles().contains(Rolle.AdminNavInnlogget) -> {
-            // TODO: FJERN KUN LOKAL UTVIKLING
             if (config.environment == Env.Local) {
                 return
             }
-            if (!brukerErNavInnlogget(ctx)) {
+            if (!autoriserBruker(ctx, config)) {
                 logger.warn { "Bruker ikke autorisert på endepunkt ${ctx.path()}" }
                 throw UnauthorizedResponse()
             }
