@@ -39,7 +39,7 @@ fun startAppServer(config: Config) {
         javalinConfig.router.apiBuilder {
             path("api") {
                 path("bruker") {
-                    get("hent", BrukerController::hentBruker, Rolle.Alle)
+                    get("hent", BrukerController::hentBruker, Rolle.InternNavInnlogget)
                 }
                 path("url") {
                     post("sjekk", Controller::sjekk, Rolle.Alle)
@@ -98,7 +98,7 @@ fun startAppServer(config: Config) {
             if (config.environment == Env.Local) {
                 logger.warn { "Bruker ikke innlogget, men tillates i lokal utvikling på endepunkt ${ctx.path()}" }
                 ctx.attribute(
-                    "texas", TexasIntrospectionResponse(
+                    "texasresponse", TexasIntrospectionResponse(
                         active = true,
                         NAVident = "Test Brukersen",
                         name = "Test Brukersen",
