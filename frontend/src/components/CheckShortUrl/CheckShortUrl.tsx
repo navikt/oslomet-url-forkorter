@@ -4,12 +4,6 @@ import {useState} from "react";
 import Input from "../shared/Input/Input.tsx";
 import classes from "./checkshorturl.module.css";
 
-const feedbackArray = [
-    "Damn son, du har en gyldig lenke!",
-    "Woow, du fakker ikke med ugyldige lenker as!",
-    "Shit, flekser med gyldig lenke!"
-]
-
 export default function CheckShortUrl() {
     const [shortLink, setShortLink] = useState("");
     const [isNotValid, setIsNotValid] = useState<boolean>(false);
@@ -17,7 +11,6 @@ export default function CheckShortUrl() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [searchResult, setSearchResult] = useState<string | null>(null);
-    const [feedback, setFeedback] = useState<string | null>(null);
 
     function handleSearchClick() {
         setIsNotValid(false);
@@ -39,7 +32,6 @@ export default function CheckShortUrl() {
         apiRequest<{ langurl: string }>(`url/sjekk?korturl=${shortUrl}`, "POST").then((res) => {
             if (res) {
                 setSearchResult(res.langurl);
-                setFeedback(feedbackArray[Math.floor(Math.random() * feedbackArray.length)]);
             }
             else setSearchResult(null);
         }).catch(error => {
@@ -68,7 +60,7 @@ export default function CheckShortUrl() {
                 {isNotFound && <p className={classes.red}>Lenken finnes ikke i databasen!</p>}
                 {error && <p className={classes.red}>Databasefeil: {error}</p>}
                 {searchResult && <>
-                    <p>{feedback}</p>
+                    <p>Lenken er forkortet! Du kan nå kopiere og dele den.</p>
                     <a href={searchResult}>{searchResult}</a>
                 </>}
             </div>

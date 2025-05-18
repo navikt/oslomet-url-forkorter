@@ -74,7 +74,6 @@ object Controller {
             .get()
         try {
             val bruker = hentBrukerInfo(ctx).NAVident
-            // TODO: Valider kort url
             val forkortetUrl = request.korturl?: Forkorter.lagUnikKortUrl()
             EntryDataAccessObject.storeNewEntry(request.beskrivelse, forkortetUrl, request.originalurl.toString(), bruker)
             ctx.status(201).json(mapOf("forkortetUrl" to forkortetUrl))
