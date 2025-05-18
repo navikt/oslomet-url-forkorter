@@ -60,7 +60,7 @@ export default function CheckShortUrl() {
                 {isNotFound && <p className={classes.red}>Lenken finnes ikke i databasen!</p>}
                 {error && <p className={classes.red}>Databasefeil: {error}</p>}
                 {searchResult && <>
-                    <p>Lenken er forkortet! Du kan nå kopiere og dele den.</p>
+                    <p>Lenken er gyldig!</p>
                     <a href={searchResult}>{searchResult}</a>
                 </>}
             </div>

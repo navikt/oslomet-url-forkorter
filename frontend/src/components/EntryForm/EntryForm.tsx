@@ -127,7 +127,8 @@ export default function EntryForm({
                     <p>{error}</p>
                     : result && (
                     <p>
-                        Her er din lenke:{" "}
+                        Lenken er forkortet! Du kan nå kopiere og dele den.
+                        <br/>/
                         <a href={url} target="_blank">{url}</a>{" "}
                         (kopier: <Icon icon="copy" onClick={() => navigator.clipboard.writeText(url)} useSuccessIcon/> )
                     </p>
