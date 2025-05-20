@@ -1,5 +1,6 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -34,7 +35,12 @@ fun main() {
 
 fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
-        javalinConfig.jsonMapper(JavalinJackson(jacksonObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())))
+        javalinConfig.jsonMapper(JavalinJackson(
+            jacksonObjectMapper()
+                .registerKotlinModule()
+                .registerModule(JavaTimeModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        ))
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
