@@ -68,6 +68,7 @@ object Auth {
             return objectMapper.readValue(response.body(), TexasIntrospectionResponse::class.java)
 
         } catch (e: Exception) {
+            logger.error("Bruker ikke autorisert {}", e.message)
             throw UnauthorizedResponse(e.message ?: e.toString())
         }
     }
