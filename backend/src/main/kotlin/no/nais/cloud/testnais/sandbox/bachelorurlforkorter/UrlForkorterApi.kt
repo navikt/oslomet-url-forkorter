@@ -39,7 +39,7 @@ fun startAppServer(config: Config) {
         javalinConfig.router.apiBuilder {
             path("api") {
                 path("bruker") {
-                    get("hent", BrukerController::hentBruker, Rolle.Alle)
+                    get("hent", BrukerController::hentBruker, Rolle.InternNavInnlogget)
                 }
                 path("url") {
                     post("sjekk", Controller::sjekk, Rolle.Alle)
