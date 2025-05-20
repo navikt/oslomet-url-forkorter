@@ -1,5 +1,8 @@
 package no.nais.cloud.testnais.sandbox.bachelorurlforkorter.common.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class TexasIntrospectionResponse(
     val active: Boolean,
     val NAVident: String,

@@ -35,12 +35,13 @@ fun main() {
 
 fun startAppServer(config: Config) {
     val app = Javalin.create { javalinConfig ->
-        javalinConfig.jsonMapper(JavalinJackson(
-            jacksonObjectMapper()
-                .registerKotlinModule()
-                .registerModule(JavaTimeModule())
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        ))
+        javalinConfig.jsonMapper(
+            JavalinJackson(
+                jacksonObjectMapper()
+                    .registerKotlinModule()
+                    .registerModule(JavaTimeModule())
+            )
+        )
         javalinConfig.staticFiles.add("/public", Location.CLASSPATH)
         javalinConfig.router.apiBuilder {
             path("api") {
@@ -53,7 +54,11 @@ fun startAppServer(config: Config) {
                     post("oppdater", Controller::oppdater, Rolle.InternNavInnlogget)
                     post("slett", Controller::slett, Rolle.InternNavInnlogget)
                     get("hentalle", Controller::hentAlleMedMetadata, Rolle.InternNavInnlogget)
-                    get("hentforinnloggetbruker", Controller::hentForInnloggetBrukerMedMetadata, Rolle.InternNavInnlogget)
+                    get(
+                        "hentforinnloggetbruker",
+                        Controller::hentForInnloggetBrukerMedMetadata,
+                        Rolle.InternNavInnlogget
+                    )
                     get("hentklikkforlenkeid", Controller::hentKlikkForLenkeID, Rolle.InternNavInnlogget)
                 }
             }
