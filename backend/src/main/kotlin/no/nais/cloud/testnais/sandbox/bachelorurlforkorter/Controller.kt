@@ -15,7 +15,11 @@ object BrukerController {
 
     fun hentBruker(ctx: Context) {
         val bruker = hentBrukerInfo(ctx)
-        if (!bruker.active) ctx.status(401)
+        if (!bruker.active) {
+            ctx.status(401)
+            logger.error("Bruker i sesjon ikke aktiv")
+            return
+        }
         ctx.status(200).json(
             BrukerResponse(
                 navIdent = bruker.NAVident,

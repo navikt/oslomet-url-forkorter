@@ -29,12 +29,15 @@ object Auth {
 
     fun hentBrukerInfo(ctx: Context): TexasIntrospectionResponse {
         return ctx.attribute("texasresponse")
-            ?: throw UnauthorizedResponse("Bruker mangler. Har du kalt autoriserBruker først?")
+            ?: throw UnauthorizedResponse("Ingen autorisert bruker i sesjon")
 
     }
 
     fun autoriserBruker(ctx: Context, config: Config): Boolean {
-        if (ctx.header("Authorization").isNullOrBlank()) return false
+        if (ctx.header("Authorization").isNullOrBlank()) {
+            logger.error("Mangler Authorization header")
+            return false
+        }
         val response = sendTexasRequest(ctx, config)
         ctx.attribute("texasresponse", response)
         return response.active
@@ -63,12 +66,15 @@ object Auth {
             logger.info("Kaller texas for autorisasjon av token")
             val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
-            if (response.statusCode() != 200) throw UnauthorizedResponse()
+            if (response.statusCode() != 200) {
+                logger.error("Http-feil {} ved autorisering av bruker: {}", response.statusCode(), response.body())
+                throw UnauthorizedResponse()
+            }
 
             return objectMapper.readValue(response.body(), TexasIntrospectionResponse::class.java)
 
         } catch (e: Exception) {
-            logger.error("Bruker ikke autorisert {}", e.message)
+            logger.error("Feil ved autorisering av bruker: {}", e.message)
             throw UnauthorizedResponse(e.message ?: e.toString())
         }
     }
